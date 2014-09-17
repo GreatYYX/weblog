@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+
+    <title>  GreatYYX Blog - 利用Pelican在Github上搭建博客
+</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="GreatYYX">
+  <meta name="robots" content="all">
+  <meta name="generator" content="pelican,github,githubpage,jquery,bootstrap,pjax">
+  <meta name="description" content="program,guitar,photo,information,security,ctf,writeup">
+  <meta name="description" content="编程,开发,音乐,吉他,摄影,信息安全,极客">
+  <meta name="baidu-site-verification" content="GxsvBPgAer" />
+  <link rel="shortcut icon" href="http://blog.yyx.name/theme/img/favicon.ico">
+  
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/bs/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/main.min.css" />
+  <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <link href="http://blog.yyx.name/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="GreatYYX Blog Full Atom Feed" />
+  <link href="http://blog.yyx.name/feeds/web.atom.xml" type="application/atom+xml" rel="alternate" title="GreatYYX Blog Categories Atom Feed" />
+
+
+    <meta name="tags" contents="github,pelican,bootstrap" />
+
+</head>
+
+<body>
+
+
+<div id="wrapper">
+  <div id="nav-main" class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a data-pjax class="navbar-brand" href="http://blog.yyx.name/index.html">
+          <img alt="Brand" height="60" width="60" src="http://blog.yyx.name/theme/img/logo.png">
+        </a>
+      </div>
+      <div class="navbar-collapse collapse">
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+    <li><a data-pjax href="http://blog.yyx.name/category/security.html">Security</a></li>
+    <li><a data-pjax href="http://blog.yyx.name/category/web.html">Web</a></li>
+            </ul>
+          </li>
+          <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
+          <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-search"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <form class="navbar-form">
+                <input id="search-input" type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-share"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="http://weibo.com/u/1085956311" target="_blank"><i class="fa fa-weibo"></i>&nbsp;Weibo</a></li>
+              <li><a href="http://github.com/GreatYYX"  target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div><!-- /.navbar -->
+    
+  <div class="container" id="main-container">
+    <div class="row row-offcanvas row-offcanvas-right">
+<div id="blog-main" class="col-sm-8 blog-main">
+  <h1 class="blog-post-title">利用Pelican在Github上搭建博客</h1>
+  <p class="blog-post-meta">
+    <i class="fa fa-clock-o"></i>&nbsp;2014-08 14 16:17:00
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <i class="fa fa-folder-o"></i>&nbsp;<a data-pjax href="http://blog.yyx.name/category/web.html">Web</a>
+  </p>
+  <div class="blog-post" >
+    <h1>写在前面</h1>
+<p>一直知道Github有Page功能，但是从来没想到把它用来做Blog。那天突然发现静态博客系统Jekyll，让我这种用惯Wordpress的人顿感欣喜，简单、轻量、纯粹的博客才是那个真正的博客。静态博客有着自己的优势，比如速度快，安全性高，同时Github的免费空间足够大(300M)，还提供CDN，甚至可以绑定域名。这比免费动态主机、自己买个虚拟空间或VPS架个动态CMS都要来的划算。最最重要的是，Github本身是分布式机制的，这样你的文章完全就是在本地写(妈妈再也不用担心断网了)，之后sync到服务器即可，相当于多重备份+Git强大的版本管理。不过Jekyll基于Ruby，个人对于Ruby只有耳闻没有尝试，因此只能作罢(当然也放弃了Octopress之类基于Jekyll的)，于此同时google到了基于Python的静态博客系统Pelican，因此开始折腾。一周后自制主题的Blog总算竣工，因此决定撰文以方便后人。</p>
+<p>OK，在正式开始之前还要说几点：</p>
+<ol>
+<li>虽然静态博客系统有很多优势，但是也有很多缺陷。当然大部分缺陷可以用一些小hint来弥补，这对于优势来说还是可以接受的，当然你需要既然决然的去折腾。</li>
+<li>网上Jekyll系+Github建博客的文章很多，Pelican也不算特别少，因此本文力求写出一些不一样的、有营养的东西。</li>
+<li>Pelican升级时候配置文件做了较大变化(虽然我认为对于接口或配置的不严谨设置与改动是不可取的)，不排除其他工具或环境的版本升级时候的变化。如不信碰到，请自行查阅相关工具或环境的手册，RTFM :D。 </li>
+<li>成文仓促，水平有限，望不吝赐教。</li>
+</ol>
+<p>So, let's start...</p>
+<h1>基础准备</h1>
+<h2>系统环境</h2>
+<p>由于平时办公环境还是以Win7为主，因此还是决定将环境搭建在Windows下。Linux下搭建环境比Windows更加简单，网上也有相关文章，请自行检索。</p>
+<h2>套件选择</h2>
+<p>必装：</p>
+<ul>
+<li>Python3 (2 or 3你自己纠结去)</li>
+<li>pip和setuptool(为了方便package的安装)</li>
+<li>Pelican3</li>
+<li>Markdown（个人觉得Markdown语法简洁优美，Pelican3还支持其他语法）</li>
+<li>make工具（GNU的make，win下的nmake不行）</li>
+<li>Git工具集（当然还要去Github上搞个账号）</li>
+</ul>
+<p>可选（主要这里比较折腾）：</p>
+<ul>
+<li>Bootstrap3 (Twitter出品的快速网站搭建框架)</li>
+<li>Disqus (可以选择国内的社会化评论系统，比如多说)</li>
+<li>Google Analytics (可以选择其他网站分析服务商，比如CNZZ)</li>
+<li>MarkdownPad2 (可视化的Markdown写作软件，还有很多可以选择的，甚至是在线的)</li>
+<li>一些基于JQuery的插件</li>
+<li>一堆其他什么的……</li>
+</ul>
+<h1>搭建环境</h1>
+<h2>安装Python</h2>
+<p>在<a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>下载Python并安装，就那么简单。安装完成后把Python的安装路径扔到环境变量Path里。</p>
+<h2>安装pip和setuptool</h2>
+<p>在<a href="https://pip.pypa.io/en/latest/installing.html">https://pip.pypa.io/en/latest/installing.html</a>下载get-pip.py。打开cmd，进入get-pip.py所在目录，之后执行<code>python get-pip.py</code>，pip和setuptool都会安装好。</p>
+<h2>安装Pelican和Markdown</h2>
+<p>装好了pip就方便了，直接执行以下命令。</p>
+<pre><code>pip install pelican
+pip install markdown
+</code></pre>
+<p>之后将Python目录下的script目录路径加入环境变量Path中。</p>
+<h2>安装Git工具</h2>
+<p>下载Github for Windows <a href="https://windows.github.com/">https://windows.github.com/</a> 并安装即可。
+关于Git的命令，推荐一个简单的<a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">git教程</a>。和图形界面相比，git的shell也非常好用。</p>
+<h2>其他</h2>
+<ul>
+<li>make只需要下载下来就可以了<a href="http://www.equation.com/servlet/equation.cmd?fa=make">http://www.equation.com/servlet/equation.cmd?fa=make</a>。</li>
+<li>网上可能会推荐把Pelican装在虚拟环境virtalenv中，这点你自己决定。</li>
+<li>可选部分的下载和安装在写到的时候再给出。</li>
+</ul>
+<h1>发表Blog的完整流程</h1>
+<p>Pelican创建Blog的步骤可以总结为：创建框架(包括目录结构，主题模板，配置文件)--&gt;(创建主题)--&gt;写文章--&gt;生成html--&gt;(上传Github等)。</p>
+<p>当碰到问题时候记得查阅手册，这部分在手册<a href="http://docs.getpelican.com/">http://docs.getpelican.com/</a>的getting started中。</p>
+<h2>创建框架</h2>
+<p>所谓的框架就是一个静态Blog的生成骨架，Pelican只需要一句命令即可（先cd到要生成的目录中）：</p>
+<pre><code>pelican-quickstart
+</code></pre>
+<p>运行命令后根据提示设置，会生成默认的配置文件。此时Pelican已经为我们构建了框架，结构如下:</p>
+<pre><code>yourproject/
+├── content             #写好的Markdown格式的博文
+│   └── (pages)         #Markdown格式的静态界面(比如About，同WP的Page)
+├── output              #通过Pelican最终生成的html界面
+├── develop_server.sh   #Pelican服务器的脚本
+├── fabfile.py          #生成和上传等自动化操作
+├── Makefile            #make的自动化脚本
+├── pelicanconf.py      #主配置文件(测试环境)
+└── publishconf.py      #主配置文件的扩展，用于(生产环境)
+</code></pre>
+<h2>写文章</h2>
+<p>这里其实和Pelican没多大关系了。这里使用<a href="http://wowubuntu.com/markdown/">Makedown语法</a>写文章，并保存为.md文件。</p>
+<pre><code>Title: My super title
+Date: 2010-12-03 10:20
+Category: Python
+Tags: pelican, publishing
+Slug: my-super-post
+Author: Alexis Metaireau
+Summary: Short version for index and feeds
+
+This is the content of my super blog post. #正文内容
+</code></pre>
+<p>上面是官方给出的模板，可以看到正文内容前为文章的meta数据，你可以制定文章的标题、日期、类别、标签、路径名、作者、摘要等(这些信息部分会出现在最终生成html的meta数据中，当然这取决于主题文件是否引用这些数据)。这些里面只有Title和Date是必须的(默认配置下，Date要自己指定是不是很BT，法国人的思维真是……)。meta块之后就用Makrdown写文章啦~当然你可以和我上面说的一样搞一个Markdown的可视化编辑器，写起来很愉快。Markdown语法实现不了的直接用html的语法即可。</p>
+<h2>Pelican重要的操作命令</h2>
+<p>目录中的makefile非常重要，通过make调用makefile中的命令即可完成相关操作。</p>
+<pre><code>make html           #创建静态界面
+make regenerate     #修改后自动创建静态界面
+make serve          #创建服务器
+make devserver      #相当于regenerate+serve
+make publish        #生成用于发布的html
+</code></pre>
+<p>手册上还有其他一些命令，请自行发掘。</p>
+<h2>生成与预览</h2>
+<p>文章写好了就用上面的<code>make html</code>生成文章，你需要反复不停修改和生成的话就用<code>make regenerate</code>，每次修改会自动生成新的html。之后用<code>make serve</code>开启服务器，默认<code>http://localhost:8000</code>可浏览你的Blog。</p>
+<p>当然最后发布的请使用<code>make publish</code>，该配置更加适合用于正式发布。</p>
+<h2>Github相关操作</h2>
+<p>以上步骤后静态blog已经生成，默认在output文件夹中。下面需要把它上传到github中。所有关于github page的操作都在<a href="http://pages.github.io">http://pages.github.io</a>。</p>
+<p>先去Github注册账号，比如用户名是username，然后Create New Repository, Repository的名字必须为username.github.io（网上流传的.com的貌似已经无效了，所以看手册是多么的重要）。</p>
+<p>创建好了之后直接点上面的绿色的set up in desktop就会打开桌面端的Git图形化操作界面。之后会让你同步一个本地的目录，这样本地的目录就和远程的关联好了。commit之后sync即可。</p>
+<p>当然也可以用gitshell，命令也很简单。首先进入需要上传的目录，之后执行(具体命令含义可以看相关git教程)：</p>
+<pre><code>git init
+git remote origin https://github.com/username/username.github.io.git
+git pull
+git add .
+git commit -m "update"
+git push origin master
+</code></pre>
+<p>大概等几分钟之后即可访问username.github.io。至此，一个完整的Pelican+Github生成静态Blog的流程已经完成。</p>
+<h2>一些问题和处理</h2>
+<ul>
+<li>对于Python3默认的配置可能会出现问题，需要将develop_server.sh将<code>PY=${PY:-python2}</code>改为python3，makefile中如果有问题也需要修改。</li>
+<li>可以将pelicanconf.py中的SITEURL改成<code>http://localhost:8000</code>，将publishconf.py中的SITEURL改为<code>http://username.github.io</code>。</li>
+</ul>
+<h1>主题制作</h1>
+<p>到这儿，你应该已经能顺利搭建起一个基于Pelican的Blog并在Github上发布了。下面我们探讨一下Pelican下的个性化主题制作。主题制作的官方文档<a href="http://docs.getpelican.com/en/3.4.0/themes.html">在此</a>，请不断查阅与参考。另外，Pelican官方的Github上也有别人制作好的主题，你可以<a href="https://github.com/getpelican/pelican-themes">点这儿</a>进去参考或者下载。</p>
+<h2>制作思路及组件</h2>
+<p>Pelican的主题制作基于<a href="http://jinja.pocoo.org/">Jinjia模板引擎</a>，看这个名字和Logo就知道是小日本的作品了，如果你曾经用过smarty（N年以前了）或者是类似的模板引擎，基本能秒速上手。利用模板引擎的优势就是视图和数据的分离，整个过程相当于你写的.md文件就是数据，通过Pelican驱动之后按照Jinjia作为模板填充数据，并输出最终html。</p>
+<p>对于主题制作，无非就是前端的一些东西，什么html啊js啊之类的东西，我这边采用bootstrap3加上一堆插件的方法创建html，之后改写成Jinjia模板。</p>
+<p>通过主题制作，基本可以搞明白大部分Pelican配置的含义。另外，由于这块内容本身覆盖知识面很广，这里只能按照Pelican中特有的一些规定展开，周边的前端知识只能说到一些必要的，其他方面还请读者自行补充。</p>
+<h2>主题结构</h2>
+<p>首先创建主题目录，我准备放在yourproject/theme目录下，此时打开<code>pelicanconf.py</code>，添加如下字段：</p>
+<pre><code>THEME = "theme"             #主题目录
+THEME_STATIC_DIR = 'theme'  #生成后的主题目录
+</code></pre>
+<p>手册上给出如下主题结构，这写文件可以放在yourproject/theme目录下（具体哪儿都可以通过配置文件指定）。</p>
+<pre><code>├── static
+│   ├── css
+│   └── images
+└── templates
+    ├── archives.html         // 文章归档
+    ├── period_archives.html  // 按照时间排序的归档
+    ├── article.html          // 每篇文章
+    ├── author.html           // 每个作者
+    ├── authors.html          // 所有作者
+    ├── categories.html       // 所有分类
+    ├── category.html         // 每个分类
+    ├── index.html            // 主页
+    ├── page.html             // page界面（自定义的界面）
+    ├── tag.html              // 每个不同tag的界面
+    └── tags.html             // 总tag界面，可以创建tag云
+</code></pre>
+<p>看到上面的目录构造可以基本明白各个文件的作用了。static中的文件会被完整复制到生成目录中，而templates中的文件则会通过Pelican处理。</p>
+<p>需要特别说明的是，不是所有文件都是必须的，比如我的Blog就我一个人写文章，只有一个作者，所以author和authors我就不用，你可以保留文件，之后把里面内容删除即可。当然你也可以创建文件，采用Jinjia的包含语句包含到其他界面中，这在后面会说明。</p>
+<h2>主题和配置</h2>
+<p>待续……</p>
+  </div><!-- /.blog-post -->
+  
+  <hr>
+
+  <div id="tag-list" class="tag-list">
+    <i class="fa fa-tags"></i>
+    <a data-pjax href="http://blog.yyx.name/tag/github.html">github</a>
+    <a data-pjax href="http://blog.yyx.name/tag/pelican.html">pelican</a>
+    <a data-pjax href="http://blog.yyx.name/tag/bootstrap.html">bootstrap</a>
+  </div>
+
+    <!--comment-->
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'yyxblog'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div><!-- /.blog-main -->
+
+<div id="blog-sidebar" class="hidden-xs col-sm-3 col-sm-offset-1">
+<div id="sidebar-fix">
+    <!--toc-->
+    <div class="sidebar-module">
+      <!-- <h4>Table of Contents</h4> -->
+      <div id="toc" class="toc"></div>
+    </div>
+</div><!-- ./sidebar-fix -->
+</div><!-- /.blog-sidebar -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+
+  <div id="loading" class="fade"><div class="loader"></div></div>
+
+  <div class="blog-footer">
+    <p class="l">©2014&nbsp;<a href="#">GreatYYX</a>.&nbsp;&nbsp;
+      <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
+    </p>
+  </div><!-- /.blog-footer -->
+
+  <div class="float-tool">
+    <a id="btn-comment" class="btn hide" title="Comments"><i class="fa fa-comment"></i></a>
+    <a id="btn-top" class="btn hide" title="Top"><i class="fa fa-arrow-up"></i></a>
+  </div><!-- /.float-tool -->
+
+</div><!-- /.wrapper -->
+
+  <script src="http://blog.yyx.name/theme/js/jquery.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery-ui.min.js"></script>
+  <script src="http://blog.yyx.name/theme/bs/js/bootstrap.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery.tocify.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/highlight.pack.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery.pjax.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/main.min.js"></script>
+
+<div style="display:none">
+<script src="http://s19.cnzz.com/z_stat.php?id=1253039383&web_id=1253039383" language="JavaScript"></script>
+</div>
+<script type="text/javascript">
+(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+})(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+_st('install','XwpC765YWzV58fvrdjoQ');
+</script>
+</body>
+</html>
