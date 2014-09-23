@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+
+    <title>  GreatYYX Blog - reversing.kr ImagePrc Walkthrough
+</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="GreatYYX">
+  <meta name="robots" content="all">
+  <meta name="generator" content="pelican,github,githubpage,jquery,bootstrap,pjax">
+  <meta name="description" content="program,guitar,photo,information,security,ctf,writeup">
+  <meta name="description" content="编程,开发,音乐,吉他,摄影,信息安全,极客">
+  <meta name="baidu-site-verification" content="GxsvBPgAer" />
+  <link rel="shortcut icon" href="http://blog.yyx.name/theme/img/favicon.ico">
+  
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/bs/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/main.min.css" />
+  <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <link href="http://blog.yyx.name/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="GreatYYX Blog Full Atom Feed" />
+  <link href="http://blog.yyx.name/feeds/security.atom.xml" type="application/atom+xml" rel="alternate" title="GreatYYX Blog Categories Atom Feed" />
+
+
+    <meta name="tags" contents="reversing.kr,wargame,hacking,reversing" />
+
+</head>
+
+<body>
+
+
+<div id="wrapper">
+  <div id="nav-main" class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a data-pjax class="navbar-brand" href="http://blog.yyx.name/index.html">
+          <img alt="Brand" height="60" width="60" src="http://blog.yyx.name/theme/img/logo.png">
+        </a>
+      </div>
+      <div class="navbar-collapse collapse">
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+    <li><a data-pjax href="http://blog.yyx.name/category/security.html">Security</a></li>
+    <li><a data-pjax href="http://blog.yyx.name/category/web.html">Web</a></li>
+            </ul>
+          </li>
+          <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
+          <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-search"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <form class="navbar-form">
+                <input id="search-input" type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-share"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="http://weibo.com/u/1085956311" target="_blank"><i class="fa fa-weibo"></i>&nbsp;Weibo</a></li>
+              <li><a href="http://github.com/GreatYYX"  target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div><!-- /.navbar -->
+    
+  <div class="container" id="main-container">
+    <div class="row row-offcanvas row-offcanvas-right">
+<div id="blog-main" class="col-sm-8 blog-main">
+  <h1 class="blog-post-title">reversing.kr ImagePrc Walkthrough</h1>
+  <p class="blog-post-meta">
+    <i class="fa fa-clock-o"></i>&nbsp;2014-09 23 18:05:00
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <i class="fa fa-folder-o"></i>&nbsp;<a data-pjax href="http://blog.yyx.name/category/security.html">Security</a>
+  </p>
+  <div class="blog-post" >
+    <h1>试玩</h1>
+<p>看起来很有意思的一道题目。拿到后打开一个窗口，可以用鼠标画一些东西，之后点Check，弹出“Wrong”。直觉认为应该是要画出一个图像，正确的话会得到flag。可惜这个图能画正确的概率真的很低。</p>
+<h1>逻辑分析</h1>
+<p>OD打开之后下MessageBoxA的API断点或者WM_LBUTTONUP的消息断点，点击Check后断下并跟踪到核心逻辑代码的位置。</p>
+<pre><code class="x86asm">004012D6   &gt; \83BC24 940000&gt;cmp dword ptr ss:[esp+0x94],0x64         ;  Case 111 (WM_COMMAND) of switch 0040113A
+004012DE   .  0F85 01020000 jnz ImagePrc.004014E5
+...
+004013CD   &gt;  8B8424 900000&gt;mov eax,dword ptr ss:[esp+0x90]
+004013D4   .  6A 30         push 0x30                                ; /Style = MB_OK|MB_ICONEXCLAMATION|MB_APPLMODAL
+004013D6   .  68 34604000   push ImagePrc.00406034                   ; |ImagePrc
+004013DB   .  68 40604000   push ImagePrc.00406040                   ; |Wrong
+004013E0   .  50            push eax                                 ; |hOwner
+004013E1   .  FF15 F8504000 call dword ptr ds:[&lt;&amp;USER32.MessageBoxA&gt;&gt;; \MessageBoxA
+004013E7   .  56            push esi
+004013E8   .  E8 13010000   call ImagePrc.00401500
+004013ED   .  83C4 04       add esp,0x4
+004013F0   .  33C0          xor eax,eax
+004013F2   .  5B            pop ebx
+004013F3   .  5F            pop edi
+004013F4   .  5E            pop esi
+004013F5   .  81C4 80000000 add esp,0x80
+004013FB   .  C2 1000       retn 0x10
+</code></pre>
+
+<p>在按钮消息路由到弹出消息框之间就是我们要找的核心逻辑。下面分解一下逻辑：</p>
+<pre><code class="x86asm">...
+004012E4   .  A1 F4844000   mov eax,dword ptr ds:[0x4084F4]
+004012E9   .  8D5424 08     lea edx,dword ptr ss:[esp+0x8]
+004012ED   .  53            push ebx
+004012EE   .  52            push edx                                 ; /Buffer = 0018FB04
+004012EF   .  6A 18         push 0x18                                ; |BufSize = 18 (24.)
+004012F1   .  50            push eax                                 ; |hObject =&gt; B9051E9B
+004012F2   .  FF15 1C504000 call dword ptr ds:[&lt;&amp;GDI32.GetObjectA&gt;]  ; \GetObjectA
+004012F8   .  B9 0A000000   mov ecx,0xA
+004012FD   .  33C0          xor eax,eax
+004012FF   .  8D7C24 24     lea edi,dword ptr ss:[esp+0x24]
+00401303   .  8D5424 24     lea edx,dword ptr ss:[esp+0x24]
+00401307   .  F3:AB         rep stos dword ptr es:[edi]
+00401309   .  8B4424 14     mov eax,dword ptr ss:[esp+0x14]
+0040130D   .  8B4C24 10     mov ecx,dword ptr ss:[esp+0x10]
+00401311   .  8B3D 20504000 mov edi,dword ptr ds:[&lt;&amp;GDI32.GetDIBits&gt;&gt;;  GDI32.GetDIBits
+00401317   .  6A 00         push 0x0                                 ; /Usage = DIB_RGB_COLORS
+00401319   .  52            push edx                                 ; |pBitmapinfo
+0040131A   .  6A 00         push 0x0                                 ; |Buffer = NULL
+0040131C   .  894424 38     mov dword ptr ss:[esp+0x38],eax          ; |
+00401320   .  50            push eax                                 ; |nLines
+00401321   .  A1 F4844000   mov eax,dword ptr ds:[0x4084F4]          ; |
+00401326   .  894C24 38     mov dword ptr ss:[esp+0x38],ecx          ; |
+0040132A   .  8B0D DC844000 mov ecx,dword ptr ds:[0x4084DC]          ; |
+00401330   .  6A 00         push 0x0                                 ; |StartLine = 0
+00401332   .  50            push eax                                 ; |hBitmap =&gt; B9051E9B
+00401333   .  51            push ecx                                 ; |hDC =&gt; 4C01191B
+00401334   .  C74424 40 280&gt;mov dword ptr ss:[esp+0x40],0x28         ; |
+0040133C   .  66:C74424 4C &gt;mov word ptr ss:[esp+0x4C],0x1           ; |
+00401343   .  66:C74424 4E &gt;mov word ptr ss:[esp+0x4E],0x18          ; |
+0040134A   .  C74424 50 000&gt;mov dword ptr ss:[esp+0x50],0x0          ; |
+00401352   .  FFD7          call edi                                 ; \GetDIBits
+...
+</code></pre>
+
+<p>程序首先获取绘制的对象，并提取绘制对象的像素内容。在<code>GetDIBits()</code>的时候栈情况如下：</p>
+<pre><code class="x86asm">...
+0018FADC   4C01191B  |hDC = 4C01191B
+0018FAE0   B9051E9B  |hBitmap = B9051E9B
+0018FAE4   00000000  |StartLine = 0
+0018FAE8   00000096  |nLines = 96 (150.)
+0018FAEC   00000000  |Buffer = NULL
+0018FAF0   0018FB1C  |pBitmapinfo = 0018FB1C
+0018FAF4   00000000  \Usage = DIB_RGB_COLORS
+...
+</code></pre>
+
+<p>可以看到图像为RGB图像，第一个扫描线是150（其实就是150的高度）。查看地址0018FB1C处数据的LPBITMAPINFO结构体指针的内容：</p>
+<pre><code class="ascii">...
+0018FB1C  28 00 00 00 C8 00 00 00 96 00 00 00 01 00 18 00  (.È..
+...
+</code></pre>
+
+<p>根据BITMAPINFO结构体格式，发现bitmap的长度是0xC8，高度0x96，即200x150大小。</p>
+<p>接着往下看：</p>
+<pre><code class="x86asm">...
+00401381   .  6A 18         push 0x18                                ; /ResourceType = 18
+00401383   .  6A 65         push 0x65                                ; |ResourceName = 65
+00401385   .  6A 00         push 0x0                                 ; |hModule = NULL
+00401387   .  FF15 7C504000 call dword ptr ds:[&lt;&amp;KERNEL32.FindResour&gt;; \FindResourceA
+0040138D   .  50            push eax                                 ; /hResource
+0040138E   .  6A 00         push 0x0                                 ; |hModule = NULL
+00401390   .  FF15 80504000 call dword ptr ds:[&lt;&amp;KERNEL32.LoadResour&gt;; \LoadResource
+00401396   .  50            push eax                                 ; /hResource
+00401397   .  FF15 88504000 call dword ptr ds:[&lt;&amp;KERNEL32.LockResour&gt;; \LockResource
+...
+</code></pre>
+
+<p>之后程序从自身获取资源编号为0x65、类型是0x18的资源并加载。这里提一句，<code>FindResource()</code>返回的eax指向的数据区构造如下：</p>
+<pre><code class="ascii">0047E048  60 E0 07 00 90 5F 01 00 00 00 00 00 00 00 00 00  徐....
+0047E058  00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF  ........
+0047E068  FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF  ........
+...
+</code></pre>
+
+<p>可以看到第0-4个字节0x0007E060是资源真正的起始地址的偏移，5-8个字节0x00105F90是资源大小，0047E060才是资源数据内容的起始。这就是PE文件对于资源的布局（当然不知道也能解题）。</p>
+<p><code>LoadResource()</code>并Lock之后，进入如下逻辑：</p>
+<pre><code class="x86asm">...
+0040139D   .  33FF          xor edi,edi
+0040139F   .  8BCE          mov ecx,esi
+004013A1   .  2BC6          sub eax,esi
+004013A3   &gt;  8A11          mov dl,byte ptr ds:[ecx]
+004013A5   .  8A1C08        mov bl,byte ptr ds:[eax+ecx]
+004013A8   .  3AD3          cmp dl,bl
+004013AA      75 21         jnz XImagePrc.004013CD
+004013AC   .  47            inc edi
+004013AD   .  41            inc ecx
+004013AE      81FF 905F0100 cmp edi,0x15F90
+004013B4   .^ 7C ED         jl XImagePrc.004013A3
+004013B6   .  56            push esi
+004013B7   .  E8 44010000   call ImagePrc.00401500
+004013BC   .  83C4 04       add esp,0x4
+004013BF   .  33C0          xor eax,eax
+004013C1   .  5B            pop ebx
+004013C2   .  5F            pop edi
+004013C3   .  5E            pop esi
+004013C4   .  81C4 80000000 add esp,0x80
+004013CA &gt; .  C2 1000       retn 0x10
+...
+</code></pre>
+
+<p>这段逻辑很简单，一个循环，一共循环0x15F90次（刚好是上面分析的资源的大小）。之后把绘制的图像数据和资源图像数据分别放入dl和bl进行每个byte的逐一比较。一开始我以为只要比较结果正确就能拿到flag，所以直接修改比较次数为0，可惜程序正常执行，却没有flag的踪迹。所以思路转为从资源入手。</p>
+<h1>资源操作</h1>
+<p>打开exeScope之类的资源提取工具，提取编号0x65的资源，发现大小是0X15F80，比我们需要的数据小0x10个字节。于是重新跟程序到<code>LoadResource()</code>执行后，eax为47e060，提取47e060-493ff0一共0X15F90字节所有数据到文件。发现其实最后0x10个字节直接被填充为全0。</p>
+<p>二进制文件提取出来后，需要让它作为图像显示出来。文件大小为0X15F90，十进制是9000，相当于200x150x3，也就是200x150的RGB三通道图像。我这边直接利用Python的<a href="https://github.com/python-pillow/Pillow/">Pillow图像处理库</a>做还原（Python3的PIL为Pillow）：</p>
+<pre><code class="python">from PIL import Image
+
+width = 200
+height = 150
+
+fp = open('rgb.mem', 'rb')
+data = fp.read()
+im = Image.frombytes('RGB', (width, height), data)
+im = im.transpose(Image.FLIP_TOP_BOTTOM)
+im.show()
+im.save('result.bmp')
+</code></pre>
+
+<p>提取后发现图片是上下颠倒的，不知道是由于作者故意做成颠倒的还是WinAPI中GetDIBits是倒着读的。所以使用<code>transpose()</code>做翻转。之后可以看到作者绘制的内容为GOT三个字符，即为flag。</p>
+  </div><!-- /.blog-post -->
+  
+  <hr>
+
+  <div id="tag-list" class="tag-list">
+    <i class="fa fa-tags"></i>
+    <a data-pjax href="http://blog.yyx.name/tag/reversingkr.html">reversing.kr</a>
+    <a data-pjax href="http://blog.yyx.name/tag/wargame.html">wargame</a>
+    <a data-pjax href="http://blog.yyx.name/tag/hacking.html">hacking</a>
+    <a data-pjax href="http://blog.yyx.name/tag/reversing.html">reversing</a>
+  </div>
+
+    <!--comment-->
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'yyxblog'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</div><!-- /.blog-main -->
+
+<div id="blog-sidebar" class="hidden-xs col-sm-3 col-sm-offset-1">
+<div id="sidebar-fix">
+    <!--toc-->
+    <div class="sidebar-module">
+      <!-- <h4>Table of Contents</h4> -->
+      <div id="toc" class="toc"></div>
+    </div>
+</div><!-- ./sidebar-fix -->
+</div><!-- /.blog-sidebar -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+
+  <div id="loading" class="fade"><div class="loader"></div></div>
+
+  <div class="blog-footer">
+    <p class="l">©2014&nbsp;<a href="#">GreatYYX</a>.&nbsp;&nbsp;
+      <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
+    </p>
+  </div><!-- /.blog-footer -->
+
+  <div class="float-tool">
+    <a id="btn-comment" class="btn hide" title="Comments"><i class="fa fa-comment"></i></a>
+    <a id="btn-top" class="btn hide" title="Top"><i class="fa fa-arrow-up"></i></a>
+  </div><!-- /.float-tool -->
+
+</div><!-- /.wrapper -->
+
+  <script src="http://blog.yyx.name/theme/js/jquery.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery-ui.min.js"></script>
+  <script src="http://blog.yyx.name/theme/bs/js/bootstrap.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery.tocify.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/highlight.pack.js"></script>
+  <script src="http://blog.yyx.name/theme/js/jquery.pjax.min.js"></script>
+  <script src="http://blog.yyx.name/theme/js/main.min.js"></script>
+
+<div style="display:none">
+<script src="http://s19.cnzz.com/z_stat.php?id=1253039383&web_id=1253039383" language="JavaScript"></script>
+</div>
+<script type="text/javascript">
+(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+})(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+_st('install','XwpC765YWzV58fvrdjoQ');
+</script>
+</body>
+</html>
