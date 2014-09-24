@@ -128,7 +128,7 @@
 &lt;p&gt;这段逻辑很简单，一个循环，一共循环0x15F90次（刚好是上面分析的资源的大小）。之后把绘制的图像数据和资源图像数据分别放入dl和bl进行每个byte的逐一比较。一开始我以为只要比较结果正确就能拿到flag，所以直接修改比较次数为0，可惜程序正常执行，却没有flag的踪迹。所以思路转为从资源入手。&lt;/p&gt;
 &lt;h1&gt;资源操作&lt;/h1&gt;
 &lt;p&gt;打开exeScope之类的资源提取工具，提取编号0x65的资源，发现大小是0X15F80，比我们需要的数据小0x10个字节。于是重新跟程序到&lt;code&gt;LoadResource()&lt;/code&gt;执行后，eax为47e060，提取47e060-493ff0一共0X15F90字节所有数据到文件。发现其实最后0x10个字节直接被填充为全0。&lt;/p&gt;
-&lt;p&gt;二进制文件提取出来后，需要让它作为图像显示出来。文件大小为0X15F90，十进制是9000，相当于200x150x3，也就是200x150的RGB三通道图像。我这边直接利用Python的&lt;a href="https://github.com/python-pillow/Pillow/"&gt;Pillow图像处理库&lt;/a&gt;做还原（Python3的PIL为Pillow）：&lt;/p&gt;
+&lt;p&gt;二进制文件提取出来后，需要让它作为图像显示出来。文件大小为0X15F90，十进制是90000，相当于200x150x3，也就是200x150的RGB三通道图像。我这边直接利用Python的&lt;a href="https://github.com/python-pillow/Pillow/"&gt;Pillow图像处理库&lt;/a&gt;做还原（Python3的PIL为Pillow）：&lt;/p&gt;
 &lt;pre&gt;&lt;code class="python"&gt;from PIL import Image
 
 width = 200
