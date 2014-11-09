@@ -6,6 +6,9 @@
 </title>
 
   <meta charset="utf-8">
+  <link rel="dns-prefetch" href="http://yyx.com"/>
+  <link rel="dns-prefetch" href="http://www.yyx.com"/>
+  <link rel="dns-prefetch" href="http://blog.yyx.com"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="GreatYYX">
@@ -14,11 +17,12 @@
   <meta name="description" content="program,guitar,photo,information,security,ctf,writeup">
   <meta name="description" content="编程,开发,音乐,吉他,摄影,信息安全,极客">
   <meta name="baidu-site-verification" content="U9HmJyJXz6" />
-  <link rel="shortcut icon" href="http://blog.yyx.name/theme/img/favicon.ico">
+  <link rel="shortcut icon" href="http://yyxname.qiniudn.com/theme/img/favicon.ico">
   
-  <link rel="stylesheet" href="http://blog.yyx.name/theme/bs/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="http://blog.yyx.name/theme/css/main.min.css" />
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://yyxname.qiniudn.com/theme/css/main.min.css" />
+  <style>.loader{background:url('http://yyxname.qiniudn.com/theme/img/loading.gif') no-repeat;}body.bgimg{background: #fff url('http://yyxname.qiniudn.com/theme/img/welcome_bg.jpg') no-repeat center center fixed;}</style>
   <!--[if lt IE 9]>
     <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -46,7 +50,7 @@
           <span class="icon-bar"></span>
         </button>
         <a data-pjax class="navbar-brand" href="http://blog.yyx.name/index.html">
-          <img alt="Brand" height="60" width="60" src="http://blog.yyx.name/theme/img/logo.png">
+          <img alt="Brand" height="60" width="60" src="http://yyxname.qiniudn.com/theme/img/logo.png">
         </a>
       </div>
       <div class="navbar-collapse collapse">
@@ -93,7 +97,7 @@
 <div id="blog-main" class="col-sm-8 blog-main">
   <h1 class="blog-post-title">利用Pelican在Github上搭建博客</h1>
   <p class="blog-post-meta">
-    <i class="fa fa-clock-o"></i>&nbsp;2014-08 14 16:17:00
+    <i class="fa fa-clock-o"></i>&nbsp;2014-08-14
     &nbsp;&nbsp;|&nbsp;&nbsp;
     <i class="fa fa-folder-o"></i>&nbsp;<a data-pjax href="http://blog.yyx.name/category/web.html">Web</a>
   </p>
@@ -104,7 +108,7 @@
 <ol>
 <li>虽然静态博客系统有很多优势，但是也有很多缺陷。当然大部分缺陷可以用一些小hint来弥补，这对于优势来说还是可以接受的，当然你需要既然决然的去折腾。</li>
 <li>网上Jekyll系+Github建博客的文章很多，Pelican也不算特别少，因此本文力求写出一些不一样的、有营养的东西。</li>
-<li>Pelican升级时候配置文件做了较大变化(虽然我认为对于接口或配置的不严谨设置与改动是不可取的)，不排除其他工具或环境的版本升级时候的变化。如不信碰到，请自行查阅相关工具或环境的手册，RTFM :D。 </li>
+<li>Pelican升级时候配置文件做了较大变化(虽然我认为对于接口或配置的不严谨设置与改动是不可取的)，不排除其他工具或环境的版本升级时候的变化。如不幸碰到，请自行查阅相关工具或环境的手册，RTFM :D。 </li>
 <li>成文仓促，水平有限，望不吝赐教。</li>
 </ol>
 <p>So, let's start...</p>
@@ -299,13 +303,13 @@ THEME_STATIC_DIR = 'theme'  #生成后的主题目录
 
 </div><!-- /.wrapper -->
 
-  <script src="http://blog.yyx.name/theme/js/jquery.min.js"></script>
-  <script src="http://blog.yyx.name/theme/js/jquery-ui.min.js"></script>
-  <script src="http://blog.yyx.name/theme/bs/js/bootstrap.min.js"></script>
-  <script src="http://blog.yyx.name/theme/js/jquery.tocify.min.js"></script>
-  <script src="http://blog.yyx.name/theme/js/highlight.pack.js"></script>
-  <script src="http://blog.yyx.name/theme/js/jquery.pjax.min.js"></script>
-  <script src="http://blog.yyx.name/theme/js/main.min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/jquery.tocify.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/highlight.pack.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/jquery.pjax.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/main.min.js"></script>
 
 <div style="display:none">
 <script src="http://s19.cnzz.com/z_stat.php?id=1253039383&web_id=1253039383" language="JavaScript"></script>
