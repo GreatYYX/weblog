@@ -6,9 +6,9 @@
 </title>
 
   <meta charset="utf-8">
-  <link rel="dns-prefetch" href="http://yyx.com"/>
-  <link rel="dns-prefetch" href="http://www.yyx.com"/>
-  <link rel="dns-prefetch" href="http://blog.yyx.com"/>
+  <link rel="dns-prefetch" href="http://yyx.name"/>
+  <link rel="dns-prefetch" href="http://www.yyx.name"/>
+  <link rel="dns-prefetch" href="http://blog.yyx.name"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="GreatYYX">
@@ -183,6 +183,36 @@
 </code></pre>
 
 <p>可以看到，函数执行完成之后会ShowWindow()，而当参数为5的时候，就是SW_SHOW，因此可以将push的参数设置为0(SW_HIDE)或者直接把整合函数nop掉。</p>
+<p><strong>2014-12-03更新：</strong></p>
+<p>今天在项目上调试的时候发现又出现弹窗，使用相同的dll在皮肤测试程序上则没有出现。于是直接调试项目程序，发现还有几处ShowWindow函数。</p>
+<pre><code class="x86asm">10012B40  /$  55            push ebp
+10012B41  |.  8BEC          mov ebp,esp
+10012B43  |.  833D D45F0710&gt;cmp dword ptr ds:[0x10075FD4],0x0
+10012B4A  |.  56            push esi
+10012B4B  |.  8BF1          mov esi,ecx
+10012B4D  |.  75 42         jnz XSkinCraf.10012B91
+10012B4F  |.  8B0D DC5F0710 mov ecx,dword ptr ds:[0x10075FDC]
+10012B55  |.  6A 05         push 0x5
+10012B57  |.  E8 22480400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B5C  |.  8B0D DC5F0710 mov ecx,dword ptr ds:[0x10075FDC]
+10012B62  |.  6A 00         push 0x0
+10012B64  |.  6A 08         push 0x8
+10012B66  |.  6A 00         push 0x0
+10012B68  |.  E8 8B490400   call &lt;jmp.&amp;mfc100.#CWnd::ModifyStyle_7889&gt;
+10012B6D  |.  8B0D E05F0710 mov ecx,dword ptr ds:[0x10075FE0]
+10012B73  |.  6A 05         push 0x5
+10012B75  |.  E8 04480400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B7A  |.  8B0D E45F0710 mov ecx,dword ptr ds:[0x10075FE4]
+10012B80  |.  6A 05         push 0x5
+10012B82  |.  E8 F7470400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B87  |.  C705 D45F0710&gt;mov dword ptr ds:[0x10075FD4],0x1
+10012B91  |&gt;  8B46 18       mov eax,dword ptr ds:[esi+0x18]
+10012B94  |.  85C0          test eax,eax
+10012B96  |.  74 74         je XSkinCraf.10012C0C
+...
+</code></pre>
+
+<p>可直接在OD的Name表中找出MFC的CWnd::ShowWindow函数调用处全部下断，此处连续出现3处ShowWindow()，将第一次出现处的<code>push 0x5</code>改成<code>push 0x0</code>即可。</p>
 <h1>去除标题栏DEMO字样</h1>
 <p>本以为这步会很简单，很可惜，低估了作者的智商。直接找字符串没看到SkinCrafter Demo字样，因此怀疑很可能字符串是被加密的了。OD调试Dll会加载LoadDll.exe这个程序，并在Dll加载后允许通过接口执行Dll的导出函数，对于一般作为函数库的Dll这样调试当然没问题，每个函数都是独立的，但是对于这种函数之间有数据依赖的Dll来说，我必须先调用几个依赖的函数，这样就过于麻烦了（主要懒得输那么长的参数，还要小端码，而且每次加载都要输入……）。这里就用到一个技巧，自己写一个调用dll的exe，直接调试exe，并进入Dll的领空找需要的东西。</p>
 <p>在OD的调试选项中，找到事件(Event)选项卡，把“中断于新模块”这项勾上，之后加载exe程序。每当exe加载一个dll的时候，就会被断下，F9继续执行，直到目标出现。当然SkinCrafterDll这个Dll是在程序中通过LoadLibrary()加载的，因此先要把程序跑起来。</p>
