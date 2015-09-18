@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 
-  <title>  GreatYYX Blog - About
+  <title>	GreatYYX Blog - About
 </title>
 
   <meta charset="utf-8">
@@ -92,13 +92,15 @@
     
   <div class="container" id="main-container">
     <div class="row row-offcanvas row-offcanvas-right">
+
 <div id="blog-main" class="col-sm-8 blog-main">
   <div class="lang-btn">
-    <a data-pjax href="about.html" class="btn btn-default btn-sm" role="button">中文版</a>
-    <a data-pjax href="about_en.html" class="btn btn-default btn-sm" role="button">English Version</a>
+    <a id = "lang-btn-cn" class="btn btn-default btn-sm active" role="button">中文版</a>
+    <a id = "lang-btn-en" class="btn btn-default btn-sm" role="button">English Version</a>
   </div>
   <div class="blog-post" >
-  <h1>About Me</h1>
+  <div id="lang-cn">
+<h1>About Me</h1>
 <p>传说中的第八个男人(DebugMan)，严重拖延症患者，不折腾会死青年，生活状态基本同猿……</p>
 <p>键盘党：
 和计算机沾边的技术都感兴趣，具体方向没想过，热衷于好玩的程序开发和信息安全技术的研究。不过当和同类聚集在一起的时候基本跨界成美工:D</p>
@@ -132,6 +134,43 @@
 <p>具体配置方法请参考<a href="../posts/build-blog-on-github-by-pelican.html">本文</a>。</p>
 <h1>About Team</h1>
 <p>新成立的信息安全战队<a href="http://www.watch0ut.com">watch0ut</a>中的一员，希望志同道合的小伙伴们能和我们一起喝喝啤酒吃吃烤肉打打CTF。 比赛心得和Writeup请移步<a href="http://blog.watch0ut.com">watch0ut的博客</a>。</p>
+</div>
+<div class="hide" id="lang-en">
+<h1>About Me</h1>
+<p>Debug Man, Geek in techniques.</p>
+<p>Coding:
+I’m interested about all the fields of techs and enthusiastic about developing and information security. However, I am the only graphic and UI designer when working with other programmers :D</p>
+<p>Guitar:
+Pursue the style of folk and rock. Play with guitar after encountering obstacles or bottlenecks in coding.</p>
+<p>Photography:
+Canon in my hands, Hasselbladusa in my heart. Once, I've owned a Carl Zeiss lens in an <del>bankrupted</del> acquired mobile company. Take photos of beautiful girls first, then scenery.</p>
+<p>Other:
+Drown in FPS games before being an adult. Try to be a student in Blueshit... (a joke about Hackers in China)</p>
+<blockquote>
+<p>The dream that nobody laughed at is not worth achieving!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---Yonghao Luo</p>
+</blockquote>
+<h1>About This Site</h1>
+<p>I've owned many VPSs and websites. All of them are start from scratch or modified by me for my passion. Although my Wordpress site is coming to its second version，I give it up for this new simple and pure GitHub + Pelican blog.</p>
+<p>Now, yyx.name and yyx.me point to this site. <b>Copyright of logo and theme, all rights reserved. All posts follow the license of Creative Common.</b></p>
+<p>The open source projects and free components used:</p>
+<ul>
+<li>GitHub Page</li>
+<li>Pelican3 (Python3, Markdown)</li>
+<li>Bootstrap3</li>
+<li>jQuery2</li>
+<li>jQuery-UI</li>
+<li>jQuery.pjax</li>
+<li>jQuery.tocify</li>
+<li>Font Awesome</li>
+<li>Disqus</li>
+<li>highlight.js</li>
+<li>Google Analytics</li>
+<li>Swiftype</li>
+</ul>
+<p>Detailed tutorial of building the site please refer to <a href="../posts/build-blog-on-github-by-pelican.html">this article</a>.</p>
+<h1>About Team</h1>
+<p>Member of a new-born information security team <a href="http://www.watch0ut.com">watch0ut</a>. We really hope more and more friend will join in, enjoy beer, BBQ and CTF with us. Competition notes and write-ups please refer to <a href="http://blog.watch0ut.com">watch0ut Notebook</a>.</p>
+</div>
   </div><!-- /.blog-post -->
   
   <hr>
