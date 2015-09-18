@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
 
-  <title>  GreatYYX Blog - About
+  <title>	GreatYYX Blog - About
 </title>
 
   <meta charset="utf-8">
@@ -18,17 +18,16 @@
   <meta name="description" content="编程,开发,音乐,吉他,摄影,信息安全,极客,调试">
   <meta name="baidu-site-verification" content="U9HmJyJXz6" />
   <meta name="google-site-verification" content="9dDxioopwKNhApH1U_Jzy8_Cf7BCLFW5UTUqiTQLG9A" />
-  <link rel="shortcut icon" href="http://yyxname.qiniudn.com/theme/img/favicon.ico">
+  <link rel="shortcut icon" href="http://localhost:8000/theme/img/favicon.ico">
   
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="http://yyxname.qiniudn.com/theme/css/main.min.css" />
+  <link rel="stylesheet" href="http://localhost:8000/theme/bs/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="http://localhost:8000/theme/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://localhost:8000/theme/css/main.min.css" />
   <!--[if lt IE 9]>
     <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="http://blog.yyx.name/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="GreatYYX Blog Full Atom Feed" />
 
 
 </head>
@@ -46,8 +45,8 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a data-pjax class="navbar-brand" href="http://blog.yyx.name/index.html">
-          <img alt="Brand" height="60" width="60" src="http://yyxname.qiniudn.com/theme/img/logo.png">
+        <a data-pjax class="navbar-brand" href="http://localhost:8000/index.html">
+          <img alt="Brand" height="60" width="60" src="http://localhost:8000/theme/img/logo.png">
         </a>
       </div>
       <div class="navbar-collapse collapse">
@@ -56,13 +55,13 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-    <li><a data-pjax href="http://blog.yyx.name/category/music.html">Music</a></li>
-    <li><a data-pjax href="http://blog.yyx.name/category/security.html">Security</a></li>
-    <li><a data-pjax href="http://blog.yyx.name/category/web.html">Web</a></li>
+    <li><a data-pjax href="http://localhost:8000/category/music.html">Music</a></li>
+    <li><a data-pjax href="http://localhost:8000/category/security.html">Security</a></li>
+    <li><a data-pjax href="http://localhost:8000/category/web.html">Web</a></li>
             </ul>
           </li>
           <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
-          <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
+          <li><a data-pjax href="http://localhost:8000/pages/about.html">About</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-search"></span>
@@ -92,13 +91,15 @@
     
   <div class="container" id="main-container">
     <div class="row row-offcanvas row-offcanvas-right">
+
 <div id="blog-main" class="col-sm-8 blog-main">
   <div class="lang-btn">
-    <a data-pjax href="about.html" class="btn btn-default btn-sm" role="button">中文版</a>
-    <a data-pjax href="about_en.html" class="btn btn-default btn-sm" role="button">English Version</a>
+    <a id = "lang-btn-cn" class="btn btn-default btn-sm active" role="button">中文版</a>
+    <a id = "lang-btn-en" class="btn btn-default btn-sm" role="button">English Version</a>
   </div>
   <div class="blog-post" >
-  <h1>About Me</h1>
+  <div id="lang-cn">
+<h1>About Me</h1>
 <p>传说中的第八个男人(DebugMan)，严重拖延症患者，不折腾会死青年，生活状态基本同猿……</p>
 <p>键盘党：
 和计算机沾边的技术都感兴趣，具体方向没想过，热衷于好玩的程序开发和信息安全技术的研究。不过当和同类聚集在一起的时候基本跨界成美工:D</p>
@@ -132,31 +133,54 @@
 <p>具体配置方法请参考<a href="../posts/build-blog-on-github-by-pelican.html">本文</a>。</p>
 <h1>About Team</h1>
 <p>新成立的信息安全战队<a href="http://www.watch0ut.com">watch0ut</a>中的一员，希望志同道合的小伙伴们能和我们一起喝喝啤酒吃吃烤肉打打CTF。 比赛心得和Writeup请移步<a href="http://blog.watch0ut.com">watch0ut的博客</a>。</p>
+</div>
+<div class="hide" id="lang-en">
+<h1>About Me</h1>
+<p>Debug Man, Geek in techniques.</p>
+<p>Coding:
+I’m interested about all the fields of techs and enthusiastic about developing and information security. However, I am the only graphic and UI designer when working with other programmers :D</p>
+<p>Guitar:
+Pursue the style of folk and rock. Play with guitar after encountering obstacles or bottlenecks in coding.</p>
+<p>Photography:
+Canon in my hands, Hasselbladusa in my heart. Once, I've owned a Carl Zeiss lens in an <del>bankrupted</del> acquired mobile company. Take photos of beautiful girls first, then scenery.</p>
+<p>Other:
+Drown in FPS games before being an adult. Try to be a student in Blueshit... (a joke about Hackers in China)</p>
+<blockquote>
+<p>The dream that nobody laughed at is not worth achieving!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---Yonghao Luo</p>
+</blockquote>
+<h1>About This Site</h1>
+<p>I've owned many VPSs and websites. All of them are start from scratch or modified by me for my passion. Although my Wordpress site is coming to its second version，I give it up for this new simple and pure GitHub + Pelican blog.</p>
+<p>Now, yyx.name and yyx.me point to this site. <b>Copyright of logo and theme, all rights reserved. All posts follow the license of Creative Common.</b></p>
+<p>The open source projects and free components used:</p>
+<ul>
+<li>GitHub Page</li>
+<li>Pelican3 (Python3, Markdown)</li>
+<li>Bootstrap3</li>
+<li>jQuery2</li>
+<li>jQuery-UI</li>
+<li>jQuery.pjax</li>
+<li>jQuery.tocify</li>
+<li>Font Awesome</li>
+<li>Disqus</li>
+<li>highlight.js</li>
+<li>Google Analytics</li>
+<li>Swiftype</li>
+</ul>
+<p>Detailed tutorial of building the site please refer to <a href="../posts/build-blog-on-github-by-pelican.html">this article</a>.</p>
+<h1>About Team</h1>
+<p>Member of a new-born information security team <a href="http://www.watch0ut.com">watch0ut</a>. We really hope more and more friend will join in, enjoy beer, BBQ and CTF with us. Competition notes and write-ups please refer to <a href="http://blog.watch0ut.com">watch0ut Notebook</a>.</p>
+</div>
   </div><!-- /.blog-post -->
   
   <hr>
 
   <!--comment-->
   <div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'yyxblog'; // required: replace example with your forum shortname
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 </div><!-- /.blog-main -->
 
 <div id="blog-sidebar" class="col-sm-4">
   <div class="sidebar-module">
-<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=1&isWeibo=1&isFans=0&uid=1085956311&verifier=480b8dd8&colors=f5f5f5,ffffff,666666,339966,fbfbfb&dpc=1"></iframe>
   </div>
 </div>
     </div><!-- /.row -->
@@ -177,23 +201,14 @@
 
 </div><!-- /.wrapper -->
 
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script src="http://yyxname.qiniudn.com/theme/js/jquery.tocify.min.js"></script>
-  <script src="http://yyxname.qiniudn.com/theme/js/highlight.pack.js"></script>
-  <script src="http://yyxname.qiniudn.com/theme/js/jquery.pjax.min.js"></script>
-  <script src="http://yyxname.qiniudn.com/theme/js/main.min.js"></script>
+  <script src="http://localhost:8000/theme/js/jquery.min.js"></script>
+  <script src="http://localhost:8000/theme/js/jquery-ui.min.js"></script>
+  <script src="http://localhost:8000/theme/bs/js/bootstrap.min.js"></script>
+  <script src="http://localhost:8000/theme/js/jquery.tocify.min.js"></script>
+  <script src="http://localhost:8000/theme/js/highlight.pack.js"></script>
+  <script src="http://localhost:8000/theme/js/jquery.pjax.min.js"></script>
+  <script src="http://localhost:8000/theme/js/main.min.js"></script>
 
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-64342434-1', 'auto');
-    ga('send', 'pageview');
-    </script>
 <script type="text/javascript">
 (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
 (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
