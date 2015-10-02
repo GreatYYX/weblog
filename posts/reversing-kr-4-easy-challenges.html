@@ -66,7 +66,7 @@
           </li>
           <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
           <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
-          <li class="dropdown">
+          <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-search"></span>
             </a>
@@ -77,17 +77,9 @@
                 </form>
               </li>
             </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-share"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="http://weibo.com/u/1085956311" target="_blank"><i class="fa fa-weibo"></i>&nbsp;Weibo</a></li>
-              <li><a href="http://github.com/GreatYYX"  target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
-            </ul>
-          </li>
-
+          </li> -->
+          <li><a href="http://weibo.com/u/1085956311" target="_blank" title="Weibo"><i class="fa fa-lg fa-weibo"></i></a></li>
+          <li><a href="http://github.com/GreatYYX"  target="_blank" title="Github"><i class="fa fa-lg fa-github"></i></a></li>
         </ul>
       </div>
     </div>
@@ -200,7 +192,7 @@
 
 <p>之后匹配字符串R3versing，并在字符串头部（esp+4处）添加字符为E。因此答案为Ea5yR3versing。</p>
 <p>这里算法由于涉及到esp的改变，因此OD跟踪起来比IDA静态分析更加简单。可以直接将程序跑起来，当程序碰到相关判断的地方（一般是cmp）会改变标志位（一般是ZF），只需要改变标志位寄存器的值让它按照你要的逻辑执行下去即可，当然你需要同时记录这些让逻辑保持正确的字符，你可以直接在栈（或数据区）中作出修改。之后当程序跑完之后，你的栈（或数据区）中就是一个正确的值。本程序栈的结构如下：</p>
-<p><img src="../statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg" /></p>
+<p><img alt="OD" src="../statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg" /></p>
 <h1>Easy Keygen</h1>
 <p>注册机题，readme要求Find the Name when the Serial is 5B134977135E7D13。程序跑起来，要求输入名字和序列号，测试了一下Name为abcde和随机的序列号，提示错误：</p>
 <pre><code class="dos">C:\Users\GreatYYX&gt;&quot;F:\Crack\reversingkr\Easy_KeygenMe\Easy Keygen.exe&quot;
@@ -505,7 +497,7 @@ Easy_ELF: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically 
 
 <p>sub_804851B函数是提示正确与错误的分支函数，其中四个call，write识别出来了，其他函数跟进去看一下（我已经注释），发现是scanf、主算法函数和返回Correct字符串的函数，其中当主算法函数返回1时判为正确。</p>
 <p>然后就重点来看sub_8048451。转到图形视图，一组连续判断，只要逻辑沿着右边下来即可走通（最后eax为1，符合上面的判对条件）。</p>
-<p><img src="../statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg" /></p>
+<p><img alt="IDA" src="../statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg" /></p>
 <p>之后大致扫描了一下程序体，发现反复调用ds段寄存器指向的段内的一些byte，点进去看一下数据区布局（在.bss段，全局变量）。</p>
 <pre><code class="x86asm">.bss:0804A020 byte_804A020    db ?                    ; DATA XREF: sub_8048434+Bo
 .bss:0804A020                                         ; sub_8048451:loc_8048469r ...
@@ -639,7 +631,7 @@ Easy_ELF: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically 
   <div id="loading" class="fade"><div class="loader"></div></div>
 
   <div class="blog-footer">
-    <p class="l">©2015&nbsp;<a href="#">GreatYYX</a>.&nbsp;&nbsp;
+    <p class="l">©2015&nbsp;<a data-pjax href="http://blog.yyx.name/pages/about.html">GreatYYX</a>.&nbsp;&nbsp;
       <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
     </p>
   </div><!-- /.blog-footer -->
@@ -654,6 +646,7 @@ Easy_ELF: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically 
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/ekko-lightbox.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.tocify.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/highlight.pack.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.pjax.min.js"></script>
@@ -668,13 +661,6 @@ Easy_ELF: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically 
     ga('create', 'UA-64342434-1', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-})(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
 
-_st('install','XwpC765YWzV58fvrdjoQ');
-</script>
 </body>
 </html>

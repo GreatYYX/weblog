@@ -66,7 +66,7 @@
           </li>
           <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
           <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
-          <li class="dropdown">
+          <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-search"></span>
             </a>
@@ -77,17 +77,9 @@
                 </form>
               </li>
             </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-share"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="http://weibo.com/u/1085956311" target="_blank"><i class="fa fa-weibo"></i>&nbsp;Weibo</a></li>
-              <li><a href="http://github.com/GreatYYX"  target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
-            </ul>
-          </li>
-
+          </li> -->
+          <li><a href="http://weibo.com/u/1085956311" target="_blank" title="Weibo"><i class="fa fa-lg fa-weibo"></i></a></li>
+          <li><a href="http://github.com/GreatYYX"  target="_blank" title="Github"><i class="fa fa-lg fa-github"></i></a></li>
         </ul>
       </div>
     </div>
@@ -321,7 +313,7 @@ else if (X &gt;= 3 &amp;&amp; X &lt;= 13)
 <p>由于每个人对于记牌器最终功能设计的不一致，所以在写图形界面的时候也会有很大的差异。我目前粗略的实现了显示玩家剩余牌数、已经出的牌以及除了自己的牌以外还剩下的牌。</p>
 <p>这边需要特别说明一下一个不可避免的问题：玩家的座位。当玩家入座后，无论他在游戏大厅中是哪个座位，他的位置一定是显示在最下面的。我上面一直强调无论是玩家剩余的牌数还是玩家打出去的牌，都是根据大厅中的绝对位置来确定的。所以这里涉及到计算相对座位的问题，公式其实很简单：<code>相对座位 = (座位-玩家自己的座位) MOD 4</code>。</p>
 <p>最后上一张成品图：</p>
-<p><img src="../statics/qq-card-game-recorder/recorder.jpg" /></p>
+<p><img alt="record" src="../statics/qq-card-game-recorder/recorder.jpg" /></p>
 <h1>DayN 完善和后话</h1>
 <p>找八阿哥（bug）当然是不可缺少的重要一步，不然怎么做第八个男人（Debug Man）呢？</p>
 <p>QQ新双扣角色版的内存数据抓取总的来说没有碰到特别大的问题，主要还是因为数据没有加密，因此可以靠猜想和CE的辅助最终找到数据。GameLogic.dll也没有加壳，所以直接就能在IDA中看反汇编，相对也降低了破解的门槛。联网游戏的破解难度就是实时性，因此很难用OD之类的工具来下断点跟踪，所以推断的能力和阅读静态反汇编的能力需要加强。</p>
@@ -374,7 +366,7 @@ else if (X &gt;= 3 &amp;&amp; X &lt;= 13)
   <div id="loading" class="fade"><div class="loader"></div></div>
 
   <div class="blog-footer">
-    <p class="l">©2015&nbsp;<a href="#">GreatYYX</a>.&nbsp;&nbsp;
+    <p class="l">©2015&nbsp;<a data-pjax href="http://blog.yyx.name/pages/about.html">GreatYYX</a>.&nbsp;&nbsp;
       <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
     </p>
   </div><!-- /.blog-footer -->
@@ -389,6 +381,7 @@ else if (X &gt;= 3 &amp;&amp; X &lt;= 13)
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/ekko-lightbox.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.tocify.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/highlight.pack.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.pjax.min.js"></script>
@@ -403,13 +396,6 @@ else if (X &gt;= 3 &amp;&amp; X &lt;= 13)
     ga('create', 'UA-64342434-1', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-})(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
 
-_st('install','XwpC765YWzV58fvrdjoQ');
-</script>
 </body>
 </html>

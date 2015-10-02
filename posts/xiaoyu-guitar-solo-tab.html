@@ -66,7 +66,7 @@
           </li>
           <li><a target="_blank" href="http://photo.yyx.name">Photography</a></li>
           <li><a data-pjax href="http://blog.yyx.name/pages/about.html">About</a></li>
-          <li class="dropdown">
+          <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-search"></span>
             </a>
@@ -77,17 +77,9 @@
                 </form>
               </li>
             </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-share"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="http://weibo.com/u/1085956311" target="_blank"><i class="fa fa-weibo"></i>&nbsp;Weibo</a></li>
-              <li><a href="http://github.com/GreatYYX"  target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
-            </ul>
-          </li>
-
+          </li> -->
+          <li><a href="http://weibo.com/u/1085956311" target="_blank" title="Weibo"><i class="fa fa-lg fa-weibo"></i></a></li>
+          <li><a href="http://github.com/GreatYYX"  target="_blank" title="Github"><i class="fa fa-lg fa-github"></i></a></li>
         </ul>
       </div>
     </div>
@@ -107,14 +99,14 @@
 <p>一直很喜欢阿岳的《小宇》，简单、真诚的情感流露。当然，这首青涩的情歌也成了泡妹子必备/必杀歌曲之一（虽然我不是这个目的你们爱信不信）。不过网络上大多只有主歌和副歌的和弦谱（Solo部分为和弦分解），比较完善的谱子虽然有前奏尾奏和独立Solo，但Solo部分普遍是双吉他配合的，因此没法一个人完成弹(zhuang)唱(x)，毕竟你不能和妹子单独约个会还叫上兄弟吧。</p>
 <p>于是乎，寡人就想着自己捣鼓一个（听起来好牛X的样子）。可是因为拖延症就一直没搞…… 昨晚上突然大脑充血，“做个文艺B”的口号响彻脑门，趁着荷尔蒙还不知道是多巴胺的那股劲儿，就草草编配了一下。</p>
 <h1>Solo</h1>
-<p><img src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.jpg" /></p>
+<p><img alt="xiaoyu solo" src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.jpg" /></p>
 <p>本Solo谱是根据下面这个主谱来编配，因此什么都得按照主谱子来：标准调弦降半音。</p>
 <h1>主谱</h1>
 <p>下面上主谱，版权归原作者和www.jitaba.cn所有。其中我标红色的部分替换成我编配的Solo即可。</p>
 <p>需要注意的是，原版的伴奏从我标黄色的部分开始有鼓点的配合，因此请即兴加入闷音模仿鼓的节奏，这样和Solo部分的感觉相似，可以平滑过渡，同时提升整个曲子的Feel。</p>
-<p><img src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-1.jpg" /></p>
-<p><img src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-2.jpg" /></p>
-<p><img src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-3.jpg" /></p>
+<p><img alt="xiaoyu 1" src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-1.jpg" /></p>
+<p><img alt="xiaoyu 2" src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-2.jpg" /></p>
+<p><img alt="xiaoyu 3" src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-3.jpg" /></p>
 <p>从遵循原版的角度来说，原版Solo结束后为：</p>
 <blockquote>
 <p>我不管未来会怎麽样
@@ -176,7 +168,7 @@
   <div id="loading" class="fade"><div class="loader"></div></div>
 
   <div class="blog-footer">
-    <p class="l">©2015&nbsp;<a href="#">GreatYYX</a>.&nbsp;&nbsp;
+    <p class="l">©2015&nbsp;<a data-pjax href="http://blog.yyx.name/pages/about.html">GreatYYX</a>.&nbsp;&nbsp;
       <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
     </p>
   </div><!-- /.blog-footer -->
@@ -191,6 +183,7 @@
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://yyxname.qiniudn.com/theme/js/ekko-lightbox.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.tocify.min.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/highlight.pack.js"></script>
   <script src="http://yyxname.qiniudn.com/theme/js/jquery.pjax.min.js"></script>
@@ -205,13 +198,6 @@
     ga('create', 'UA-64342434-1', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-})(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
 
-_st('install','XwpC765YWzV58fvrdjoQ');
-</script>
 </body>
 </html>
