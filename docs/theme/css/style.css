@@ -373,6 +373,9 @@ section#content h1 {
 .lang-btn-active {
   text-decoration:line-through;
 }
+.lang-btn-active:hover {
+  text-decoration:line-through;
+}
 section#content .lang-section {
 
 }
