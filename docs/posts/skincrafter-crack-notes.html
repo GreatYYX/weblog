@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>SkinCrafter破解笔记 &ndash; YYX's WEBlog</title>
+
+    <!-- Meta -->
+    <meta name="description" content="YYX's WEBlog &ndash; ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="yyx" />
+    <meta property="article:section" content="Security" />
+    <meta property="article:published_time" content="2014-11-09" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="SkinCrafter破解笔记"/>
+    <meta property="og:description" content="记录了著名VC及.NET皮肤库SkinCrafter(3.8.0 for VS2010)的破解过程，包括license初始化函数破解，弹出框去除以及DEMO文字去除的具体方法及技巧。"/>
+    <meta property="og:site_name" content="YYX's WEBlog" />
+    <meta property="og:url" content="http://blog.yyx.me/posts/skincrafter-crack-notes.html"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SkinCrafter破解笔记">
+    <meta name="twitter:description" content="记录了著名VC及.NET皮肤库SkinCrafter(3.8.0 for VS2010)的破解过程，包括license初始化函数破解，弹出框去除以及DEMO文字去除的具体方法及技巧。">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/skincrafter-crack-notes.html">
+
+    <!-- Feed -->
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's WEBlog Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/security.atom.xml" title="YYX's WEBlog Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's WEBlog Comments RSS Feed">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
+
+    <!-- Icon -->
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <!-- <script src="http://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
+    <script src="http://blog.yyx.me/theme/js/main.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="http://blog.yyx.me/index.html" id="header-logo" title="Home"><img src="http://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"/></a>
+        <!-- <a href="http://blog.yyx.me" id="header-logo" title="Home">y</a> -->
+        <nav id="header-menu">
+          <ul>
+            <!-- <li class="w3-bottombar w3-border-white w3-hover-text-grey" ><a href="http://blog.yyx.me/category/music.html">Music</a></li> -->
+            <!-- <li class="w3-bottombar w3-border-white w3-hover-text-grey" style="/*font-weight: bold;*/"><a href="http://blog.yyx.me/category/security.html">Security</a></li> -->
+            <!-- <li class="w3-bottombar w3-border-white w3-hover-text-grey" ><a href="http://blog.yyx.me/category/web.html">Web</a></li> -->
+            <li class="w3-bottombar w3-border-white w3-hover-text-grey"><a href="http://photo.yyx.me" target="_blank">Photo</a></li>
+            <li><a href="http://blog.yyx.me/pages/about.html">About</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <br><br><br>
+
+    <article>
+      <header class="w3-container col-main">
+        <h1>SkinCrafter破解笔记</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2014-11-09T23:46:00-08:00">Nov 09, 2014</time> @ <a href="http://blog.yyx.me/category/security.html" title="All articles in category Security">Security</a></span>
+          </div>
+          <div class="w3-margin-right">
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/skincrafter.html" title="All articles with Skincrafter tag">#SkinCrafter</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/crack.html" title="All articles with Crack tag">#crack</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/reversing.html" title="All articles with Reversing tag">#reversing</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/pi-fu.html" title="All articles with 皮肤 tag">#皮肤</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/po-jie.html" title="All articles with 破解 tag">#破解</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tag/ni-xiang.html" title="All articles with 逆向 tag">#逆向</a>
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <br>
+
+
+      <div class="col-main w3-container">
+        <section id="content">
+          <h1>开篇废话</h1>
+<p>最近的一个Win下的小项目，图形界面需求简单，就直接上MFC。完成后某人觉得界面不够和谐，于是得折腾下界面。貌似目前VC++界的UI主流是MS自家DirectUI思想下的一些UI库，可惜本人的哲学“懒”字当头，再学一套UI的用法实在是要了亲命，直接放弃。记得本科期间用过一个Skin++的皮肤库，加载后可以直接换肤，可惜那玩意皮肤太少、没有皮肤编辑器而且貌似已经停止维护，因此作罢。后google到同为皮肤库的SkinCrafter，并下了3.4.4的破解版，可惜在VS2010下整合后MessageBox的按钮底色在Win7下无法匹配皮肤设置（官网查阅后发现是bug，新版已解决），遂换到3.8.0。该版本的VS2012有相关破解版，但VS2010没有，于是自己上手破解（正所谓学会破解，用D版软件都有底气了），花了差不多快2小时最终成功，并记录成本文。</p>
+<h1>Dll版工作流程</h1>
+<p>对于VC/MFC程序，SkinCrafter有Dll/ActiveX两个版本，我个人喜欢使用Dll版（两个版本的破解方法其实是一样的）。下面介绍Dll版本官方的使用方法：</p>
+<ol>
+<li>首先需要引入CSCSkin.h和CSCSkin.cpp文件，并将dll及皮肤文件.skf放在目录下。</li>
+<li>实例化CSCSkin对象m_skin，并在App的InitInstance()中执行Init()、LoadSkinFromFile()及ApplySkin()三个函数。</li>
+</ol>
+<p>对比ActiveX版本，可以发现少执行好几个函数，其实这些函数在Init()方法中都完成了，所以真正的工作流程是：</p>
+<ol>
+<li>定义了Dll导出表中所有的函数指针。</li>
+<li>通过LoadLibrary()加载Dll，并执行InitLicenKeys()和InitDecoration()。</li>
+<li>LoadSkinFromFile()加载皮肤。</li>
+<li>ApplySkin()应用皮肤。</li>
+</ol>
+<h1>InitLicenKeys函数破解</h1>
+<p>这个函数用于写入注册信息，对于DEMO版，该函数的4个参数是定死的。其实不破解这个函数也无所谓，反正写在程序里面，但是真要破解也很简单。</p>
+<p>由于是简单的固定字符串匹配，因此可以直接替换Dll中的字符串。当然还可以采用爆破的方法，这样无论输入什么都行。</p>
+<p>查找四个参数中任意一个字符串，我这儿用DEMOSKINCRAFTERLICENCE（比较有代表性），定位到程序。发现有两个处strcmp()比较字符串并作出比较和跳转，因此直接nop掉跳转即可。</p>
+<div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="nt">10005A49</span>  <span class="o">|&gt;</span> <span class="err">\</span><span class="nt">85C0</span>          <span class="nt">test</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">eax</span>
+<span class="nt">10005A4B</span>  <span class="o">|.</span>  <span class="nt">75</span> <span class="nt">48</span>         <span class="nt">jnz</span> <span class="nt">XSkinCraf</span><span class="p">.</span><span class="nc">10005A95</span>                   <span class="o">;</span>  <span class="err">第一次跳转判断</span>
+<span class="nt">10005A4D</span>  <span class="o">|.</span>  <span class="nt">8B45</span> <span class="nt">14</span>       <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="cp">[</span><span class="nx">arg.4</span><span class="cp">]</span>
+<span class="nt">10005A50</span>  <span class="o">|.</span>  <span class="nt">B9</span> <span class="nt">8C420610</span>   <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">1006428C</span>                <span class="o">;</span>  <span class="nt">DEMOSKINCRAFTERLICENCE</span>
+<span class="o">...</span>
+<span class="nt">10005A7A</span>  <span class="o">|&gt;</span>  <span class="nt">85C0</span>          <span class="nt">test</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">eax</span>
+<span class="nt">10005A7C</span>  <span class="o">|.</span>  <span class="nt">75</span> <span class="nt">17</span>         <span class="nt">jnz</span> <span class="nt">XSkinCraf</span><span class="p">.</span><span class="nc">10005A95</span>                   <span class="o">;</span>  <span class="err">第二次跳转判断</span>
+<span class="nt">10005A7E</span>  <span class="o">|.</span>  <span class="nt">5E</span>            <span class="nt">pop</span> <span class="nt">esi</span>
+<span class="nt">10005A7F</span>  <span class="o">|.</span>  <span class="nt">B8</span> <span class="nt">01000000</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">0x1</span>
+<span class="nt">10005A84</span>  <span class="o">|.</span>  <span class="nt">5B</span>            <span class="nt">pop</span> <span class="nt">ebx</span>
+<span class="nt">10005A85</span>  <span class="o">|.</span>  <span class="nt">8B4D</span> <span class="nt">FC</span>       <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.1</span><span class="cp">]</span>
+<span class="nt">10005A88</span>  <span class="o">|.</span>  <span class="nt">33CD</span>          <span class="nt">xor</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">ebp</span>
+<span class="nt">10005A8A</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">E91E0500</span>   <span class="nt">call</span> <span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">10057978</span>
+<span class="nt">10005A8F</span>  <span class="o">|.</span>  <span class="nt">8BE5</span>          <span class="nt">mov</span> <span class="nt">esp</span><span class="o">,</span><span class="nt">ebp</span>
+<span class="nt">10005A91</span>  <span class="o">|.</span>  <span class="nt">5D</span>            <span class="nt">pop</span> <span class="nt">ebp</span>
+<span class="nt">10005A92</span>  <span class="o">|.</span>  <span class="nt">C2</span> <span class="nt">1000</span>       <span class="nt">retn</span> <span class="nt">0x10</span>
+<span class="nt">10005A95</span>  <span class="o">|&gt;</span>  <span class="nt">6A</span> <span class="nt">00</span>         <span class="nt">push</span> <span class="nt">0x0</span>                                 <span class="o">;</span> <span class="o">/</span><span class="nt">Style</span> <span class="o">=</span> <span class="nt">MB_OK</span><span class="o">|</span><span class="nt">MB_APPLMODAL</span>
+<span class="nt">10005A97</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">80420610</span>   <span class="nt">push</span> <span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">10064280</span>                   <span class="o">;</span> <span class="o">|</span><span class="nt">SkinCrafter</span>
+<span class="nt">10005A9C</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">D8410610</span>   <span class="nt">push</span> <span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">100641D8</span>                   <span class="o">;</span> <span class="o">|</span><span class="nt">You</span> <span class="nt">are</span> <span class="nt">using</span> <span class="nt">DEMO</span> <span class="nt">version</span> <span class="nt">of</span> <span class="nt">SkinCrafter</span><span class="o">.</span> <span class="nt">InitLicenKeys</span> <span class="nt">function</span> <span class="nt">parameters</span> <span class="nt">should</span> <span class="nt">be</span><span class="o">:</span> <span class="nt">SKINCRAFTER</span><span class="o">,</span> <span class="nt">SKINCRAFTER</span><span class="p">.</span><span class="nc">COM</span><span class="o">,</span> <span class="nt">support</span><span class="p">@</span><span class="k">skincrafter</span><span class="p">.</span><span class="nc">com</span><span class="o">,</span> <span class="nt">DEMOSKINCRAFTERLICENCE</span>
+<span class="nt">10005AA1</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">00</span>         <span class="nt">push</span> <span class="nt">0x0</span>                                 <span class="p">;</span> <span class="o">|</span><span class="nt">hOwner</span> <span class="o">=</span> <span class="nt">NULL</span>
+<span class="nt">10005AA3</span>  <span class="o">|.</span>  <span class="nt">FF15</span> <span class="nt">4C350610</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">USER32.MessageBoxA</span><span class="o">&gt;&gt;</span><span class="p">;</span> <span class="o">\</span><span class="nx">MessageBoxA</span>
+<span class="nx">...</span>
+</pre></div>
+
+
+<h1>去除弹出框</h1>
+<p>最明显的莫过于这个弹出框，程序启动后就会出现。该弹出框无边框可拖动，而且强制置顶（TOP_MOST），因此想到SetWindowPos()及SetWindowLong()两个函数，仔细查找后均无果。后来又查找了CreateWindow()、CreateRectRgn()及CreateRectRgnIndirect()也没有很好的下手位置。就在找函数这条思路没有突破口的时候，看到弹出窗口上有一条可以点击的网址，因此直接查字符串找这个网址，然后跳转到程序处。</p>
+<p>找到程序处之后翻看上下文，无非就在load一些资源，突然看到ShowWindow()函数。</p>
+<div class="highlight"><pre><span></span><span class="nt">10002F40</span>  <span class="o">/$</span>  <span class="nt">55</span>            <span class="nt">push</span> <span class="nt">ebp</span>
+<span class="nt">10002F41</span>  <span class="o">|.</span>  <span class="nt">8BEC</span>          <span class="nt">mov</span> <span class="nt">ebp</span><span class="o">,</span><span class="nt">esp</span>
+<span class="o">...</span>
+<span class="nt">10002F87</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">F3000000</span>   <span class="nt">push</span> <span class="nt">0xF3</span>
+<span class="nt">10002F8C</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">02</span>         <span class="nt">push</span> <span class="nt">0x2</span>
+<span class="nt">10002F8E</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">F3000000</span>   <span class="nt">push</span> <span class="nt">0xF3</span>
+<span class="nt">10002F93</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">D6410500</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">mfc100</span><span class="o">.</span><span class="p">#</span><span class="nn">AfxFindResourceHandle_1900</span><span class="o">&gt;</span>
+<span class="nt">10002F98</span>  <span class="o">|.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>                                             <span class="o">;</span> <span class="o">|</span><span class="nt">hInst</span>
+<span class="nt">10002F99</span>  <span class="o">|.</span>  <span class="nt">FF15</span> <span class="nt">70350610</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">USER32.LoadBitmapW</span><span class="o">&gt;</span><span class="cp">]</span>            <span class="o">;</span> <span class="err">\</span><span class="nt">LoadBitmapW</span>
+<span class="nt">10002F9F</span>  <span class="o">|.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>
+<span class="nt">10002FA0</span>  <span class="o">|.</span>  <span class="nt">B9</span> <span class="nt">CC450710</span>   <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">100745CC</span>
+<span class="nt">10002FA5</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">BE410500</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">mfc100</span><span class="o">.</span><span class="p">#</span><span class="nn">CGdiObject</span><span class="p">::</span><span class="nd">Attach_2184</span><span class="o">&gt;</span>
+<span class="nt">10002FAA</span>  <span class="o">|.</span>  <span class="nt">A1</span> <span class="nt">D0450710</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x100745D0</span><span class="cp">]</span>
+<span class="nt">10002FAF</span>  <span class="o">|.</span>  <span class="nt">A3</span> <span class="nt">D85F0710</span>   <span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x10075FD8</span><span class="cp">]</span><span class="o">,</span><span class="nt">eax</span>
+<span class="nt">10002FB4</span>  <span class="o">|.</span>  <span class="nt">391D</span> <span class="nt">DC5F0710</span> <span class="nt">cmp</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x10075FDC</span><span class="cp">]</span><span class="o">,</span><span class="nt">ebx</span>
+<span class="nt">10002FBA</span>  <span class="o">|.</span>  <span class="nt">0F85</span> <span class="nt">7C020000</span> <span class="nt">jnz</span> <span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">1000323C</span>
+<span class="o">...</span>
+<span class="nt">10003143</span>  <span class="o">|.</span>  <span class="nt">A1</span> <span class="nt">E05F0710</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x10075FE0</span><span class="cp">]</span>
+<span class="nt">10003148</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">01</span>         <span class="nt">push</span> <span class="nt">0x1</span>
+<span class="nt">1000314A</span>  <span class="o">|.</span>  <span class="nt">51</span>            <span class="nt">push</span> <span class="nt">ecx</span>
+<span class="nt">1000314B</span>  <span class="o">|.</span>  <span class="nt">8BCC</span>          <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">esp</span>
+<span class="nt">1000314D</span>  <span class="o">|.</span>  <span class="nt">8965</span> <span class="nt">DC</span>       <span class="nt">mov</span> <span class="cp">[</span><span class="kd">local</span><span class="mf">.9</span><span class="cp">]</span><span class="o">,</span><span class="nt">esp</span>
+<span class="nt">10003150</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">843D0610</span>   <span class="nt">push</span> <span class="nt">SkinCraf</span><span class="p">.</span><span class="nc">10063D84</span>                               <span class="o">;</span>  <span class="nt">http</span><span class="o">://</span><span class="nt">www</span><span class="p">.</span><span class="nc">skincrafter</span><span class="p">.</span><span class="nc">com</span><span class="o">/</span><span class="nt">order</span><span class="p">.</span><span class="nc">html</span>
+<span class="nt">10003155</span>  <span class="o">|.</span>  <span class="nt">C780</span> <span class="nt">84000000</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="nx">eax</span><span class="o">+</span><span class="mh">0x84</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x497D</span>
+<span class="nt">1000315F</span>  <span class="o">|.</span>  <span class="nt">FF15</span> <span class="nt">A4390610</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">mfc100.</span><span class="vi">#ATL</span><span class="nl">::CStringT</span><span class="o">&lt;</span><span class="nx">char</span><span class="p">,</span><span class="nx">StrT</span><span class="o">&gt;</span><span class="p">;</span>  <span class="nx">mfc100.</span><span class="vi">#ATL</span><span class="nl">::CStringT</span><span class="o">&lt;</span><span class="nx">char</span><span class="p">,</span><span class="nx">StrTraitMFC_DLL</span><span class="o">&lt;</span><span class="nx">char</span><span class="p">,</span><span class="nx">ATL</span><span class="nl">::ChTraitsCRT</span><span class="o">&lt;</span><span class="nx">char</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&gt;</span><span class="nl">::CStringT</span><span class="o">&lt;</span><span class="nx">char</span><span class="p">,</span><span class="nx">StrTraitMFC_DLL</span><span class="o">&lt;</span><span class="nx">char</span><span class="p">,</span><span class="nx">ATL</span><span class="nl">::ChTraitsCRT</span><span class="o">&lt;</span><span class="nx">char</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&gt;</span><span class="nx">_310</span>
+<span class="mi">10003165</span>  <span class="o">|</span><span class="nx">.</span>  <span class="mi">8</span><span class="nx">B0D</span> <span class="nx">E05F0710</span> <span class="nx">mov</span> <span class="nx">ecx</span><span class="p">,</span><span class="nx">dword</span> <span class="nx">ptr</span> <span class="nx">ds</span><span class="p">:</span><span class="err">[</span><span class="mh">0x10075FE0</span><span class="cp">]</span>
+<span class="o">...</span>
+<span class="nt">1000323C</span>  <span class="o">|&gt;</span>  <span class="nt">8B0D</span> <span class="nt">DC5F0710</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x10075FDC</span><span class="cp">]</span>
+<span class="nt">10003242</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">05</span>         <span class="nt">push</span> <span class="nt">0x5</span>
+<span class="nt">10003244</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">35410500</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">mfc100</span><span class="o">.</span><span class="p">#</span><span class="nn">CWnd</span><span class="p">::</span><span class="nd">ShowWindow_12962</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+
+
+<p>可以看到，函数执行完成之后会ShowWindow()，而当参数为5的时候，就是SW_SHOW，因此可以将push的参数设置为0(SW_HIDE)或者直接把整合函数nop掉。</p>
+<p><strong>2014-12-03更新：</strong></p>
+<p>今天在项目上调试的时候发现又出现弹窗，使用相同的dll在皮肤测试程序上则没有出现。于是直接调试项目程序，发现还有几处ShowWindow函数。</p>
+<div class="highlight"><pre><span></span>10012B40  /$  55            push ebp
+10012B41  |.  8BEC          mov ebp,esp
+10012B43  |.  833D D45F0710&gt;cmp dword ptr ds:[0x10075FD4],0x0
+10012B4A  |.  56            push esi
+10012B4B  |.  8BF1          mov esi,ecx
+10012B4D  |.  75 42         jnz XSkinCraf.10012B91
+10012B4F  |.  8B0D DC5F0710 mov ecx,dword ptr ds:[0x10075FDC]
+10012B55  |.  6A 05         push 0x5
+10012B57  |.  E8 22480400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B5C  |.  8B0D DC5F0710 mov ecx,dword ptr ds:[0x10075FDC]
+10012B62  |.  6A 00         push 0x0
+10012B64  |.  6A 08         push 0x8
+10012B66  |.  6A 00         push 0x0
+10012B68  |.  E8 8B490400   call &lt;jmp.&amp;mfc100.#CWnd::ModifyStyle_7889&gt;
+10012B6D  |.  8B0D E05F0710 mov ecx,dword ptr ds:[0x10075FE0]
+10012B73  |.  6A 05         push 0x5
+10012B75  |.  E8 04480400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B7A  |.  8B0D E45F0710 mov ecx,dword ptr ds:[0x10075FE4]
+10012B80  |.  6A 05         push 0x5
+10012B82  |.  E8 F7470400   call &lt;jmp.&amp;mfc100.#CWnd::ShowWindow_12962&gt;
+10012B87  |.  C705 D45F0710&gt;mov dword ptr ds:[0x10075FD4],0x1
+10012B91  |&gt;  8B46 18       mov eax,dword ptr ds:[esi+0x18]
+10012B94  |.  85C0          test eax,eax
+10012B96  |.  74 74         je XSkinCraf.10012C0C
+...
+</pre></div>
+
+
+<p>可直接在OD的Name表中找出MFC的CWnd::ShowWindow函数调用处全部下断，此处连续出现3处ShowWindow()，将第一次出现处的<code>push 0x5</code>改成<code>push 0x0</code>即可。</p>
+<h1>去除标题栏DEMO字样</h1>
+<p>本以为这步会很简单，很可惜，低估了作者的智商。直接找字符串没看到SkinCrafter Demo字样，因此怀疑很可能字符串是被加密的了。OD调试Dll会加载LoadDll.exe这个程序，并在Dll加载后允许通过接口执行Dll的导出函数，对于一般作为函数库的Dll这样调试当然没问题，每个函数都是独立的，但是对于这种函数之间有数据依赖的Dll来说，我必须先调用几个依赖的函数，这样就过于麻烦了（主要懒得输那么长的参数，还要小端码，而且每次加载都要输入……）。这里就用到一个技巧，自己写一个调用dll的exe，直接调试exe，并进入Dll的领空找需要的东西。</p>
+<p>在OD的调试选项中，找到事件(Event)选项卡，把“中断于新模块”这项勾上，之后加载exe程序。每当exe加载一个dll的时候，就会被断下，F9继续执行，直到目标出现。当然SkinCrafterDll这个Dll是在程序中通过LoadLibrary()加载的，因此先要把程序跑起来。</p>
+<p>断下后进入该Dll领空，并查看所有函数符号。考虑到和绘图有关，并经过几次实验，最后定位在GdiPlus库中的GdipDrawString()函数上，直接下断函数。但是查找函数引用的时候却没有结果，这是因为Dll刚开始并没有填充IAT，所以需要再继续F9，直到IAT初始化完毕。再查找引用就可以找到函数调用处了。</p>
+<div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="nt">02E01511</span>  <span class="o">|.</span>  <span class="nt">53</span>            <span class="nt">push</span> <span class="nt">ebx</span>                                             <span class="o">;</span> <span class="o">/</span><span class="nt">hIcon</span>
+<span class="nt">02E01512</span>  <span class="o">|.</span>  <span class="nt">FF15</span> <span class="nt">0034E102</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">USER32.DestroyIcon</span><span class="o">&gt;</span><span class="cp">]</span>            <span class="o">;</span> <span class="err">\</span><span class="nt">DestroyIcon</span>
+<span class="nt">02E01518</span>  <span class="o">|&gt;</span>  <span class="nt">8B9D</span> <span class="nt">54FFFFFF</span> <span class="nt">mov</span> <span class="nt">ebx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.43</span><span class="cp">]</span>
+<span class="nt">02E0151E</span>  <span class="o">|&gt;</span>  <span class="nt">A1</span> <span class="nt">406CE102</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x2E16C40</span><span class="cp">]</span>
+<span class="nt">02E01523</span>  <span class="o">|.</span>  <span class="nt">8B15</span> <span class="nt">3C6CE102</span> <span class="nt">mov</span> <span class="nt">edx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x2E16C3C</span><span class="cp">]</span>
+<span class="nt">02E01529</span>  <span class="o">|.</span>  <span class="nt">8B0D</span> <span class="nt">446CE102</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x2E16C44</span><span class="cp">]</span>
+<span class="nt">02E0152F</span>  <span class="o">|.</span>  <span class="nt">8945</span> <span class="nt">E0</span>       <span class="nt">mov</span> <span class="cp">[</span><span class="kd">local</span><span class="mf">.8</span><span class="cp">]</span><span class="o">,</span><span class="nt">eax</span>
+<span class="nt">02E01532</span>  <span class="o">|.</span>  <span class="nt">66</span><span class="p">:</span><span class="nd">A1</span> <span class="nt">4C6CE10</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">ax</span><span class="o">,</span><span class="nt">word</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x2E16C4C</span><span class="cp">]</span>
+<span class="nt">02E01538</span>  <span class="o">|.</span>  <span class="nt">8955</span> <span class="nt">DC</span>       <span class="nt">mov</span> <span class="cp">[</span><span class="kd">local</span><span class="mf">.9</span><span class="cp">]</span><span class="o">,</span><span class="nt">edx</span>
+<span class="nt">02E0153B</span>  <span class="o">|.</span>  <span class="nt">8B15</span> <span class="nt">486CE102</span> <span class="nt">mov</span> <span class="nt">edx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x2E16C48</span><span class="cp">]</span>
+<span class="nt">02E01541</span>  <span class="o">|.</span>  <span class="nt">66</span><span class="p">:</span><span class="nd">8945</span> <span class="nt">EC</span>    <span class="nt">mov</span> <span class="nt">word</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">ebp</span><span class="o">-</span><span class="mh">0x14</span><span class="cp">]</span><span class="o">,</span><span class="nt">ax</span>
+<span class="nt">02E01545</span>  <span class="o">|.</span>  <span class="nt">8D45</span> <span class="nt">DC</span>       <span class="nt">lea</span> <span class="nt">eax</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.9</span><span class="cp">]</span>
+<span class="nt">02E01548</span>  <span class="o">|.</span>  <span class="nt">894D</span> <span class="nt">E4</span>       <span class="nt">mov</span> <span class="cp">[</span><span class="kd">local</span><span class="mf">.7</span><span class="cp">]</span><span class="o">,</span><span class="nt">ecx</span>
+<span class="nt">02E0154B</span>  <span class="o">|.</span>  <span class="nt">8955</span> <span class="nt">E8</span>       <span class="nt">mov</span> <span class="cp">[</span><span class="kd">local</span><span class="mf">.6</span><span class="cp">]</span><span class="o">,</span><span class="nt">edx</span>
+<span class="nt">02E0154E</span>  <span class="o">|.</span>  <span class="nt">33C9</span>          <span class="nt">xor</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">ecx</span>
+<span class="nt">02E01550</span>  <span class="o">|.</span>  <span class="nt">8D70</span> <span class="nt">01</span>       <span class="nt">lea</span> <span class="nt">esi</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="nx">eax</span><span class="o">+</span><span class="mh">0x1</span><span class="cp">]</span>
+<span class="o">...</span>
+<span class="nt">02E017E5</span>  <span class="o">|.</span>  <span class="nt">8B8D</span> <span class="nt">64FFFFFF</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.39</span><span class="cp">]</span>
+<span class="nt">02E017EB</span>  <span class="o">|.</span>  <span class="nt">56</span>            <span class="nt">push</span> <span class="nt">esi</span>
+<span class="nt">02E017EC</span>  <span class="o">|.</span>  <span class="nt">51</span>            <span class="nt">push</span> <span class="nt">ecx</span>
+<span class="nt">02E017ED</span>  <span class="o">|.</span>  <span class="nt">8B8D</span> <span class="nt">48FFFFFF</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.46</span><span class="cp">]</span>
+<span class="nt">02E017F3</span>  <span class="o">|.</span>  <span class="nt">8D95</span> <span class="nt">F8FEFFFF</span> <span class="nt">lea</span> <span class="nt">edx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.66</span><span class="cp">]</span>
+<span class="nt">02E017F9</span>  <span class="o">|.</span>  <span class="nt">52</span>            <span class="nt">push</span> <span class="nt">edx</span>
+<span class="nt">02E017FA</span>  <span class="o">|.</span>  <span class="nt">8B95</span> <span class="nt">6CFFFFFF</span> <span class="nt">mov</span> <span class="nt">edx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.37</span><span class="cp">]</span>
+<span class="nt">02E01800</span>  <span class="o">|.</span>  <span class="nt">51</span>            <span class="nt">push</span> <span class="nt">ecx</span>
+<span class="nt">02E01801</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">FF</span>         <span class="nt">push</span> <span class="nt">-0x1</span>
+<span class="nt">02E01803</span>  <span class="o">|.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>
+<span class="nt">02E01804</span>  <span class="o">|.</span>  <span class="nt">52</span>            <span class="nt">push</span> <span class="nt">edx</span>
+<span class="nt">02E01805</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">D26D0000</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">gdiplus</span><span class="p">.</span><span class="nc">GdipDrawString</span><span class="o">&gt;</span>
+<span class="nt">02E0180A</span>  <span class="o">|.</span>  <span class="nt">8B85</span> <span class="nt">64FFFFFF</span> <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.39</span><span class="cp">]</span>
+<span class="nt">02E01810</span>  <span class="o">|.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>
+<span class="nt">02E01811</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">846D0000</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">gdiplus</span><span class="p">.</span><span class="nc">GdipDeleteStringFormat</span><span class="o">&gt;</span>
+<span class="nt">02E01816</span>  <span class="o">|.</span>  <span class="nt">56</span>            <span class="nt">push</span> <span class="nt">esi</span>
+<span class="nt">02E01817</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">A66C0000</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">gdiplus</span><span class="p">.</span><span class="nc">GdipDeleteBrush</span><span class="o">&gt;</span>
+<span class="nt">02E0181C</span>  <span class="o">|.</span>  <span class="nt">8B8D</span> <span class="nt">48FFFFFF</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.46</span><span class="cp">]</span>
+<span class="nt">02E01822</span>  <span class="o">|.</span>  <span class="nt">51</span>            <span class="nt">push</span> <span class="nt">ecx</span>
+<span class="nt">02E01823</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">906D0000</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">gdiplus</span><span class="p">.</span><span class="nc">GdipDeleteFont</span><span class="o">&gt;</span>
+<span class="nt">02E01828</span>  <span class="o">|.</span>  <span class="nt">8B95</span> <span class="nt">6CFFFFFF</span> <span class="nt">mov</span> <span class="nt">edx</span><span class="o">,</span><span class="cp">[</span><span class="kd">local</span><span class="mf">.37</span><span class="cp">]</span>
+<span class="nt">02E0182E</span>  <span class="o">|.</span>  <span class="nt">52</span>            <span class="nt">push</span> <span class="nt">edx</span>
+<span class="nt">02E0182F</span>  <span class="o">|.</span>  <span class="nt">C645</span> <span class="nt">FC</span> <span class="nt">01</span>    <span class="nt">mov</span> <span class="nt">byte</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">ebp</span><span class="o">-</span><span class="mh">0x4</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x1</span>
+<span class="nt">02E01833</span>  <span class="o">|.</span>  <span class="nt">E8</span> <span class="nt">906C0000</span>   <span class="nt">call</span> <span class="o">&lt;</span><span class="nt">jmp</span><span class="o">.&amp;</span><span class="nt">gdiplus</span><span class="p">.</span><span class="nc">GdipDeleteGraphics</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+
+
+<p>经过跟踪，可以发现字符串在DestroyIcon()执行之后被装入，在内存中显示为：</p>
+<div class="highlight"><pre><span></span>02E16C38  80 0F E0 02 54 6C 6E 69 44 75 66 61 73 62 75 27  €?TlniDufasbu&#39;
+02E16C48  43 62 6A 68 27 00 00 00 E4 D9 E1 02 A0 2B E0 02  Cbjh&#39;...滟???
+</pre></div>
+
+
+<p>因此字符串为TlniDufasbu'Cbjh'，这个字符串经过后面的算法转换成了SkinCrafter Demo，因此只要直接干掉字符串就可以，或者nop掉GdipDrawString()。我采用删掉字符串的方法，用16进制编辑器打开dll找到这个字符串并填0。</p>
+<h1>后记</h1>
+<p>从我使用的情况来看暂时没有出现其他问题，如果有破解不完全或造成错误的地方，我会在后续做出完善。另外，此次调试过程中全程在IDA中同步参考，IDA的图形视图能很好的看出程序的执行流程，当然IDA还有万恶的F5大杀器 :P</p>
+        </section>
+
+        <br><br><br>
+
+        <footer>
+<!--           <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px; margin-top: 15px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">yyx</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br> -->
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
+          <div id="share" class="share">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/skincrafter-crack-notes.html&amp;t=YYX%27s%20WEBlog%3A%20SkinCrafter%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
+            </a>
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/skincrafter-crack-notes.html&amp;text=YYX%27s%20WEBlog%3A%20SkinCrafter%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
+            </a>
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/skincrafter-crack-notes.html" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
+            </a>
+          </div>
+
+          <br><br><br>
+
+
+          <div id="disqus_thread"></div>
+          <script>
+            /**
+             *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+             *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+             */
+            
+            var disqus_config = function () {
+              this.page.url = 'http://blog.yyx.me';  // Replace PAGE_URL with your page's canonical URL variable
+              // this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+            
+            (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+              var d = document, s = d.createElement('script');
+              
+              s.src = 'https://yyxblog.disqus.com/embed.js';  // IMPORTANT: Replace EXAMPLE with your forum shortname!
+              
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+          <br><br><br>
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          yyx
+ | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-64342434-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

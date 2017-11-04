@@ -1,0 +1,8 @@
+#
+# robots.txt for GreatYYX Blog
+# Version: 1.0
+#
+
+User-agent: *
+Disallow: /author/
+Disallow: /theme/
