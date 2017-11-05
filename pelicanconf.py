@@ -68,6 +68,7 @@ RELATIVE_URLS = True
 
 MINIMALXY_START_YEAR = '2014'
 MINIMALXY_CURRENT_YEAR = datetime.date.today().strftime('%Y')
+MINIMALXY_FAVICON = SITEURL + '/theme/images/favicon-32x32.png'
 
 THEME = 'theme/MinimalXYZ'
 THEME_STATIC_DIR = 'theme'

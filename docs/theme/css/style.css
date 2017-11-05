@@ -385,3 +385,7 @@ section#content .lang-section-hide {
   margin-left: 1px;
   margin-right: 2px;
 }
+.w3-pagination li a:hover {
+  background-color: transparent;
+  opacity: 0.5;
+}
