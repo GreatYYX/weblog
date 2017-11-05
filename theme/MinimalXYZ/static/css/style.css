@@ -379,3 +379,9 @@ section#content .lang-section {
 section#content .lang-section-hide {
   display:none;
 }
+.yyx-external-link {
+  font-size: 70% !important;
+  vertical-align: text-top;
+  margin-left: 1px;
+  margin-right: 2px;
+}
