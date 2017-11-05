@@ -17,7 +17,7 @@
         <section id="content">
           <ul>
           {% for article in dates %}
-          	<li><time datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time> <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></li>
+          	<li><time datetime="{{ article.date.isoformat() }}">{{ article.date|strftime("%b %d, %Y") }}</time> <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></li>
           {% endfor %}
           </ul>
         </section>
