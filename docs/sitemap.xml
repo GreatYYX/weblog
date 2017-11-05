@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://blog.yyx.me/</loc>
-<lastmod>2017-11-04T16:29:17-00:00</lastmod>
+<lastmod>2017-11-04T17:33:12-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://blog.yyx.me/archives.html</loc>
-<lastmod>2017-11-04T16:29:17-00:00</lastmod>
+<lastmod>2017-11-04T17:33:12-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://blog.yyx.me/tags.html</loc>
-<lastmod>2017-11-04T16:29:17-00:00</lastmod>
+<lastmod>2017-11-04T17:33:12-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://blog.yyx.me/categories.html</loc>
-<lastmod>2017-11-04T16:29:17-00:00</lastmod>
+<lastmod>2017-11-04T17:33:12-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

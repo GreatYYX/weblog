@@ -1,0 +1,31 @@
+{% block content_title %}
+{% include 'introduction.html' %}
+{% endblock %}
+
+<br><br><br>
+<article>
+  <div class="col-main w3-container">
+    <div class="lang-btn">
+      <a id="lang-btn-cn" class="lang-btn lang-btn-active">中文版</a>&nbsp;|&nbsp;
+      <a id="lang-btn-en" class="lang-btn lang-btn-hover">English Version</a>
+    </div>
+    <section id="content">
+      {{ page.content }}
+    </section>
+    
+    {% if page.modified %}
+    <br>
+    <p>Last updated: {{ page.locale_modified }}</p>
+    {% endif %}
+
+    <br><br><br>
+
+    <footer>
+      {% if DISQUS_SITENAME %}
+      {% include "disqus_script.html" %}
+      <br><br><br>
+      {% endif %}
+    </footer>
+    
+  </div>
+</article>

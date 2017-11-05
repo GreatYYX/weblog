@@ -31,6 +31,7 @@ AUTHOR_FEED_RSS = None
 SOCIAL = (('github', 'https://github.com/GreatYYX'),
           ('instagram', 'https://www.instagram.com/debug.dog/'),
           ('weibo', 'https://weibo.com/p/1005051085956311'),
+          ('rss', SITEURL + '/feeds/all.atom.xml'),
           # ('linkedin', '#'),
           )
 
@@ -64,6 +65,6 @@ RELATIVE_URLS = True
 MINIMALXY_START_YEAR = '2014'
 MINIMALXY_START_YEAR = datetime.date.today().strftime('%Y')
 
-THEME = 'theme/MinimalXY'
+THEME = 'theme/MinimalXYZ'
 THEME_STATIC_DIR = 'theme'
 
