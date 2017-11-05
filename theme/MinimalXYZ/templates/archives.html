@@ -17,7 +17,7 @@
         <section id="content">
           <ul>
           {% for article in dates %}
-          	<li><time datetime="{{ article.date.isoformat() }}">{{ article.date|strftime("%b %d, %Y") }}</time> <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></li>
+          	<li><time datetime="{{ article.date.isoformat() }}">{{ article.date|strftime("%b %d, %Y") }}</time> <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a> <a href="{{ SITEURL }}/{{ article.category.url }}" title="All articles in category {{ article.category }}" class="w3-text-black w3-opacity">@{{ article.category }}</a></li>
           {% endfor %}
           </ul>
         </section>

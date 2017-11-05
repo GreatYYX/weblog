@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 import datetime
 
-AUTHOR = u'yyx'
+AUTHOR = u'YYX'
 SITENAME = u'YYX\'s WEBlog'
 SITEURL = ''
 
@@ -37,7 +37,11 @@ SOCIAL = (('github', 'https://github.com/GreatYYX'),
 
 CC = 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
 
-MENUITEMS = (('Photo', 'http://photo.yyx.me'),)
+MENUITEMS = (('Gallery', 'http://photo.yyx.me'),)
+DISPLAY_CATEGORIES_ON_MENU = False
+DISPLAY_CATEGORIES_LIST = False
+DISPLAY_ARCHIVES_LIST = True
+
 
 DEFAULT_PAGINATION = 6
 
@@ -63,7 +67,7 @@ AUTHOR_AVATAR = SITEURL + '/theme/images/cat_avatar.png'
 RELATIVE_URLS = True
 
 MINIMALXY_START_YEAR = '2014'
-MINIMALXY_START_YEAR = datetime.date.today().strftime('%Y')
+MINIMALXY_CURRENT_YEAR = datetime.date.today().strftime('%Y')
 
 THEME = 'theme/MinimalXYZ'
 THEME_STATIC_DIR = 'theme'

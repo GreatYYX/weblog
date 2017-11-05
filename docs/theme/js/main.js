@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 	/* external link */
 	var host = new RegExp('/' + window.location.host + '/');
-	$('section#content a').each(function() {
+	$('article section#content a').each(function() {
 		if(!host.test(this.href) && !$(this).attr('target')) {
 			$(this).attr('target', '_blank');
 			$(this).append('<i class="fa fa-external-link-square yyx-external-link"></i>');

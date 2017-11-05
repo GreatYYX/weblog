@@ -118,19 +118,29 @@
         {% endif %}
         <nav id="header-menu">
           <ul>
+            <!-- category -->
             {% if DISPLAY_CATEGORIES_ON_MENU %}
             {% for cat, null in categories %}
             {% if cat != DEFAULT_CATEGORY %}
-            <!-- <li class="w3-bottombar w3-border-white w3-hover-border-green" {% if cat == category %}style="font-weight: bold;"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li> -->
+            <li class="{% if cat == category %}active{% else %}w3-hover-opacity{% endif %}""><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
             {% endif %}
             {% endfor %}
             {% endif %}
+            <!-- list -->
+            {% if DISPLAY_CATEGORIES_LIST %}
+            <li class="{% if page_name == 'categories' %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/categories.html">Categories</a></li>
+            {% endif %}
+            {% if DISPLAY_ARCHIVES_LIST %}
+            <li class="{% if page_name == 'archives' %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/archives.html">Archives</a></li>
+            {% endif %}
+            <!-- menu item -->
             {% for title, link in MENUITEMS %}
-            <li class="w3-bottombar w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
             {% endfor %}
+            <!-- pages -->
             {% if DISPLAY_PAGES_ON_MENU %}
             {% for p in pages %}
-            <li{% if p==page %} class="active" {% endif %}><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
+            <li class="{% if p == page %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
             {% endfor %}
             {% endif %}
           </ul>
