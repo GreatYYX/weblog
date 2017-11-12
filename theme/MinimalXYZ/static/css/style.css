@@ -386,3 +386,11 @@ section#content .lang-section-hide {
   background-color: transparent;
   opacity: 0.5;
 }
+#nav-expand-btn {
+  line-height: 60px;
+  padding: 0 10px;
+}
+.header-nav-show-small {
+  display: block !important;
+  margin-top: 70px !important;
+}

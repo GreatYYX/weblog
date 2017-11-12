@@ -118,12 +118,13 @@
         <!-- <a href="{{ SITEURL }}" id="header-logo" title="Home">{{ AUTHOR[0] }}</a> -->
         {% endif %}
         <nav id="header-menu">
-          <ul>
+          <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
+          <ul class="w3-hide-small">
             <!-- category -->
             {% if DISPLAY_CATEGORIES_ON_MENU %}
             {% for cat, null in categories %}
             {% if cat != DEFAULT_CATEGORY %}
-            <li class="{% if cat == category %}active{% else %}w3-hover-opacity{% endif %}""><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+            <li class="{% if cat == category %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
             {% endif %}
             {% endfor %}
             {% endif %}

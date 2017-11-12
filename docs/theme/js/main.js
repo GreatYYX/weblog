@@ -44,4 +44,9 @@ $(document).ready(function(){
 		}
 	});
 
+	/* nav expansion */
+	$('#nav-expand-btn').click(function() {
+		$('#header-menu ul').toggleClass('header-nav-show-small');
+	});
+
 });
