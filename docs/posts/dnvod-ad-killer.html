@@ -101,7 +101,9 @@
 
       <div class="col-main w3-container">
         <section id="content">
-          <h1>背景铺垫</h1>
+          <h1>小白通道</h1>
+<p>首先代码仓库和使用方法送上：<a href="https://github.com/GreatYYX/dnvod-ad-killer">https://github.com/GreatYYX/dnvod-ad-killer</a>。然后不用往下看了。</p>
+<h1>背景铺垫</h1>
 <p>17年在美帝工作后，就再没来写过blog，一年一更的“好习惯”也被打破了。其实过去这一年多时间里自己在安全方面基本没有hands-on的动作，除了去某哥onsite前那晚上成功zuo si把手机上一个游戏给破解了然后华丽的gg，主要在研究以流量伪装手段绕过GFW的方法和binary文件准确恢复函数图谱的可能性，不过目前这两者都只停留在思路阶段（Sigh～菜的抠脚）。</p>
 <p>这次萌发动力写个文章主要是被多瑙的bling bling的广告闪瞎了可又掏不起银子充会员，而单纯的AdBlock / AdBlock Plus以及Chrome Extension里的<a href="https://github.com/AugustusZ/Dnvod-Ad-Remover">dnvod-ad-remover</a>都已经失效，于是乎只能寡人亲自操刀了。</p>
 <h1>思路概述</h1>
@@ -228,7 +230,6 @@
 
 <p>我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。</p>
 <p>之后浏览器代理挂好，对于<code>*.dnvod.tv</code>的流量转向这个代理即可。</p>
-<p>代码仓库送上：<a href="https://github.com/GreatYYX/dnvod-ad-killer">https://github.com/GreatYYX/dnvod-ad-killer</a></p>
 <h1>后续</h1>
 <p>其实从防御方来说，修改Flash Player本身可以明显增加破解门槛，在Flash内部强制限定广告时间，广告资源本身甚至可以固化到Flash的内置资源列表中，这样不会产生单独的下载流量。但是缺点也显而易见，每次广告更新都要完整更新这个播放器，维护成本不可小觑。另外对于空白图片，也可以在前端检测一下（比如图片byte是否固定，图片大小如何，不过这类检测脚本也可以被中间人替换了或者被重新构造的资源绕过）。</p>
 <p>从攻击方来说，后续需要的基本增强就是对于https时候mitm，不过这个就是一个库两个证书的问题。另外就是对于规则的修订问题了。进一步说，如果防御方真修改了Flash Player，那就decompile这个播放器然后替换之...</p>

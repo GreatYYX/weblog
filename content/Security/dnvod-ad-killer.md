@@ -5,6 +5,10 @@ Slug: dnvod-ad-killer
 Summary: 本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。
 Summary_en: The article mainly discussed how to remove the ads on dnvod.tv and how to make an implementation.
 
+# 小白通道
+
+首先代码仓库和使用方法送上：[https://github.com/GreatYYX/dnvod-ad-killer](https://github.com/GreatYYX/dnvod-ad-killer)。然后不用往下看了。
+
 # 背景铺垫
 
 17年在美帝工作后，就再没来写过blog，一年一更的“好习惯”也被打破了。其实过去这一年多时间里自己在安全方面基本没有hands-on的动作，除了去某哥onsite前那晚上成功zuo si把手机上一个游戏给破解了然后华丽的gg，主要在研究以流量伪装手段绕过GFW的方法和binary文件准确恢复函数图谱的可能性，不过目前这两者都只停留在思路阶段（Sigh～菜的抠脚）。
@@ -155,8 +159,6 @@ function EmbedFlash(_0xf706x24, _0xf706x2b, _0xf706x2a, _0xf706x4f) {
 我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。
 
 之后浏览器代理挂好，对于`*.dnvod.tv`的流量转向这个代理即可。
-
-代码仓库送上：[https://github.com/GreatYYX/dnvod-ad-killer](https://github.com/GreatYYX/dnvod-ad-killer)
 
 
 # 后续

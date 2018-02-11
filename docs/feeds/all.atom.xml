@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/all.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2018-02-11T11:06:00-08:00</updated><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer.html" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;背景铺垫&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/all.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2018-02-11T11:06:00-08:00</updated><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer.html" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;小白通道&lt;/h1&gt;
+&lt;p&gt;首先代码仓库和使用方法送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer"&gt;https://github.com/GreatYYX/dnvod-ad-killer&lt;/a&gt;。然后不用往下看了。&lt;/p&gt;
+&lt;h1&gt;背景铺垫&lt;/h1&gt;
 &lt;p&gt;17年在美帝工作后，就再没来写过blog，一年一更的“好习惯”也被打破了。其实过去这一年多时间里自己在安全方面基本没有hands-on的动作，除了去某哥onsite前那晚上成功zuo si把手机上一个游戏给破解了然后华丽的gg，主要在研究以流量伪装手段绕过GFW的方法和binary文件准确恢复函数图谱的可能性，不过目前这两者都只停留在思路阶段（Sigh～菜的抠脚）。&lt;/p&gt;
 &lt;p&gt;这次萌发动力写个文章主要是被多瑙的bling bling的广告闪瞎了可又掏不起银子充会员，而单纯的AdBlock / AdBlock Plus以及Chrome Extension里的&lt;a href="https://github.com/AugustusZ/Dnvod-Ad-Remover"&gt;dnvod-ad-remover&lt;/a&gt;都已经失效，于是乎只能寡人亲自操刀了。&lt;/p&gt;
 &lt;h1&gt;思路概述&lt;/h1&gt;
@@ -126,7 +128,6 @@
 
 &lt;p&gt;我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。&lt;/p&gt;
 &lt;p&gt;之后浏览器代理挂好，对于&lt;code&gt;*.dnvod.tv&lt;/code&gt;的流量转向这个代理即可。&lt;/p&gt;
-&lt;p&gt;代码仓库送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer"&gt;https://github.com/GreatYYX/dnvod-ad-killer&lt;/a&gt;&lt;/p&gt;
 &lt;h1&gt;后续&lt;/h1&gt;
 &lt;p&gt;其实从防御方来说，修改Flash Player本身可以明显增加破解门槛，在Flash内部强制限定广告时间，广告资源本身甚至可以固化到Flash的内置资源列表中，这样不会产生单独的下载流量。但是缺点也显而易见，每次广告更新都要完整更新这个播放器，维护成本不可小觑。另外对于空白图片，也可以在前端检测一下（比如图片byte是否固定，图片大小如何，不过这类检测脚本也可以被中间人替换了或者被重新构造的资源绕过）。&lt;/p&gt;
 &lt;p&gt;从攻击方来说，后续需要的基本增强就是对于https时候mitm，不过这个就是一个库两个证书的问题。另外就是对于规则的修订问题了。进一步说，如果防御方真修改了Flash Player，那就decompile这个播放器然后替换之...&lt;/p&gt;
