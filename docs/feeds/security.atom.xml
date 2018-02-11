@@ -1,5 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog - Security</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/security.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2015-05-12T01:17:00-07:00</updated><entry><title>QQ双扣记牌器实现</title><link href="http://blog.yyx.me/posts/qq-card-game-recorder.html" rel="alternate"></link><published>2015-05-12T01:17:00-07:00</published><updated>2015-05-12T01:17:00-07:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2015-05-12:/posts/qq-card-game-recorder.html</id><summary type="html">&lt;p&gt;本文讨论了腾讯QQ游戏大厅新双扣角色版记牌器的设计、数据抓取的思路及方法以及最终记牌器的实现细节。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;吐槽&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog - Security</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/security.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2018-02-11T11:06:00-08:00</updated><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer.html" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;背景铺垫&lt;/h1&gt;
+&lt;p&gt;17年在美帝工作后，就再没来写过blog，一年一更的“好习惯”也被打破了。其实过去这一年多时间里自己在安全方面基本没有hands-on的动作，除了去某哥onsite前那晚上成功zuo si把手机上一个游戏给破解了然后华丽的gg，主要在研究以流量伪装手段绕过GFW的方法和binary文件准确恢复函数图谱的可能性，不过目前这两者都只停留在思路阶段（Sigh～菜的抠脚）。&lt;/p&gt;
+&lt;p&gt;这次萌发动力写个文章主要是被多瑙的bling bling的广告闪瞎了可又掏不起银子充会员，而单纯的AdBlock / AdBlock Plus以及Chrome Extension里的&lt;a href="https://github.com/AugustusZ/Dnvod-Ad-Remover"&gt;dnvod-ad-remover&lt;/a&gt;都已经失效，于是乎只能寡人亲自操刀了。&lt;/p&gt;
+&lt;h1&gt;思路概述&lt;/h1&gt;
+&lt;h2&gt;前人走过的路&lt;/h2&gt;
+&lt;p&gt;本着先做好功课再下手的一贯作风，去网上找了圈现有的思路。&lt;/p&gt;
+&lt;p&gt;由于HTML5的普及，大多数视频网站已经抛弃了Flash播放器（比如激进的Youtube和一些不可描述的网站），而鉴于特殊国情，国内大多数采用HTML5和Flash两者并用的局面。HTML5本身作为开放的web标准，所有东西都是暴露在用户面前的，正所谓前端无秘密。因此之前的思路基本属于：屏蔽掉Flash播放器，转而强制使用HTML5播放器从而实施后续的移除。只不过目前dnvod已经强制要求使用Flash了，也不知道为何会采用这种逆时代进程的做法而不是换一种投放广告的思路。&lt;/p&gt;
+&lt;p&gt;还有一则思路采用修改host表的方法，将几个ad来源的domain进行屏蔽。不过此方法最大的问题在于，相关的资源直接就出现了无法访问的情况，而现在最基本的判断是不是有AdBlock类插件的方案就是判断相应的资源能否下载成功（相比binary判断自身是否处于被调试状态要简单太多了）。所以一旦使用该方法，网页上就会告诉你，我和AdBlock你只能选一个。&lt;/p&gt;
+&lt;h2&gt;长江后浪&lt;/h2&gt;
+&lt;p&gt;前人的思路已经死在了沙滩上，因此只能另辟蹊径。&lt;/p&gt;
+&lt;p&gt;其实主要是破解两个问题：1.移除视频前70s的广告和等待时间 2.移除那些闪闪发光的小广告。&lt;/p&gt;
+&lt;h3&gt;移除视频前等待&lt;/h3&gt;
+&lt;p&gt;对于第一点，本身网站界面加载的也只有基本的框架，评论、集数、广告均由js创建而来。而加载后最显而易见的就是视频播放区的这段dom：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;object&lt;/span&gt; &lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    ...
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;param&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;movie&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;/_player/954684356/ckplayer.swf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;param&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;flashvars&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;f=rtmp://s1-r1.dnvod.tv/kvod/mp4:lxj-hpfd-01-021E92666.mp4&amp;amp;amp;loaded=loadedHandler&amp;amp;amp;s=0&amp;amp;amp;b=0&amp;amp;amp;c=0&amp;amp;amp;a=&amp;amp;amp;i=//static.dnvod.tv/images/logo-group.jpg&amp;amp;amp;l=http://static.dnvod.tv/upload/video/201802081401510175878s.jpg|...&amp;amp;amp;r=http://public.dnvod.tv/c/c?position%3db%26i%3d376%26r%3d4|...&amp;amp;amp;t=10|10|10|10|10|10|10...&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;100%&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;100%&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ckplayer_a1&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ckplayer_a1&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;align&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;middle&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;application/x-shockwave-flash&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;pluginspage&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://www.macromedia.com/go/getflashplayer&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;embed&lt;/span&gt; &lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;object&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这段html比较长，重点部分主要是一个&lt;code&gt;object&lt;/code&gt;标签里面的两个&lt;code&gt;param&lt;/code&gt;及一个&lt;code&gt;embed&lt;/code&gt;。从这儿的第一个&lt;code&gt;param&lt;/code&gt;可以看出采用了一个叫做ckplayer的播放器，我查了下是个国人开发的通用的网页视频播放器。第二个&lt;code&gt;param&lt;/code&gt;是真正干活的地方了，利用&lt;code&gt;flashvar&lt;/code&gt;把网页参数传入播放器中。凭空猜测，&lt;code&gt;f&lt;/code&gt;是具体的视频地址，&lt;code&gt;l&lt;/code&gt;是左边广告，&lt;code&gt;r&lt;/code&gt;是右边广告，&lt;code&gt;t&lt;/code&gt;是每个广告时间，每组广告图片采用&lt;code&gt;|&lt;/code&gt;分割。于是上神器burp修改request的payload，不过竟然没有成功。这个思路是最最直接最最简单的，理论上来说应该是可行的，不过可能我当时实验时候有失误，于是阴差阳错的放弃了这个方法（后面会阐述这反而成了优势）。&lt;/p&gt;
+&lt;p&gt;之后就从js上下手，过了一遍加载的js。有一个混淆了js特别值得注意，&lt;code&gt;playerselection-1.2.7.90.js&lt;/code&gt;。过一下反混淆器，代码的大致架子基本能还原出来（相比binary下反汇编的作业环境，js的这个的可读性还真不错）。快速scan一遍代码，感觉&lt;code&gt;settimeout&lt;/code&gt;最可能作为突破点，毕竟倒计时在js里面最直观的做法就是用这个函数。一个个过下去发现有个的值被设置成&lt;code&gt;70000&lt;/code&gt;，这不会就是70秒（70000ms）的广告吧？不好意思，对。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;loadedHandler&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;noads&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x34&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;CKobject&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;getObjectById&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ckid&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+                &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x34&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x34&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;frontAdUnload&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                    &lt;span class="nx"&gt;_0xf706x34&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;frontAdUnload&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]()&lt;/span&gt;
+                &lt;span class="p"&gt;}&lt;/span&gt;
+            &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;70000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// &amp;lt;---- HERE!!!!! OMG F*** IT&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;};&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;随手在burp里把response body（注意这次不是改request是改response）改成10000，画面依然显示70s广告，不过到60s的时候就自动结束了。于是再接再厉，改成5000（此时记得&lt;code&gt;header&lt;/code&gt;中的&lt;code&gt;content-length&lt;/code&gt;也需要修改，否则malformat的包会被Chrome丢弃）。尝试把这个数字再改小就存在了没有了倒计时可广告仍然存在的问题，于是又定位了其他几个&lt;code&gt;settimeout&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;CheckPlay&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x8c&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x8d&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+        &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.playtimer&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x8c&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;toHHMMSS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]());&lt;/span&gt;
+        &lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;CheckPlay&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x8c&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;PlayAds&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xf&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xae&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xf&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;split&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;|&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xaf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x5&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;split&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;|&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x6&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;split&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;|&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x3&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xae&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;length&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xae&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;indexOf&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;swf&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;_0xf706xae&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;splice&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="nx"&gt;_0xf706xaf&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;splice&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="nx"&gt;_0xf706xb0&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;splice&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;_0xf706xb1&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="nb"&gt;parseInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xb0&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x3&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;};&lt;/span&gt;
+    &lt;span class="nx"&gt;callAdd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xae&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xaf&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;setInterval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb4&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.second&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;_0xf706xb4&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xb2&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;980&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.ads-control&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;remove&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]();&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb4&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.second&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;clearInterval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706xb3&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;_0xf706xb4&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;CKobject&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nx"&gt;CKobject&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;getObjectById&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ckid&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;videoPlay&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]()&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="nx"&gt;_0xf706xb1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;1020&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;EmbedFlash&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x24&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x2b&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x2a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x4f&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x50&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x2b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;playlistM&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;playlistM&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;length&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_0xf706x4f&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x4f&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;wa&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x4f&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;timeout&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="p"&gt;...&lt;/span&gt;
+            &lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_vp&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;TirggerPending&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;_0xf706x4f&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;timeout&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其中最关键的应该就是&lt;code&gt;PlayAds&lt;/code&gt;这个函数了，基本就是读取广告然后丢到Flash中，这里的&lt;code&gt;settimeout&lt;/code&gt;用于时间到了之后把广告的div移调。另外&lt;code&gt;CheckPlay&lt;/code&gt;是用来检测状态改变的(相当于刷新器)，因此需要把值改的要比较小，否则就会出现上面的值改小了却不生效的情况。&lt;/p&gt;
+&lt;h3&gt;移除广告&lt;/h3&gt;
+&lt;p&gt;有时候灵光一闪真的很重要，还记得当年比CTF睡觉时候突然有思路爬起来增援刷夜的老曾和潘神的情况。判断AdBlock这类插件是否存在的原理上面已经说了，就是只要设定一个timeout，过了timeout之后看这个资源有没有下载成功即可。因此直接屏蔽资源肯定是不行的，思路就变成了伪造一个正常的资源。之后就想到CSS1/2标准不完善的时候一个hack div的技巧，于是构造了一个1px x 1px的透明gif图片，直接替换掉所有广告图片，这样对于检测程序来说，依然认为ad下载成功，而事实上什么都看不到喽。&lt;/p&gt;
+&lt;h1&gt;自动化去广告&lt;/h1&gt;
+&lt;p&gt;这里没有采用开发一个Chrome Extension的方案，原因主要是Chrome团队是很激进的（褒义词），为了推动web标准进步和增强浏览器安全问题费尽了心思，比如这儿修改response body本身会或者将会受到Chrome API的限制。于是直接就用炉火纯青的中间人攻击(mitm)解决这个问题，网上随便找了个&lt;a href="https://github.com/abhinavsingh/proxy.py"&gt;HTTP Proxy&lt;/a&gt;，code写的不错，全是Python原生库。之后主要修改下处理response body的环节：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; def _process_response(self, data):
+        # parse incoming response packet
+        # only for non-https requests
+        if not self.request.method == b&amp;quot;CONNECT&amp;quot;:
+            self.response.parse(data)
+
+        # print self.request.host_, self.request.url_
+        if self.request.host_ and self.request.host_.endswith(&amp;#39;dnvod.tv&amp;#39;):
+            # ads
+            one_px_gif_data = &amp;#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&amp;#39;
+            if self.request.url_ and self.request.url_.startswith(&amp;#39;/upload/video&amp;#39;):
+                if os.path.splitext(self.request.url_)[-1] in (&amp;#39;.jpg&amp;#39;, &amp;#39;.gif&amp;#39;):
+                    data = base64.b64decode(one_px_gif_data)
+
+            # count down
+            if self.request.url_ and self.request.url_ == &amp;#39;/js/2016/playerselection-1.2.7.90.js&amp;#39;:
+                with open(&amp;#39;dn_replace.js&amp;#39;, &amp;#39;r&amp;#39;) as f:
+                    data = f.read()
+
+        # queue data for client
+        self.client.queue(data)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。&lt;/p&gt;
+&lt;p&gt;之后浏览器代理挂好，对于&lt;code&gt;*.dnvod.tv&lt;/code&gt;的流量转向这个代理即可。&lt;/p&gt;
+&lt;p&gt;代码仓库送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer"&gt;https://github.com/GreatYYX/dnvod-ad-killer&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;后续&lt;/h1&gt;
+&lt;p&gt;其实从防御方来说，修改Flash Player本身可以明显增加破解门槛，在Flash内部强制限定广告时间，广告资源本身甚至可以固化到Flash的内置资源列表中，这样不会产生单独的下载流量。但是缺点也显而易见，每次广告更新都要完整更新这个播放器，维护成本不可小觑。另外对于空白图片，也可以在前端检测一下（比如图片byte是否固定，图片大小如何，不过这类检测脚本也可以被中间人替换了或者被重新构造的资源绕过）。&lt;/p&gt;
+&lt;p&gt;从攻击方来说，后续需要的基本增强就是对于https时候mitm，不过这个就是一个库两个证书的问题。另外就是对于规则的修订问题了。进一步说，如果防御方真修改了Flash Player，那就decompile这个播放器然后替换之...&lt;/p&gt;
+&lt;p&gt;攻防本身就是个矛盾体，只要平衡其实就好。毕竟Amazon和Walmart还天天互爬数据并互相屏蔽对方的爬虫呢。&lt;/p&gt;
+&lt;p&gt;一开始没有选择修改request是个阴差阳错，但是这个反而成为了后续的优势。因为修改的request payload可以被服务器鉴别，而response已经返回到了本地，主动权完全在我方，因此可以被任意修改而服务器并不知道中间人的存在。而没有写成Chrome Extension也是为了突破Chrome API目前以及将来的种种限制。这两点都为后续可能存在的更强的反广告策略提供了保障。&lt;/p&gt;
+&lt;p&gt;懒癌最后扯一句：只要多瑙不更新，伦家是不会主动更新的嘤嘤嘤。&lt;/p&gt;</content><category term="bypass"></category><category term="mitm"></category><category term="hacking"></category></entry><entry><title>QQ双扣记牌器实现</title><link href="http://blog.yyx.me/posts/qq-card-game-recorder.html" rel="alternate"></link><published>2015-05-12T01:17:00-07:00</published><updated>2015-05-12T01:17:00-07:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2015-05-12:/posts/qq-card-game-recorder.html</id><summary type="html">&lt;p&gt;本文讨论了腾讯QQ游戏大厅新双扣角色版记牌器的设计、数据抓取的思路及方法以及最终记牌器的实现细节。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;吐槽&lt;/h1&gt;
 &lt;p&gt;到USC刷master真可谓“玩命”读书，在学校被大神虐，在路上怕被黑哥虐，出去玩耍被款爷虐，逢年过节被秀恩爱的虐，总之就是各种不择手段花式虐狗。再加上这学期悲剧的选课，期末下来，已经基本气绝。考闭，准备打打牌找找乐子，作为杭州人，当然最爱双扣，但是当你发现双扣竟然在4月底被企鹅的程序猿改的面目全非之后，就有种气急败坏的却又无从抱怨的感觉。&lt;/p&gt;
 &lt;p&gt;也不知道怎么想的，突然很想搞一个自己的记牌器玩玩（我承认这儿转折很突兀，因为我自己也不知道为什么当时还没来得及拍脑门就决定了），最后竟然三天抛出成品（不可避免有小bug），于是决定撰文记录一下，行文就按照日子来了。&lt;/p&gt;
 &lt;p&gt;我这边测试的双扣可执行文件skrpg.exe的文件版本是2.0.107.14，MD5为1c6d85c0accf6ce1a834e947e5467412。很可能游戏更新后数据会有所不同（新版本刚出来更新会特别频繁），但是思路不变的，你需要再机械劳动一次更新所有数据。&lt;/p&gt;
