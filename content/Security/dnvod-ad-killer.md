@@ -160,6 +160,35 @@ function EmbedFlash(_0xf706x24, _0xf706x2b, _0xf706x2a, _0xf706x4f) {
 
 之后浏览器代理挂好，对于`*.dnvod.tv`的流量转向这个代理即可。
 
+## Update: 2018-02-25
+
+据网友Orooz反应，程序在Windows下不可用，测试后发现原本使用的HTTP Proxy在Windows下无法正常工作，遂使用[proxy2](https://github.com/inaz2/proxy2)替换之。原理完全一样，直接贴修改的代码。
+
+
+```
+def response_handler(self, req, req_body, res, res_body):
+        url = urlparse.urlparse(req.path)
+        url_domain = url.netloc
+        url_path = url.path
+
+        if url_domain and url_domain.endswith('dnvod.tv'):
+            # ads
+            one_px_gif_data = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+            if url_path and url_path.startswith('/upload/video'):
+                if os.path.splitext(url_path)[-1] in ('.jpg', '.gif'):
+                    res_body = base64.b64decode(one_px_gif_data)
+
+            # count down
+            if url_path and url_path == '/js/2016/playerselection-1.2.7.90.js':
+                with open('dn_replace.js', 'r') as f:
+                    res_body = f.read()
+
+            return res_body
+```
+
+
+意外收获是该Proxy支持HTTPS的mitm。
+
 
 # 后续
 

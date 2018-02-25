@@ -128,6 +128,30 @@
 
 &lt;p&gt;我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。&lt;/p&gt;
 &lt;p&gt;之后浏览器代理挂好，对于&lt;code&gt;*.dnvod.tv&lt;/code&gt;的流量转向这个代理即可。&lt;/p&gt;
+&lt;h2&gt;Update: 2018-02-25&lt;/h2&gt;
+&lt;p&gt;据网友Orooz反应，程序在Windows下不可用，测试后发现原本使用的HTTP Proxy在Windows下无法正常工作，遂使用&lt;a href="https://github.com/inaz2/proxy2"&gt;proxy2&lt;/a&gt;替换之。原理完全一样，直接贴修改的代码。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;def response_handler(self, req, req_body, res, res_body):
+        url = urlparse.urlparse(req.path)
+        url_domain = url.netloc
+        url_path = url.path
+
+        if url_domain and url_domain.endswith(&amp;#39;dnvod.tv&amp;#39;):
+            # ads
+            one_px_gif_data = &amp;#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&amp;#39;
+            if url_path and url_path.startswith(&amp;#39;/upload/video&amp;#39;):
+                if os.path.splitext(url_path)[-1] in (&amp;#39;.jpg&amp;#39;, &amp;#39;.gif&amp;#39;):
+                    res_body = base64.b64decode(one_px_gif_data)
+
+            # count down
+            if url_path and url_path == &amp;#39;/js/2016/playerselection-1.2.7.90.js&amp;#39;:
+                with open(&amp;#39;dn_replace.js&amp;#39;, &amp;#39;r&amp;#39;) as f:
+                    res_body = f.read()
+
+            return res_body
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;意外收获是该Proxy支持HTTPS的mitm。&lt;/p&gt;
 &lt;h1&gt;后续&lt;/h1&gt;
 &lt;p&gt;其实从防御方来说，修改Flash Player本身可以明显增加破解门槛，在Flash内部强制限定广告时间，广告资源本身甚至可以固化到Flash的内置资源列表中，这样不会产生单独的下载流量。但是缺点也显而易见，每次广告更新都要完整更新这个播放器，维护成本不可小觑。另外对于空白图片，也可以在前端检测一下（比如图片byte是否固定，图片大小如何，不过这类检测脚本也可以被中间人替换了或者被重新构造的资源绕过）。&lt;/p&gt;
 &lt;p&gt;从攻击方来说，后续需要的基本增强就是对于https时候mitm，不过这个就是一个库两个证书的问题。另外就是对于规则的修订问题了。进一步说，如果防御方真修改了Flash Player，那就decompile这个播放器然后替换之...&lt;/p&gt;
