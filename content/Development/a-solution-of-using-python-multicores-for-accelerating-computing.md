@@ -9,13 +9,13 @@ Summary_en: Because of the Global Interpreter Lock (GIL), Python's multi-threadi
 
 Python并发编程绕不开[全局锁(GIL)](https://docs.python.org/3.6/glossary.html#term-global-interpreter-lock)的问题。简单来说，GIL保证了一段时间内只允许一个真实的thread运行。网上有大量关于这个问题的历史成因的解释及性能瓶颈的测试结果。总结来说，当程序为IO密集型的时候，多线程其实也还是个不错的方案，但如果是运算密集型的情况下，CPU的资源就不能很好的分配和利用了。
 
-在最近实验室的项目中，需要开发一个针对Entity Resolution问题的包，我们叫它[Record Linkage ToolKit (RLTK)](https://github.com/usc-isi-i2/rltk)。在使用RLTK的时候，很多依赖包或者是用户代码都是线程不安全的；于此同时，RLTK的使用场景不允许进行输入文件的预先切割然后并行的跑几个不同的进程。
+在最近实验室的项目中，需要开发一个针对Entity Resolution问题的包，我们叫它[Record Linkage ToolKit (RLTK)](https://github.com/usc-isi-i2/rltk)。在使用RLTK的时候，我们希望可以使用多线程来加速运算，但很多依赖包或者是用户代码都是线程不安全的；于此同时，RLTK的使用场景不允许进行输入文件的预先切割然后并行的跑几个不同的并行进程。
 
 针对这些问题，我在RLTK的实现中给出了一个通用的方案。
 
 # 实现方案
 
-最直观的代替多线程的方案就是多进程，但是多进程的优缺点也很明显：优点当然是内存的独立互不影响，这也是为何Chrome需要一个tab一个进程；缺点也是内存空间的独立（好一把双刃剑），数据交换繁琐，于是就诞生了各种IPC技术）。
+最直观的代替多线程的方案就是多进程（这也是官方推荐的），但是多进程的优缺点也很明显：优点当然是内存的独立互不影响同时能很好的使用CPU的多核，这也是为何Chrome需要一个tab一个进程；缺点也是内存空间的独立（好一把双刃剑），进程间数据交换过程繁琐，于是就诞生了各种IPC技术。
 
 RLTK的使用场景归纳后其实就是：开始->单线程->并发/并行->单线程->并发/并行->...->单线程->结束。注意此处我没有区别并发(Concurrent)和并行(Parallel)这两个完全不同的概念，是因为此处我的目的无非就是通过某种手段实现CPU资源的最大化利用。
 
@@ -27,9 +27,34 @@ RLTK的使用场景归纳后其实就是：开始->单线程->并发/并行->单
 
 注意主进程中两个线程将由CPU调配交替运行，子进程中均只有各自的主线程因此无线程切换。这个设计在使用的时候需要将运算尽可能的在子进程中完成，主进程的子线程仅仅负责运算结果的获取和合并。
 
-具体代码实现 ([github](https://github.com/usc-isi-i2/rltk/blob/2edd0e4754b39336dd140f16404a03dcc9a5710a/rltk/parallel_processor.py)):
+具体代码实现 ([github](https://github.com/usc-isi-i2/rltk/blob/09c81edd8adb450ddfde409888c2b83497877ef5/rltk/parallel_processor.py)):
 
 ```
+"""
+This module is designed for breaking the restriction of Python Global Interpreter Lock (GIL): It uses multi-processing (compute-intensive operations) and multi-threading (return data collecting) to accelerate computing.
+Once it's initialized, it creates a sub process pool, all the added data will be dispatched to different sub processes for parallel computing. The result sends back and consumes in another thread in current main process. The Inter Process Communication (IPC) between main process and sub processes is based on queue.
+Example::
+    result = []
+    
+    def dummy_computation_with_input(x):
+        time.sleep(0.0001)
+        return x * x, x + 5
+    
+    def output_handler(r1, r2):
+        result.append(r1 if r1 > r2 else r2)
+    
+    pp = ParallelProcessor(dummy_computation_with_input, 8, output_handler=output_handler)
+    pp.start()
+    
+    for i in range(8):
+        pp.compute(i)
+    
+    pp.task_done()
+    pp.join()
+    
+    print(result)
+"""
+
 import multiprocessing as mp
 import threading
 import queue
@@ -65,6 +90,10 @@ class ParallelProcessor(object):
         output_handler (Callable): If the output data needs to be get in main process (another thread), 
                                 set this handler, the arguments are same to the return from input_handler.
                                 The return result is one by one, order is arbitrary.
+    
+    
+    Note:
+        Do NOT implement heavy compute-intensive operations in output_handler, they should be in input_handler.
     """
 
     # Command format in queue. Represent in tuple.

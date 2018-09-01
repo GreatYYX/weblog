@@ -228,7 +228,7 @@ ul.social li a:hover {
 }
 
 #content div.highlight {
-  max-height: 600px;
+  /*max-height: 600px;*/
   font-size: 11pt;
   background-color:#f1f1f1;
   overflow: auto;

@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/all.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2018-08-28T05:50:00-07:00</updated><entry><title>一种Python中模拟多线程计算的方案</title><link href="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python.html" rel="alternate"></link><published>2018-08-28T05:50:00-07:00</published><updated>2018-08-28T05:50:00-07:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-08-28:/posts/a-solution-of-simulating-real-multithreading-in-python.html</id><summary type="html">&lt;p&gt;Python中由于全局锁(GIL)的限制无法使多线程在运算密集场景下发挥其威力，本文探讨一个通过多线程和多进程配合的方案来“突破”这种限制。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;问题场景&lt;/h1&gt;
 &lt;p&gt;Python并发编程绕不开&lt;a href="https://docs.python.org/3.6/glossary.html#term-global-interpreter-lock"&gt;全局锁(GIL)&lt;/a&gt;的问题。简单来说，GIL保证了一段时间内只允许一个真实的thread运行。网上有大量关于这个问题的历史成因的解释及性能瓶颈的测试结果。总结来说，当程序为IO密集型的时候，多线程其实也还是个不错的方案，但如果是运算密集型的情况下，CPU的资源就不能很好的分配和利用了。&lt;/p&gt;
-&lt;p&gt;在最近实验室的项目中，需要开发一个针对Entity Resolution问题的包，我们叫它&lt;a href="https://github.com/usc-isi-i2/rltk"&gt;Record Linkage ToolKit (RLTK)&lt;/a&gt;。在使用RLTK的时候，很多依赖包或者是用户代码都是线程不安全的；于此同时，RLTK的使用场景不允许进行输入文件的预先切割然后并行的跑几个不同的进程。&lt;/p&gt;
+&lt;p&gt;在最近实验室的项目中，需要开发一个针对Entity Resolution问题的包，我们叫它&lt;a href="https://github.com/usc-isi-i2/rltk"&gt;Record Linkage ToolKit (RLTK)&lt;/a&gt;。在使用RLTK的时候，我们希望可以使用多线程来加速运算，但很多依赖包或者是用户代码都是线程不安全的；于此同时，RLTK的使用场景不允许进行输入文件的预先切割然后并行的跑几个不同的并行进程。&lt;/p&gt;
 &lt;p&gt;针对这些问题，我在RLTK的实现中给出了一个通用的方案。&lt;/p&gt;
 &lt;h1&gt;实现方案&lt;/h1&gt;
-&lt;p&gt;最直观的代替多线程的方案就是多进程，但是多进程的优缺点也很明显：优点当然是内存的独立互不影响，这也是为何Chrome需要一个tab一个进程；缺点也是内存空间的独立（好一把双刃剑），数据交换繁琐，于是就诞生了各种IPC技术）。&lt;/p&gt;
+&lt;p&gt;最直观的代替多线程的方案就是多进程（这也是官方推荐的），但是多进程的优缺点也很明显：优点当然是内存的独立互不影响同时能很好的使用CPU的多核，这也是为何Chrome需要一个tab一个进程；缺点也是内存空间的独立（好一把双刃剑），进程间数据交换过程繁琐，于是就诞生了各种IPC技术。&lt;/p&gt;
 &lt;p&gt;RLTK的使用场景归纳后其实就是：开始-&amp;gt;单线程-&amp;gt;并发/并行-&amp;gt;单线程-&amp;gt;并发/并行-&amp;gt;...-&amp;gt;单线程-&amp;gt;结束。注意此处我没有区别并发(Concurrent)和并行(Parallel)这两个完全不同的概念，是因为此处我的目的无非就是通过某种手段实现CPU资源的最大化利用。&lt;/p&gt;
 &lt;p&gt;在这个场景中，“并发/并行”可以看成一组并行的运算作业 (RLTK中主要是算Feature Vector)，运算期间各个单元是独立的（即在运算过程中不需要数据交互），如果每个作业单元的输入为&lt;code&gt;input[i]&lt;/code&gt;输出单元为&lt;code&gt;output[i]&lt;/code&gt;，则问题模型可以抽象成&lt;code&gt;output[i]=F(input[i])&lt;/code&gt;，其中的并行部分无非就是一个黑盒函数&lt;code&gt;F&lt;/code&gt;。因此无非就是在必要的时候把数据切割成多份然后丢入进程池去并行运行。&lt;/p&gt;
 &lt;p&gt;这之后还需要解决的问题就是输出的返回。最简单的方案当然就是直接输出到不同的文件中，之后程序主线程等待运算结束后统一读取并合并结果，但这样的坏处是额外的磁盘IO的开销。因此方案变成，主进程中再创建一条副线程专门用于output的合并，主线程需要等所有子进程和副线程退出后才能继续执行下去。数据的输入和输出通过Queue进行交换。时间线如下：&lt;/p&gt;
 &lt;p&gt;&lt;img alt="timeline" src="../statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png"&gt;&lt;/p&gt;
 &lt;p&gt;注意主进程中两个线程将由CPU调配交替运行，子进程中均只有各自的主线程因此无线程切换。这个设计在使用的时候需要将运算尽可能的在子进程中完成，主进程的子线程仅仅负责运算结果的获取和合并。&lt;/p&gt;
-&lt;p&gt;具体代码实现 (&lt;a href="https://github.com/usc-isi-i2/rltk/blob/2edd0e4754b39336dd140f16404a03dcc9a5710a/rltk/parallel_processor.py"&gt;github&lt;/a&gt;):&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;multiprocessing&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;mp&lt;/span&gt;
+&lt;p&gt;具体代码实现 (&lt;a href="https://github.com/usc-isi-i2/rltk/blob/09c81edd8adb450ddfde409888c2b83497877ef5/rltk/parallel_processor.py"&gt;github&lt;/a&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;This module is designed for breaking the restriction of Python Global Interpreter Lock (GIL): It uses multi-processing (compute-intensive operations) and multi-threading (return data collecting) to accelerate computing.&lt;/span&gt;
+&lt;span class="sd"&gt;Once it&amp;#39;s initialized, it creates a sub process pool, all the added data will be dispatched to different sub processes for parallel computing. The result sends back and consumes in another thread in current main process. The Inter Process Communication (IPC) between main process and sub processes is based on queue.&lt;/span&gt;
+&lt;span class="sd"&gt;Example::&lt;/span&gt;
+&lt;span class="sd"&gt;    result = []&lt;/span&gt;
+
+&lt;span class="sd"&gt;    def dummy_computation_with_input(x):&lt;/span&gt;
+&lt;span class="sd"&gt;        time.sleep(0.0001)&lt;/span&gt;
+&lt;span class="sd"&gt;        return x * x, x + 5&lt;/span&gt;
+
+&lt;span class="sd"&gt;    def output_handler(r1, r2):&lt;/span&gt;
+&lt;span class="sd"&gt;        result.append(r1 if r1 &amp;gt; r2 else r2)&lt;/span&gt;
+
+&lt;span class="sd"&gt;    pp = ParallelProcessor(dummy_computation_with_input, 8, output_handler=output_handler)&lt;/span&gt;
+&lt;span class="sd"&gt;    pp.start()&lt;/span&gt;
+
+&lt;span class="sd"&gt;    for i in range(8):&lt;/span&gt;
+&lt;span class="sd"&gt;        pp.compute(i)&lt;/span&gt;
+
+&lt;span class="sd"&gt;    pp.task_done()&lt;/span&gt;
+&lt;span class="sd"&gt;    pp.join()&lt;/span&gt;
+
+&lt;span class="sd"&gt;    print(result)&lt;/span&gt;
+&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;multiprocessing&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;mp&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;threading&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;queue&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Callable&lt;/span&gt;
@@ -46,6 +71,10 @@
 &lt;span class="sd"&gt;        output_handler (Callable): If the output data needs to be get in main process (another thread), &lt;/span&gt;
 &lt;span class="sd"&gt;                                set this handler, the arguments are same to the return from input_handler.&lt;/span&gt;
 &lt;span class="sd"&gt;                                The return result is one by one, order is arbitrary.&lt;/span&gt;
+
+
+&lt;span class="sd"&gt;    Note:&lt;/span&gt;
+&lt;span class="sd"&gt;        Do NOT implement heavy compute-intensive operations in output_handler, they should be in input_handler.&lt;/span&gt;
 &lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 
     &lt;span class="c1"&gt;# Command format in queue. Represent in tuple.&lt;/span&gt;
