@@ -1,6 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog - Security</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/security.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2018-02-11T11:06:00-08:00</updated><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer.html" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;小白通道&lt;/h1&gt;
-&lt;p&gt;首先代码仓库和使用方法送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer"&gt;https://github.com/GreatYYX/dnvod-ad-killer&lt;/a&gt;。然后不用往下看了。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's WEBlog - Security</title><link href="http://blog.yyx.me/" rel="alternate"></link><link href="http://blog.yyx.me/feeds/security.atom.xml" rel="self"></link><id>http://blog.yyx.me/</id><updated>2019-01-13T19:18:00-08:00</updated><entry><title>多瑙视频广告移除思路及实现（v2）</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer-v2.html" rel="alternate"></link><published>2019-01-13T19:18:00-08:00</published><updated>2019-01-13T19:18:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2019-01-13:/posts/dnvod-ad-killer-v2.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。此篇取代之前那篇文章，解决了多瑙近期更新后的问题。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;前言&lt;/h1&gt;
+&lt;p&gt;18年年底比较忙，一直没再去多瑙看过视频。今年开年回来后发现之前的实现已经失效，因此重新撰文。&lt;/p&gt;
+&lt;p&gt;新的代码仓库地址不变：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer"&gt;https://github.com/GreatYYX/dnvod-ad-killer&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;考虑到多瑙之后可能的连续更新，这里提出一个约定：每个重大升级会对应一个major版本号（比如这次的&lt;code&gt;v2&lt;/code&gt;），并可能会写相对应的文章，文章的标题和URL也会带有这个major版本号。minor的更新版本号会直接采用当天的日期，比如&lt;code&gt;v2.20190113&lt;/code&gt;（如果一天更新多次则会再加入一个后缀，如&lt;code&gt;v2.20190113.2&lt;/code&gt;），思路将直接更新在其major的文章中。之前的老版本命名为&lt;code&gt;v1&lt;/code&gt;。&lt;/p&gt;
+&lt;h1&gt;上手&lt;/h1&gt;
+&lt;p&gt;多瑙总算拿掉了之前诟病的Flash而采用纯HTML播放器了（之前的文章吐槽过，电脑端禁止了H5的播放器），顺应时代潮流才能繁衍生息。而且广告也不是在一开始就出现，而是播放一段时间后才出现，并会有5s倒计时和20s广告（不过这个广告的时间计算方法很有问题或者是故意的，一旦快进了间隔很短的时间就要看广告，貌似如果要播n段广告的话，会在剩下的时间中插入所有没有播放的广告）。视频采用MP2T流协议分片下载，另外只加载了常规的html、js、css还有图片等。值得一提的是，（几乎）所有http请求都已经是https了，总算跟上了“时代进程”（当然我觉得主要是如果没SSL/TLS会直接被浏览器提示“不安全网站”的原因）。&lt;/p&gt;
+&lt;p&gt;H5的播放器理论上都通过js加载和控制。从Chrome的DevTools中可以看出这些js和加载顺序：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DNA-3.0.0.2.js: 由html加载，UI库。&lt;/li&gt;
+&lt;li&gt;inline.1dc40c191965336599d8.bundle.js：由html加载。&lt;/li&gt;
+&lt;li&gt;polyfills.c30af323737f4e73902d.bundle.js：由html加载，UI库。&lt;/li&gt;
+&lt;li&gt;scripts.a00c037d89f30e04f3e1.bundle.js：由html加载。&lt;/li&gt;
+&lt;li&gt;main.2e8c4bc9ac78a55fed3d.bundle.js：由html加载。&lt;/li&gt;
+&lt;li&gt;0.a3d01277a3706629fe95.chunk.js：由inline.1dc40c191965336599d8.bundle.js加载。&lt;/li&gt;
+&lt;li&gt;1.ed0cb8b173b9bfffa25f.chunk.js：由inline.1dc40c191965336599d8.bundle.js加载。&lt;/li&gt;
+&lt;li&gt;ckplayer.js：由1.ed0cb8b173b9bfffa25f.chunk.js加载，播放器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;另外需要注意的是，每次广告播放完会再下载一个名字随机的js，不过这个对于目前破解并没有干扰。&lt;/p&gt;
+&lt;p&gt;除了两个UI库和播放器之外，其他的名字都像是用户代码然后bundle和混淆了的。因此从html的DOM和js两部下手（废话）。这次考虑到所有访问流量都已经变成https，我将代理更新为了更加成熟的&lt;a href="https://mitmproxy.org/"&gt;mitmproxy&lt;/a&gt;。&lt;/p&gt;
+&lt;h1&gt;分析和实现&lt;/h1&gt;
+&lt;p&gt;最开始尝试了一下通过DOM里面的广告的element来定位的办法，不过貌似都是Angular的&lt;code&gt;ng-xxxx&lt;/code&gt;，而&lt;code&gt;xxxx&lt;/code&gt;很多都在混淆了的代码里被参数化了，因此不太好定位，尝试了5分钟遂放弃-_-|||&lt;/p&gt;
+&lt;p&gt;当然促使我那么快就放弃当然不是因为我懒（反正我也不会承认的），因为更简单的思路已经萌上心头：搜索特征字符串，比如&lt;code&gt;广告&lt;/code&gt;。不幸的是，js中都没有出现中文。但是大致浏览这些js后就会发现字符串都做了unicode编码，找个编码器翻一下就是&lt;code&gt;\u5e7f\u544a&lt;/code&gt;。尝试grep一下所有可能的js发现基本都存在，于是加长为&lt;code&gt;后跳过广告&lt;/code&gt;（&lt;code&gt;多少s&lt;/code&gt;可能会是变量）后定位到&lt;code&gt;1.ed0cb8b173b9bfffa25f.chunk.js&lt;/code&gt;。下面开刀这个文件。&lt;/p&gt;
+&lt;p&gt;根据&lt;code&gt;\u540e\u8df3\u8fc7\u5e7f\u544a&lt;/code&gt;定位到：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;t() {&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;secondFormat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;lt;font class=&amp;quot;text-red&amp;quot; color=&amp;quot;#F00000&amp;quot;&amp;gt;{second}s&amp;lt;/font &amp;gt; \u540e\u64ad\u653e\u5e7f\u544a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;之后根据&lt;code&gt;secondFormat&lt;/code&gt;发现一处关键代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;this.subscriptions.push(this.publicManager.eventList.subscribe(function(e) {
+    switch (t.api.intersitialHandler(e), e.event) {
+        case Ye.Timer:
+            t.api.showInfo(nn.secondFormat.replace(&amp;quot;{second}&amp;quot;, e.data.time), 0);
+            break;
+        case Ye.ShouldPlayAds:
+            t.api.showInfo(&amp;quot;&amp;quot;, 0), n = t.api.getPlayMedia, i = t.api.currentTime, t.currentPlayingAds = t.loadMedia, t.currentPlayingAds.isImage ? t.api.pause() : t.api.playVideo([t.currentPlayingAds], !0), t.isPlayingAds = !0, t.skipAfter = 10;
+            break;
+        case Ye.ShouldBackToPlay:
+            t.isBackToPlayMedia = !0, (!t.shouldSkipAds &amp;amp;&amp;amp; !t.hasBought || t.isPlayingAds) &amp;amp;&amp;amp; null != n &amp;amp;&amp;amp; (t.currentPlayingAds = t.loadMedia = null, t.api.playVideo([n], !1), t.isPlayingAds = !1, t.shouldPlaySeoncd = i);
+            break;
+        case Ye.ShouldLoadAds:
+            t.isBackToPlayMedia = !1, t.shouldSkipAds || t.hasBought ? (t.publicManager.stopPlay(), t.hasState || t.api.showInfo(t.needBought ? 1 == t.hasBought ? nn.alreadyBought : nn.highFormat : nn.vipskipFormat, 5)) : t.startLoadMedia(e.data);
+            break;
+        case Ye.SkipTimer:
+            t.skipAfter = e.data.time, t.leftSecond = e.data.left;
+            break;
+        case Ye.ShouldCancel:
+            t.caption = &amp;quot;&amp;quot;, n = null, i = 0, t.loadMedia = null, t.isPlayingAds = !1
+    }
+})), this.pendding &amp;amp;&amp;amp; (this.publicManager.invokeList(this.pendding.mediaList, this.pendding.startSecond, this.pendding.periodicSecond), this.pendding = null)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这段其实就是精髓了：&lt;code&gt;ShouldLoadAds&lt;/code&gt;用于加载广告，&lt;code&gt;ShouldPlayAds&lt;/code&gt;用于播放广告，&lt;code&gt;Timer&lt;/code&gt;用于倒计时多少秒后播放广告。直接把这三个的内容砍掉，就奇迹般的没有广告等待了。&lt;/p&gt;
+&lt;p&gt;在破解过程中其实发现并尝试过修改&lt;code&gt;leftSecond&lt;/code&gt;和&lt;code&gt;skipAfter&lt;/code&gt;两个变量，效果并没有上面这个直接。&lt;/p&gt;
+&lt;p&gt;对于暂停之后的广告窗口，根据DOM搜索&lt;code&gt;.vg-bg&lt;/code&gt;找到：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;styles&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="cp"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;....vg&lt;/span&gt;&lt;span class="na"&gt;-bg&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;\&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;            &lt;span class="nx"&gt;position&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nx"&gt;absolute&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="o"&gt;\&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;&lt;span class="o"&gt;\&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;            &lt;span class="k"&gt;max&lt;/span&gt;&lt;span class="na"&gt;-width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;640&lt;/span&gt;&lt;span class="nx"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="o"&gt;\&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;            &lt;span class="k"&gt;max&lt;/span&gt;&lt;span class="na"&gt;-height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;360&lt;/span&gt;&lt;span class="nx"&gt;px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="o"&gt;\&lt;/span&gt;&lt;span class="nx"&gt;n&lt;/span&gt;  &lt;span class="nx"&gt;...&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;加入&lt;code&gt;display:none;&lt;/code&gt;即可。&lt;/p&gt;
+&lt;p&gt;攻击代码实现非常简单：对于广告图片依然采用之前的透明图片替换法，欺骗浏览器图片已经下载，不容易被脚本检测到。js文件直接替换成修改后的即可。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;def response(self, flow: mitmproxy.http.HTTPFlow):
+    &amp;quot;&amp;quot;&amp;quot;
+        The full HTTP response has been read.
+    &amp;quot;&amp;quot;&amp;quot;
+    if flow.request.host.endswith(&amp;#39;dnvod.tv&amp;#39;):
+        one_px_gif_data = &amp;#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&amp;#39;
+        if flow.request.path.startswith(&amp;#39;/upload/video&amp;#39;):
+            if os.path.splitext(flow.request.path)[-1] in (&amp;#39;.jpg&amp;#39;, &amp;#39;.gif&amp;#39;):
+                flow.response.set_content(base64.b64decode(one_px_gif_data))
+
+        if flow.request.path.endswith(&amp;#39;1.ed0cb8b173b9bfffa25f.chunk.js&amp;#39;):
+            with open(&amp;#39;js/1.ed0cb8b173b9bfffa25f.chunk.de.js&amp;#39;, &amp;#39;r&amp;#39;) as f:
+                flow.response.set_text(f.read())
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;后记&lt;/h1&gt;
+&lt;p&gt;这次过程出奇的顺利，前后也就一个小时。经过这次其实我脑海中有一个相对比较有破解门槛的保护手法，不过作为用户我是不会告诉多瑙的，除非。。。（收买我？）&lt;/p&gt;
+&lt;p&gt;最后，还是那句话：只要多瑙不更新，伦家是不会主动更新的嘤嘤嘤。&lt;/p&gt;</content><category term="bypass"></category><category term="mitm"></category><category term="hacking"></category></entry><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer.html" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer.html</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Update: 2019-01-13&lt;/h2&gt;
+&lt;p&gt;多瑙最近更新了广告投放的实现，此文已经失效，请移步到&lt;a href="dnvod-ad-killer-v2.html"&gt;新文章&lt;/a&gt;。之前的代码可通过tag &lt;code&gt;v1&lt;/code&gt;来索取。&lt;/p&gt;
+&lt;h1&gt;小白通道&lt;/h1&gt;
+&lt;p&gt;首先代码仓库和使用方法送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer/tree/v1"&gt;https://github.com/GreatYYX/dnvod-ad-killer/tree/v1&lt;/a&gt;。然后不用往下看了。&lt;/p&gt;
 &lt;h1&gt;背景铺垫&lt;/h1&gt;
 &lt;p&gt;17年在美帝工作后，就再没来写过blog，一年一更的“好习惯”也被打破了。其实过去这一年多时间里自己在安全方面基本没有hands-on的动作，除了去某哥onsite前那晚上成功zuo si把手机上一个游戏给破解了然后华丽的gg，主要在研究以流量伪装手段绕过GFW的方法和binary文件准确恢复函数图谱的可能性，不过目前这两者都只停留在思路阶段（Sigh～菜的抠脚）。&lt;/p&gt;
 &lt;p&gt;这次萌发动力写个文章主要是被多瑙的bling bling的广告闪瞎了可又掏不起银子充会员，而单纯的AdBlock / AdBlock Plus以及Chrome Extension里的&lt;a href="https://github.com/AugustusZ/Dnvod-Ad-Remover"&gt;dnvod-ad-remover&lt;/a&gt;都已经失效，于是乎只能寡人亲自操刀了。&lt;/p&gt;
