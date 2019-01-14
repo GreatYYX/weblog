@@ -5,9 +5,13 @@ Slug: dnvod-ad-killer
 Summary: 本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。
 Summary_en: The article mainly discussed how to remove the ads on dnvod.tv and how to make an implementation.
 
+## Update: 2019-01-13
+
+多瑙最近更新了广告投放的实现，此文已经失效，请移步到[新文章](dnvod-ad-killer-v2.html)。之前的代码可通过tag `v1`来索取。
+
 # 小白通道
 
-首先代码仓库和使用方法送上：[https://github.com/GreatYYX/dnvod-ad-killer](https://github.com/GreatYYX/dnvod-ad-killer)。然后不用往下看了。
+首先代码仓库和使用方法送上：[https://github.com/GreatYYX/dnvod-ad-killer/tree/v1](https://github.com/GreatYYX/dnvod-ad-killer/tree/v1)。然后不用往下看了。
 
 # 背景铺垫
 
