@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>reversing.kr ImagePrc Walkthrough &ndash; YYX's Website</title>
+
+    <!-- Meta -->
+    <meta name="description" content="YYX's Website &ndash; ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="YYX" />
+    <meta property="article:section" content="Security" />
+    <meta property="article:published_time" content="2014-09-23" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="reversing.kr ImagePrc Walkthrough"/>
+    <meta property="og:description" content="本文为逆向工程练习网站reversing.kr中ImagePrc解题攻略。"/>
+    <meta property="og:site_name" content="YYX's Website" />
+    <meta property="og:url" content="http://blog.yyx.me/posts/reversing-kr-imageprc"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="reversing.kr ImagePrc Walkthrough">
+    <meta name="twitter:description" content="本文为逆向工程练习网站reversing.kr中ImagePrc解题攻略。">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/reversing-kr-imageprc">
+
+    <!-- Feed -->
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
+
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="http://blog.yyx.me//theme/images/favicon-32x32.png">
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="http://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="http://blog.yyx.me/theme/js/main.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="http://blog.yyx.me/" id="header-logo" title="Home"><img src="http://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"></a>
+        <!-- <a href="http://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
+        <nav id="header-menu">
+          <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
+          <ul class="w3-hide-small">
+            <!-- category -->
+            <!-- list -->
+            <!-- menu item -->
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <!-- pages -->
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <article class="w3-padding-64">
+      <header class="w3-container col-main">
+        <h1>reversing.kr ImagePrc Walkthrough</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2014-09-23T18:05:00-07:00">Sep 23, 2014</time> @ <a href="http://blog.yyx.me/categories/security" title="All articles in category Security">Security</a></span>
+          </div>
+          <div class="w3-margin-right">
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/reversingkr" title="All articles with Reversing.Kr tag">#reversing.kr</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/wargame" title="All articles with Wargame tag">#wargame</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/hacking" title="All articles with Hacking tag">#hacking</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/reversing" title="All articles with Reversing tag">#reversing</a>
+            </span>
+          </div>
+        </div>
+      </header>
+
+
+      <div class="col-main w3-container">
+        <section id="content" class="w3-margin-bottom w3-padding-8">
+          <h1>试玩</h1>
+<p>看起来很有意思的一道题目。拿到后打开一个窗口，可以用鼠标画一些东西，之后点Check，弹出“Wrong”。直觉认为应该是要画出一个图像，正确的话会得到flag。可惜这个图能画正确的概率真的很低。</p>
+<h1>逻辑分析</h1>
+<p>OD打开之后下MessageBoxA的API断点或者WM_LBUTTONUP的消息断点，点击Check后断下并跟踪到核心逻辑代码的位置。</p>
+<div class="highlight"><pre><span></span><span class="nt">004012D6</span>   <span class="o">&gt;</span> <span class="err">\</span><span class="nt">83BC24</span> <span class="nt">940000</span><span class="o">&gt;</span><span class="nt">cmp</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x94</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x64</span>         <span class="o">;</span>  <span class="nt">Case</span> <span class="nt">111</span> <span class="o">(</span><span class="nt">WM_COMMAND</span><span class="o">)</span> <span class="nt">of</span> <span class="nt">switch</span> <span class="nt">0040113A</span>
+<span class="nt">004012DE</span>   <span class="o">.</span>  <span class="nt">0F85</span> <span class="nt">01020000</span> <span class="nt">jnz</span> <span class="nt">ImagePrc</span><span class="p">.</span><span class="nc">004014E5</span>
+<span class="o">...</span>
+<span class="nt">004013CD</span>   <span class="o">&gt;</span>  <span class="nt">8B8424</span> <span class="nt">900000</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x90</span><span class="cp">]</span>
+<span class="nt">004013D4</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">30</span>         <span class="nt">push</span> <span class="nt">0x30</span>                                <span class="o">;</span> <span class="o">/</span><span class="nt">Style</span> <span class="o">=</span> <span class="nt">MB_OK</span><span class="o">|</span><span class="nt">MB_ICONEXCLAMATION</span><span class="o">|</span><span class="nt">MB_APPLMODAL</span>
+<span class="nt">004013D6</span>   <span class="o">.</span>  <span class="nt">68</span> <span class="nt">34604000</span>   <span class="nt">push</span> <span class="nt">ImagePrc</span><span class="p">.</span><span class="nc">00406034</span>                   <span class="o">;</span> <span class="o">|</span><span class="nt">ImagePrc</span>
+<span class="nt">004013DB</span>   <span class="o">.</span>  <span class="nt">68</span> <span class="nt">40604000</span>   <span class="nt">push</span> <span class="nt">ImagePrc</span><span class="p">.</span><span class="nc">00406040</span>                   <span class="o">;</span> <span class="o">|</span><span class="nt">Wrong</span>
+<span class="nt">004013E0</span>   <span class="o">.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">hOwner</span>
+<span class="nt">004013E1</span>   <span class="o">.</span>  <span class="nt">FF15</span> <span class="nt">F8504000</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">USER32.MessageBoxA</span><span class="o">&gt;&gt;</span><span class="p">;</span> <span class="o">\</span><span class="nx">MessageBoxA</span>
+<span class="mi">004013</span><span class="nx">E7</span>   <span class="nx">.</span>  <span class="mi">56</span>            <span class="nx">push</span> <span class="nx">esi</span>
+<span class="mi">004013</span><span class="nx">E8</span>   <span class="bp">.  </span><span class="nx nx-Member">E8</span> <span class="mi">13010000</span>   <span class="nx">call</span> <span class="nx">ImagePrc.00401500</span>
+<span class="mi">004013</span><span class="nx">ED</span>   <span class="nx">.</span>  <span class="mi">83</span><span class="nx">C4</span> <span class="mi">04</span>       <span class="nx">add</span> <span class="nx">esp</span><span class="p">,</span><span class="mh">0x4</span>
+<span class="mi">004013</span><span class="nx">F0</span>   <span class="nx">.</span>  <span class="mi">33</span><span class="nx">C0</span>          <span class="nx">xor</span> <span class="nx">eax</span><span class="p">,</span><span class="nx">eax</span>
+<span class="mi">004013</span><span class="nx">F2</span>   <span class="nx">.</span>  <span class="mi">5</span><span class="nx">B</span>            <span class="nx">pop</span> <span class="nx">ebx</span>
+<span class="mi">004013</span><span class="nx">F3</span>   <span class="nx">.</span>  <span class="mi">5</span><span class="nx">F</span>            <span class="nx">pop</span> <span class="nx">edi</span>
+<span class="mi">004013</span><span class="nx">F4</span>   <span class="nx">.</span>  <span class="mi">5</span><span class="nx">E</span>            <span class="nx">pop</span> <span class="nx">esi</span>
+<span class="mi">004013</span><span class="nx">F5</span>   <span class="nx">.</span>  <span class="mi">81</span><span class="nx">C4</span> <span class="mi">80000000</span> <span class="nx">add</span> <span class="nx">esp</span><span class="p">,</span><span class="mh">0x80</span>
+<span class="mi">004013</span><span class="nx">FB</span>   <span class="bp">.  </span><span class="nx nx-Member">C2</span> <span class="mi">1000</span>       <span class="nx">retn</span> <span class="mh">0x10</span>
+</pre></div>
+
+
+<p>在按钮消息路由到弹出消息框之间就是我们要找的核心逻辑。下面分解一下逻辑：</p>
+<div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="nt">004012E4</span>   <span class="o">.</span>  <span class="nt">A1</span> <span class="nt">F4844000</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x4084F4</span><span class="cp">]</span>
+<span class="nt">004012E9</span>   <span class="o">.</span>  <span class="nt">8D5424</span> <span class="nt">08</span>     <span class="nt">lea</span> <span class="nt">edx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x8</span><span class="cp">]</span>
+<span class="nt">004012ED</span>   <span class="o">.</span>  <span class="nt">53</span>            <span class="nt">push</span> <span class="nt">ebx</span>
+<span class="nt">004012EE</span>   <span class="o">.</span>  <span class="nt">52</span>            <span class="nt">push</span> <span class="nt">edx</span>                                 <span class="o">;</span> <span class="o">/</span><span class="nt">Buffer</span> <span class="o">=</span> <span class="nt">0018FB04</span>
+<span class="nt">004012EF</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">18</span>         <span class="nt">push</span> <span class="nt">0x18</span>                                <span class="o">;</span> <span class="o">|</span><span class="nt">BufSize</span> <span class="o">=</span> <span class="nt">18</span> <span class="o">(</span><span class="nt">24</span><span class="o">.)</span>
+<span class="nt">004012F1</span>   <span class="o">.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">hObject</span> <span class="o">=&gt;</span> <span class="nt">B9051E9B</span>
+<span class="nt">004012F2</span>   <span class="o">.</span>  <span class="nt">FF15</span> <span class="nt">1C504000</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">GDI32.GetObjectA</span><span class="o">&gt;</span><span class="cp">]</span>  <span class="o">;</span> <span class="err">\</span><span class="nt">GetObjectA</span>
+<span class="nt">004012F8</span>   <span class="o">.</span>  <span class="nt">B9</span> <span class="nt">0A000000</span>   <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">0xA</span>
+<span class="nt">004012FD</span>   <span class="o">.</span>  <span class="nt">33C0</span>          <span class="nt">xor</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">eax</span>
+<span class="nt">004012FF</span>   <span class="o">.</span>  <span class="nt">8D7C24</span> <span class="nt">24</span>     <span class="nt">lea</span> <span class="nt">edi</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x24</span><span class="cp">]</span>
+<span class="nt">00401303</span>   <span class="o">.</span>  <span class="nt">8D5424</span> <span class="nt">24</span>     <span class="nt">lea</span> <span class="nt">edx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x24</span><span class="cp">]</span>
+<span class="nt">00401307</span>   <span class="o">.</span>  <span class="nt">F3</span><span class="p">:</span><span class="nd">AB</span>         <span class="nt">rep</span> <span class="nt">stos</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">es</span><span class="o">:</span><span class="cp">[</span><span class="nx">edi</span><span class="cp">]</span>
+<span class="nt">00401309</span>   <span class="o">.</span>  <span class="nt">8B4424</span> <span class="nt">14</span>     <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="cp">]</span>
+<span class="nt">0040130D</span>   <span class="o">.</span>  <span class="nt">8B4C24</span> <span class="nt">10</span>     <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x10</span><span class="cp">]</span>
+<span class="nt">00401311</span>   <span class="o">.</span>  <span class="nt">8B3D</span> <span class="nt">20504000</span> <span class="nt">mov</span> <span class="nt">edi</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">GDI32.GetDIBits</span><span class="o">&gt;&gt;</span><span class="p">;</span>  <span class="nx">GDI32.GetDIBits</span>
+<span class="mi">00401317</span>   <span class="nx">.</span>  <span class="mi">6</span><span class="nx">A</span> <span class="mi">00</span>         <span class="nx">push</span> <span class="mh">0x0</span>                                 <span class="p">;</span> <span class="p">/</span><span class="nb">Usage</span> <span class="o">=</span> <span class="nx">DIB_RGB_COLORS</span>
+<span class="mi">00401319</span>   <span class="nx">.</span>  <span class="mi">52</span>            <span class="nx">push</span> <span class="nx">edx</span>                                 <span class="p">;</span> <span class="o">|</span><span class="nx">pBitmapinfo</span>
+<span class="mi">0040131</span><span class="nx">A</span>   <span class="nx">.</span>  <span class="mi">6</span><span class="nx">A</span> <span class="mi">00</span>         <span class="nx">push</span> <span class="mh">0x0</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">Buffer</span><span class="o"> =</span> <span class="kt">NULL</span>
+<span class="mi">0040131</span><span class="nx">C</span>   <span class="nx">.</span>  <span class="mi">894424</span> <span class="mi">38</span>     <span class="nx">mov</span> <span class="nx">dword</span> <span class="nx">ptr</span> <span class="nx">ss</span><span class="p">:</span><span class="err">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x38</span><span class="cp">]</span><span class="o">,</span><span class="nt">eax</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">00401320</span>   <span class="o">.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">nLines</span>
+<span class="nt">00401321</span>   <span class="o">.</span>  <span class="nt">A1</span> <span class="nt">F4844000</span>   <span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x4084F4</span><span class="cp">]</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">00401326</span>   <span class="o">.</span>  <span class="nt">894C24</span> <span class="nt">38</span>     <span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x38</span><span class="cp">]</span><span class="o">,</span><span class="nt">ecx</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">0040132A</span>   <span class="o">.</span>  <span class="nt">8B0D</span> <span class="nt">DC844000</span> <span class="nt">mov</span> <span class="nt">ecx</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="mh">0x4084DC</span><span class="cp">]</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">00401330</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">00</span>         <span class="nt">push</span> <span class="nt">0x0</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">StartLine</span> <span class="o">=</span> <span class="nt">0</span>
+<span class="nt">00401332</span>   <span class="o">.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">hBitmap</span> <span class="o">=&gt;</span> <span class="nt">B9051E9B</span>
+<span class="nt">00401333</span>   <span class="o">.</span>  <span class="nt">51</span>            <span class="nt">push</span> <span class="nt">ecx</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">hDC</span> <span class="o">=&gt;</span> <span class="nt">4C01191B</span>
+<span class="nt">00401334</span>   <span class="o">.</span>  <span class="nt">C74424</span> <span class="nt">40</span> <span class="nt">280</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x40</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x28</span>         <span class="o">;</span> <span class="o">|</span>
+<span class="nt">0040133C</span>   <span class="o">.</span>  <span class="nt">66</span><span class="p">:</span><span class="nd">C74424</span> <span class="nt">4C</span> <span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">word</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x4C</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x1</span>           <span class="o">;</span> <span class="o">|</span>
+<span class="nt">00401343</span>   <span class="o">.</span>  <span class="nt">66</span><span class="p">:</span><span class="nd">C74424</span> <span class="nt">4E</span> <span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">word</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x4E</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x18</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">0040134A</span>   <span class="o">.</span>  <span class="nt">C74424</span> <span class="nt">50</span> <span class="nt">000</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ss</span><span class="o">:</span><span class="cp">[</span><span class="nx">esp</span><span class="o">+</span><span class="mh">0x50</span><span class="cp">]</span><span class="o">,</span><span class="nt">0x0</span>          <span class="o">;</span> <span class="o">|</span>
+<span class="nt">00401352</span>   <span class="o">.</span>  <span class="nt">FFD7</span>          <span class="nt">call</span> <span class="nt">edi</span>                                 <span class="o">;</span> <span class="err">\</span><span class="nt">GetDIBits</span>
+<span class="o">...</span>
+</pre></div>
+
+
+<p>程序首先获取绘制的对象，并提取绘制对象的像素内容。在<code>GetDIBits()</code>的时候栈情况如下：</p>
+<div class="highlight"><pre><span></span>...
+0018FADC   4C01191B  |hDC = 4C01191B
+0018FAE0   B9051E9B  |hBitmap = B9051E9B
+0018FAE4   00000000  |StartLine = 0
+0018FAE8   00000096  |nLines = 96 (150.)
+0018FAEC   00000000  |Buffer = NULL
+0018FAF0   0018FB1C  |pBitmapinfo = 0018FB1C
+0018FAF4   00000000  \Usage = DIB_RGB_COLORS
+...
+</pre></div>
+
+
+<p>可以看到图像为RGB图像，第一个扫描线是150（其实就是150的高度）。查看地址0018FB1C处数据的LPBITMAPINFO结构体指针的内容：</p>
+<div class="highlight"><pre><span></span>...
+0018FB1C  28 00 00 00 C8 00 00 00 96 00 00 00 01 00 18 00  (.È..
+...
+</pre></div>
+
+
+<p>根据BITMAPINFO结构体格式，发现bitmap的长度是0xC8，高度0x96，即200x150大小。</p>
+<p>接着往下看：</p>
+<div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="nt">00401381</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">18</span>         <span class="nt">push</span> <span class="nt">0x18</span>                                <span class="o">;</span> <span class="o">/</span><span class="nt">ResourceType</span> <span class="o">=</span> <span class="nt">18</span>
+<span class="nt">00401383</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">65</span>         <span class="nt">push</span> <span class="nt">0x65</span>                                <span class="o">;</span> <span class="o">|</span><span class="nt">ResourceName</span> <span class="o">=</span> <span class="nt">65</span>
+<span class="nt">00401385</span>   <span class="o">.</span>  <span class="nt">6A</span> <span class="nt">00</span>         <span class="nt">push</span> <span class="nt">0x0</span>                                 <span class="o">;</span> <span class="o">|</span><span class="nt">hModule</span> <span class="o">=</span> <span class="nt">NULL</span>
+<span class="nt">00401387</span>   <span class="o">.</span>  <span class="nt">FF15</span> <span class="nt">7C504000</span> <span class="nt">call</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">ds</span><span class="o">:</span><span class="cp">[</span><span class="o">&lt;&amp;</span><span class="nx">KERNEL32.FindResour</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">\</span><span class="nx">FindResourceA</span>
+<span class="mi">0040138</span><span class="nx">D</span>   <span class="nx">.</span>  <span class="mi">50</span>            <span class="nx">push</span> <span class="nx">eax</span>                                 <span class="p">;</span> <span class="p">/</span><span class="nx">hResource</span>
+<span class="mi">0040138</span><span class="nx">E</span>   <span class="nx">.</span>  <span class="mi">6</span><span class="nx">A</span> <span class="mi">00</span>         <span class="nx">push</span> <span class="mh">0x0</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">hModule</span><span class="o"> =</span> <span class="kt">NULL</span>
+<span class="mi">00401390</span>   <span class="bp">.  </span><span class="nx nx-Member">FF15</span> <span class="mi">80504000</span> <span class="nx">call</span> <span class="nx">dword</span> <span class="nx">ptr</span> <span class="nx">ds</span><span class="p">:</span><span class="err">[</span><span class="o">&lt;&amp;</span><span class="nx">KERNEL32.LoadResour</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">\</span><span class="nx">LoadResource</span>
+<span class="mi">00401396</span>   <span class="nx">.</span>  <span class="mi">50</span>            <span class="nx">push</span> <span class="nx">eax</span>                                 <span class="p">;</span> <span class="p">/</span><span class="nx">hResource</span>
+<span class="mi">00401397</span>   <span class="bp">.  </span><span class="nx nx-Member">FF15</span> <span class="mi">88504000</span> <span class="nx">call</span> <span class="nx">dword</span> <span class="nx">ptr</span> <span class="nx">ds</span><span class="p">:</span><span class="err">[</span><span class="o">&lt;&amp;</span><span class="nx">KERNEL32.LockResour</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">\</span><span class="nx">LockResource</span>
+<span class="nx">...</span>
+</pre></div>
+
+
+<p>之后程序从自身获取资源编号为0x65、类型是0x18的资源并加载。这里提一句，<code>FindResource()</code>返回的eax指向的数据区构造如下：</p>
+<div class="highlight"><pre><span></span>0047E048  60 E0 07 00 90 5F 01 00 00 00 00 00 00 00 00 00  徐....
+0047E058  00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF  ........
+0047E068  FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF  ........
+...
+</pre></div>
+
+
+<p>可以看到第0-4个字节0x0007E060是资源真正的起始地址的偏移，5-8个字节0x00105F90是资源大小，0047E060才是资源数据内容的起始。这就是PE文件对于资源的布局（当然不知道也能解题）。</p>
+<p><code>LoadResource()</code>并Lock之后，进入如下逻辑：</p>
+<div class="highlight"><pre><span></span>...
+0040139D   .  33FF          xor edi,edi
+0040139F   .  8BCE          mov ecx,esi
+004013A1   .  2BC6          sub eax,esi
+004013A3   &gt;  8A11          mov dl,byte ptr ds:[ecx]
+004013A5   .  8A1C08        mov bl,byte ptr ds:[eax+ecx]
+004013A8   .  3AD3          cmp dl,bl
+004013AA      75 21         jnz XImagePrc.004013CD
+004013AC   .  47            inc edi
+004013AD   .  41            inc ecx
+004013AE      81FF 905F0100 cmp edi,0x15F90
+004013B4   .^ 7C ED         jl XImagePrc.004013A3
+004013B6   .  56            push esi
+004013B7   .  E8 44010000   call ImagePrc.00401500
+004013BC   .  83C4 04       add esp,0x4
+004013BF   .  33C0          xor eax,eax
+004013C1   .  5B            pop ebx
+004013C2   .  5F            pop edi
+004013C3   .  5E            pop esi
+004013C4   .  81C4 80000000 add esp,0x80
+004013CA &gt; .  C2 1000       retn 0x10
+...
+</pre></div>
+
+
+<p>这段逻辑很简单，一个循环，一共循环0x15F90次（刚好是上面分析的资源的大小）。之后把绘制的图像数据和资源图像数据分别放入dl和bl进行每个byte的逐一比较。一开始我以为只要比较结果正确就能拿到flag，所以直接修改比较次数为0，可惜程序正常执行，却没有flag的踪迹。所以思路转为从资源入手。</p>
+<h1>资源操作</h1>
+<p>打开exeScope之类的资源提取工具，提取编号0x65的资源，发现大小是0X15F80，比我们需要的数据小0x10个字节。于是重新跟程序到<code>LoadResource()</code>执行后，eax为47e060，提取47e060-493ff0一共0X15F90字节所有数据到文件。发现其实最后0x10个字节直接被填充为全0。</p>
+<p>二进制文件提取出来后，需要让它作为图像显示出来。文件大小为0X15F90，十进制是90000，相当于200x150x3，也就是200x150的RGB三通道图像。我这边直接利用Python的<a href="https://github.com/python-pillow/Pillow/">Pillow图像处理库</a>做还原（Python3的PIL为Pillow）：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">width</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mi">150</span>
+
+<span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;rgb.mem&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">frombytes</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">FLIP_TOP_BOTTOM</span><span class="p">)</span>
+<span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;result.bmp&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>提取后发现图片是上下颠倒的，不知道是由于作者故意做成颠倒的还是WinAPI中GetDIBits是倒着读的。所以使用<code>transpose()</code>做翻转。之后可以看到作者绘制的内容为GOT三个字符，即为flag。</p>
+        </section>
+
+        <br>
+
+        <footer>
+          <!-- <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px; margin-top: 15px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">YYX</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br> -->
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
+          <div id="share" class="share">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/reversing-kr-imageprc&amp;t=YYX%27s%20Website%3A%20reversing.kr%20ImagePrc%20Walkthrough" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
+            </a>
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-imageprc&amp;text=YYX%27s%20Website%3A%20reversing.kr%20ImagePrc%20Walkthrough" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
+            </a>
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-imageprc" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
+            </a>
+          </div>
+
+          <br><br><br>
+
+
+<div id="disqus_thread" class="w3-margin-bottom"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT 
+     *  THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR 
+     *  PLATFORM OR CMS.
+     *  
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: 
+     *  https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        // Replace PAGE_URL with your page's canonical URL variable
+        this.page.url = PAGE_URL;  
+        
+        // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.identifier = PAGE_IDENTIFIER; 
+    };
+    */
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://yyxblog.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the 
+    <a href="https://disqus.com/?ref_noscript" rel="nofollow">
+        comments powered by Disqus.
+    </a>
+</noscript>
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2014&dash;2019          YYX
+ | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-64342434-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

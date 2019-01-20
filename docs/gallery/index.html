@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Gallery &ndash; YYX's Website</title>
+
+    <!-- Meta -->
+    <meta name="description" content="YYX's Website &ndash; ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Gallery"/>
+    <meta property="og:description" content=""/>
+    <meta property="og:site_name" content="YYX's Website" />
+    <meta property="og:url" content="http://blog.yyx.me/gallery"/>
+    <meta property="og:image" content="/theme/images/cat_avatar.png"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Gallery">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:url" content="http://blog.yyx.me/gallery">
+    <meta name="twitter:image" content="/theme/images/cat_avatar.png">
+
+    <!-- Feed -->
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
+
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="http://blog.yyx.me//theme/images/favicon-32x32.png">
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="http://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="http://blog.yyx.me/theme/js/main.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="http://blog.yyx.me/" id="header-logo" title="Home"><img src="http://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"></a>
+        <!-- <a href="http://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
+        <nav id="header-menu">
+          <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
+          <ul class="w3-hide-small">
+            <!-- category -->
+            <!-- list -->
+            <!-- menu item -->
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <!-- pages -->
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+<article class="w3-padding-32">
+  <div id="photo-container" class="col-main w3-container w3-row-padding w3-margin-top">
+  </div>
+</article>
+
+<script>
+$(document).ready(function(){
+  var api = 'photos.json';
+  var gallery_data = [];
+  var offset = 0;
+  var limit = 5;
+  var loading = false;
+
+  var load_images = function(){
+    loading = true;
+    for(var i = offset; i < offset + limit && i < gallery_data.length; i++) {
+      console.log(gallery_data[i]);
+      $('#photo-container').append(
+        '<div class="w3-first w3-center w3-padding-32">\
+          <div>\
+          <a href="' + gallery_data[i]['link'] + '" title="' + gallery_data[i]['title'] + '">\
+          <img src="' + gallery_data[i]['img'] + '" alt="' + gallery_data[i]['title'] + '">\
+          </a>\
+          <div class="w3-container w3-margin-bottom">\
+          <p>' + gallery_data[i]['title'] + '</p>\
+          </div>\
+          </div>\
+        </div>'
+      );
+    }
+    offset = offset + limit;
+    loading = false;
+  }
+
+  $.get(api, function(data) {
+    // console.log(data);
+    gallery_data = data;
+    load_images();
+  });
+
+  $(window).scroll(function() {
+    var position = $(window).scrollTop();
+    var bottom = $(document).height() - $(window).height();
+
+    if(position == bottom){
+      // console.log("loading...");
+      load_images();
+    }
+
+  });
+});
+</script>
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2014&dash;2019          YYX
+ | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-64342434-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

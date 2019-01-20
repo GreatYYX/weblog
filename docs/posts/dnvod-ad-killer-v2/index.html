@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>多瑙视频广告移除思路及实现（v2） &ndash; YYX's Website</title>
+
+    <!-- Meta -->
+    <meta name="description" content="YYX's Website &ndash; ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="YYX" />
+    <meta property="article:section" content="Security" />
+    <meta property="article:published_time" content="2019-01-13" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="多瑙视频广告移除思路及实现（v2）"/>
+    <meta property="og:description" content="本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。此篇取代之前那篇文章，解决了多瑙近期更新后的问题。"/>
+    <meta property="og:site_name" content="YYX's Website" />
+    <meta property="og:url" content="http://blog.yyx.me/posts/dnvod-ad-killer-v2"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="多瑙视频广告移除思路及实现（v2）">
+    <meta name="twitter:description" content="本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。此篇取代之前那篇文章，解决了多瑙近期更新后的问题。">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/dnvod-ad-killer-v2">
+
+    <!-- Feed -->
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
+
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="http://blog.yyx.me//theme/images/favicon-32x32.png">
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="http://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="http://blog.yyx.me/theme/js/main.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="http://blog.yyx.me/" id="header-logo" title="Home"><img src="http://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"></a>
+        <!-- <a href="http://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
+        <nav id="header-menu">
+          <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
+          <ul class="w3-hide-small">
+            <!-- category -->
+            <!-- list -->
+            <!-- menu item -->
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <!-- pages -->
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <article class="w3-padding-64">
+      <header class="w3-container col-main">
+        <h1>多瑙视频广告移除思路及实现（v2）</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2019-01-13T19:18:00-08:00">Jan 13, 2019</time> @ <a href="http://blog.yyx.me/categories/security" title="All articles in category Security">Security</a></span>
+          </div>
+          <div class="w3-margin-right">
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/bypass" title="All articles with Bypass tag">#bypass</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/mitm" title="All articles with Mitm tag">#mitm</a>
+            </span>
+            <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
+              <a href="http://blog.yyx.me/tags/hacking" title="All articles with Hacking tag">#hacking</a>
+            </span>
+          </div>
+        </div>
+      </header>
+
+
+      <div class="col-main w3-container">
+        <section id="content" class="w3-margin-bottom w3-padding-8">
+          <h1>前言</h1>
+<p>18年年底比较忙，一直没再去多瑙看过视频。今年开年回来后发现之前的实现已经失效，因此重新撰文。</p>
+<p>新的代码仓库地址不变：<a href="https://github.com/GreatYYX/dnvod-ad-killer">https://github.com/GreatYYX/dnvod-ad-killer</a>。</p>
+<p>考虑到多瑙之后可能的连续更新，这里提出一个约定：每个重大升级会对应一个major版本号（比如这次的<code>v2</code>），并可能会写相对应的文章，文章的标题和URL也会带有这个major版本号。minor的更新版本号会直接采用当天的日期，比如<code>v2.20190113</code>（如果一天更新多次则会再加入一个后缀，如<code>v2.20190113.2</code>），思路将直接更新在其major的文章中。之前的老版本命名为<code>v1</code>。</p>
+<h1>上手</h1>
+<p>多瑙总算拿掉了之前诟病的Flash而采用纯HTML播放器了（之前的文章吐槽过，电脑端禁止了H5的播放器），顺应时代潮流才能繁衍生息。而且广告也不是在一开始就出现，而是播放一段时间后才出现，并会有5s倒计时和20s广告（不过这个广告的时间计算方法很有问题或者是故意的，一旦快进了间隔很短的时间就要看广告，貌似如果要播n段广告的话，会在剩下的时间中插入所有没有播放的广告）。视频采用MP2T流协议分片下载，另外只加载了常规的html、js、css还有图片等。值得一提的是，（几乎）所有http请求都已经是https了，总算跟上了“时代进程”（当然我觉得主要是如果没SSL/TLS会直接被浏览器提示“不安全网站”的原因）。</p>
+<p>H5的播放器理论上都通过js加载和控制。从Chrome的DevTools中可以看出这些js和加载顺序：</p>
+<ul>
+<li>DNA-3.0.0.2.js: 由html加载，UI库。</li>
+<li>inline.1dc40c191965336599d8.bundle.js：由html加载。</li>
+<li>polyfills.c30af323737f4e73902d.bundle.js：由html加载，UI库。</li>
+<li>scripts.a00c037d89f30e04f3e1.bundle.js：由html加载。</li>
+<li>main.2e8c4bc9ac78a55fed3d.bundle.js：由html加载。</li>
+<li>0.a3d01277a3706629fe95.chunk.js：由inline.1dc40c191965336599d8.bundle.js加载。</li>
+<li>1.ed0cb8b173b9bfffa25f.chunk.js：由inline.1dc40c191965336599d8.bundle.js加载。</li>
+<li>ckplayer.js：由1.ed0cb8b173b9bfffa25f.chunk.js加载，播放器。</li>
+</ul>
+<p>另外需要注意的是，每次广告播放完会再下载一个名字随机的js，不过这个对于目前破解并没有干扰。</p>
+<p>除了两个UI库和播放器之外，其他的名字都像是用户代码然后bundle和混淆了的。因此从html的DOM和js两部下手（废话）。这次考虑到所有访问流量都已经变成https，我将代理更新为了更加成熟的<a href="https://mitmproxy.org/">mitmproxy</a>。</p>
+<h1>分析和实现</h1>
+<p>最开始尝试了一下通过DOM里面的广告的element来定位的办法，不过貌似都是Angular的<code>ng-xxxx</code>，而<code>xxxx</code>很多都在混淆了的代码里被参数化了，因此不太好定位，尝试了5分钟遂放弃-_-|||</p>
+<p>当然促使我那么快就放弃当然不是因为我懒（反正我也不会承认的），因为更简单的思路已经萌上心头：搜索特征字符串，比如<code>广告</code>。不幸的是，js中都没有出现中文。但是大致浏览这些js后就会发现字符串都做了unicode编码，找个编码器翻一下就是<code>\u5e7f\u544a</code>。尝试grep一下所有可能的js发现基本都存在，于是加长为<code>后跳过广告</code>（<code>多少s</code>可能会是变量）后定位到<code>1.ed0cb8b173b9bfffa25f.chunk.js</code>。下面开刀这个文件。</p>
+<p>根据<code>\u540e\u8df3\u8fc7\u5e7f\u544a</code>定位到：</p>
+<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">t() {</span><span class="p">}</span>
+<span class="k">return</span> <span class="nx">t</span><span class="p">.</span><span class="nx">secondFormat</span> <span class="o">=</span> <span class="s1">&#39;&lt;font class=&quot;text-red&quot; color=&quot;#F00000&quot;&gt;{second}s&lt;/font &gt; \u540e\u64ad\u653e\u5e7f\u544a&#39;</span><span class="p">,</span> <span class="p">...</span>
+</pre></div>
+
+
+<p>之后根据<code>secondFormat</code>发现一处关键代码：</p>
+<div class="highlight"><pre><span></span>this.subscriptions.push(this.publicManager.eventList.subscribe(function(e) {
+    switch (t.api.intersitialHandler(e), e.event) {
+        case Ye.Timer:
+            t.api.showInfo(nn.secondFormat.replace(&quot;{second}&quot;, e.data.time), 0);
+            break;
+        case Ye.ShouldPlayAds:
+            t.api.showInfo(&quot;&quot;, 0), n = t.api.getPlayMedia, i = t.api.currentTime, t.currentPlayingAds = t.loadMedia, t.currentPlayingAds.isImage ? t.api.pause() : t.api.playVideo([t.currentPlayingAds], !0), t.isPlayingAds = !0, t.skipAfter = 10;
+            break;
+        case Ye.ShouldBackToPlay:
+            t.isBackToPlayMedia = !0, (!t.shouldSkipAds &amp;&amp; !t.hasBought || t.isPlayingAds) &amp;&amp; null != n &amp;&amp; (t.currentPlayingAds = t.loadMedia = null, t.api.playVideo([n], !1), t.isPlayingAds = !1, t.shouldPlaySeoncd = i);
+            break;
+        case Ye.ShouldLoadAds:
+            t.isBackToPlayMedia = !1, t.shouldSkipAds || t.hasBought ? (t.publicManager.stopPlay(), t.hasState || t.api.showInfo(t.needBought ? 1 == t.hasBought ? nn.alreadyBought : nn.highFormat : nn.vipskipFormat, 5)) : t.startLoadMedia(e.data);
+            break;
+        case Ye.SkipTimer:
+            t.skipAfter = e.data.time, t.leftSecond = e.data.left;
+            break;
+        case Ye.ShouldCancel:
+            t.caption = &quot;&quot;, n = null, i = 0, t.loadMedia = null, t.isPlayingAds = !1
+    }
+})), this.pendding &amp;&amp; (this.publicManager.invokeList(this.pendding.mediaList, this.pendding.startSecond, this.pendding.periodicSecond), this.pendding = null)
+</pre></div>
+
+
+<p>这段其实就是精髓了：<code>ShouldLoadAds</code>用于加载广告，<code>ShouldPlayAds</code>用于播放广告，<code>Timer</code>用于倒计时多少秒后播放广告。直接把这三个的内容砍掉，就奇迹般的没有广告等待了。</p>
+<p>在破解过程中其实发现并尝试过修改<code>leftSecond</code>和<code>skipAfter</code>两个变量，效果并没有上面这个直接。</p>
+<p>对于暂停之后的广告窗口，根据DOM搜索<code>.vg-bg</code>找到：</p>
+<div class="highlight"><pre><span></span><span class="nt">styles</span><span class="o">:</span> <span class="cp">[</span><span class="nx">....vg</span><span class="na">-bg</span><span class="p">{</span><span class="o">\</span><span class="nx">n</span>            <span class="nx">position</span><span class="p">:</span><span class="nx">absolute</span><span class="p">;</span><span class="o">\</span><span class="nx">n</span><span class="o">\</span><span class="nx">n</span>            <span class="k">max</span><span class="na">-width</span><span class="p">:</span> <span class="mi">640</span><span class="nx">px</span><span class="p">;</span><span class="o">\</span><span class="nx">n</span>            <span class="k">max</span><span class="na">-height</span><span class="p">:</span> <span class="mi">360</span><span class="nx">px</span><span class="p">;</span><span class="o">\</span><span class="nx">n</span>  <span class="nx">...</span><span class="cp">]</span>
+</pre></div>
+
+
+<p>加入<code>display:none;</code>即可。</p>
+<p>攻击代码实现非常简单：对于广告图片依然采用之前的透明图片替换法，欺骗浏览器图片已经下载，不容易被脚本检测到。js文件直接替换成修改后的即可。</p>
+<div class="highlight"><pre><span></span>def response(self, flow: mitmproxy.http.HTTPFlow):
+    &quot;&quot;&quot;
+        The full HTTP response has been read.
+    &quot;&quot;&quot;
+    if flow.request.host.endswith(&#39;dnvod.tv&#39;):
+        one_px_gif_data = &#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;
+        if flow.request.path.startswith(&#39;/upload/video&#39;):
+            if os.path.splitext(flow.request.path)[-1] in (&#39;.jpg&#39;, &#39;.gif&#39;):
+                flow.response.set_content(base64.b64decode(one_px_gif_data))
+
+        if flow.request.path.endswith(&#39;1.ed0cb8b173b9bfffa25f.chunk.js&#39;):
+            with open(&#39;js/1.ed0cb8b173b9bfffa25f.chunk.de.js&#39;, &#39;r&#39;) as f:
+                flow.response.set_text(f.read())
+</pre></div>
+
+
+<h1>后记</h1>
+<p>这次过程出奇的顺利，前后也就一个小时。经过这次其实我脑海中有一个相对比较有破解门槛的保护手法，不过作为用户我是不会告诉多瑙的，除非。。。（收买我？）</p>
+<p>最后，还是那句话：只要多瑙不更新，伦家是不会主动更新的嘤嘤嘤。</p>
+        </section>
+
+        <br>
+
+        <footer>
+          <!-- <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px; margin-top: 15px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">YYX</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br> -->
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
+          <div id="share" class="share">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/dnvod-ad-killer-v2&amp;t=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0%EF%BC%88v2%EF%BC%89" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
+            </a>
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/dnvod-ad-killer-v2&amp;text=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0%EF%BC%88v2%EF%BC%89" target="_blank" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
+            </a>
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/dnvod-ad-killer-v2" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+              <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
+            </a>
+          </div>
+
+          <br><br><br>
+
+
+<div id="disqus_thread" class="w3-margin-bottom"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT 
+     *  THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR 
+     *  PLATFORM OR CMS.
+     *  
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: 
+     *  https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        // Replace PAGE_URL with your page's canonical URL variable
+        this.page.url = PAGE_URL;  
+        
+        // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.identifier = PAGE_IDENTIFIER; 
+    };
+    */
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://yyxblog.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the 
+    <a href="https://disqus.com/?ref_noscript" rel="nofollow">
+        comments powered by Disqus.
+    </a>
+</noscript>
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2014&dash;2019          YYX
+ | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-64342434-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>
