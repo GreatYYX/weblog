@@ -394,3 +394,25 @@ section#content .lang-section-hide {
   display: block !important;
   margin-top: 70px !important;
 }
+
+.index-vertical-center {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 300px;
+  margin-top: -200px;
+}
+.index-vertical-center li {
+  line-height: 30px;
+  list-style-type: none;
+}
+/*.index-vertical-center a {
+  color: #000;
+  font-family: 'Source Code Pro', monospace;
+}*/
+.index-vertical-center a:hover {
+  color: #fff;
+  padding: 5px 10px;
+  background-color: #dbcf7f;
+  text-decoration: none;
+}

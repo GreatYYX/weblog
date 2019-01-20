@@ -109,6 +109,7 @@
   </head>
 
   <body>
+    {% block header %}
     <div class="w3-row w3-card w3-white">
       <header id="header">
         <a href="{{ SITEURL }}/" id="header-logo" title="Home"><img src="{{ SITEURL }}/theme/images/logo_min.png" width="60" height="60"></a>
@@ -153,6 +154,7 @@
         </nav>
       </header>
     </div>
+    {% endblock %}
 
     {% block content_title %}
     {% endblock %}
@@ -160,6 +162,7 @@
     {% block content %}
     {% endblock %}
 
+    {% block footer %}
     <footer id="footer">
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
@@ -172,6 +175,7 @@
         </span>
       </div>
     </footer>
+    {% endblock %}
 
     {% if GOOGLE_ANALYTICS %}
       {% include "ga.html" %}

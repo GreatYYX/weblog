@@ -1,8 +1,24 @@
     {% extends "base.html" %}
 
-    {% block content %}
+    {% block header %}{% endblock %}
+    {% block footer %}{% endblock %}
 
-    <br><br><br>
-    Hello
+    {% block content %}
+	<div class="index-vertical-center">
+		<div class="w3-center">
+	        <div class="w3-container">
+	          <img src="{{ SITEURL }}/theme/images/logo_min.png" width="100" height="100">
+	        </div>
+	        <ul class="w3-container">
+	          {% for title, link, external in MENUITEMS %}
+	            {% if external %}
+	            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
+	            {% else %}
+	            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}">{{ title }}</a></li>
+	            {% endif %}
+	          {% endfor %}
+	        </ul>
+    	</div>
+    </div>
 
     {% endblock content %}
