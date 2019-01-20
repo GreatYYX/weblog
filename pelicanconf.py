@@ -31,6 +31,7 @@ AUTHOR_FEED_RSS = None
 # Social widget
 SOCIAL = (('github', 'https://github.com/GreatYYX'),
           ('instagram', 'https://www.instagram.com/debug.dog/'),
+          ('500px', 'https://500px.com/yyx'),
           ('weibo', 'https://weibo.com/p/1005051085956311'),
           ('rss', SITEURL + '/feeds/all.atom.xml'),
           # ('linkedin', '#'),
@@ -45,7 +46,8 @@ DISPLAY_ARCHIVES_LIST = False
 DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = (
 	('Posts','/posts', False),
-	('Gallery', 'http://photo.yyx.me', True),
+	('Gallery', '/gallery', False),
+	# ('Gallery', 'http://photo.yyx.me', True),
 	('About','/about', False),
 )
 
@@ -63,10 +65,11 @@ PAGINATION_PATTERNS = (
 
 USE_FOLDER_AS_CATEGORY = True
 PAGE_PATHS = ['_pages']
-STATIC_PATHS = ['statics', 'extra/robots.txt', 'extra/CNAME']
+STATIC_PATHS = ['statics', 'extra/robots.txt', 'extra/CNAME', 'extra/photos.json']
 EXTRA_PATH_METADATA = {
     'extra/robots.txt': {'path': 'robots.txt'},
-    'extra/CNAME': {'path': 'CNAME'}
+    'extra/CNAME': {'path': 'CNAME'},
+    'extra/photos.json': {'path': 'photos.json'}
 }
 # MD_EXTENSIONS = ['extra']
 
