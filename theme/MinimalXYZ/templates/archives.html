@@ -4,9 +4,7 @@
 
     {% block content %}
 
-    <br><br><br>
-
-    <section id="listing">
+    <section id="listing" class="w3-padding-32">
       {% for article in articles_page.object_list %}
       <article class="w3-container col-main">
         <header>
@@ -42,13 +40,10 @@
         </footer> -->
       </article>
 
-      <br><br><br>
-
       {% endfor %}
 
       {% if articles_page.has_other_pages() %}
       {% include 'pagination.html' %}
-      <br><br><br>
       {% endif %}
 
     </section>

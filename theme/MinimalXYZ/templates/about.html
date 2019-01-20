@@ -2,8 +2,7 @@
 {% include 'introduction.html' %}
 {% endblock %}
 
-<br><br><br>
-<article>
+<article class="w3-padding-32">
   <div class="col-main w3-container">
     <div class="lang-btn">
       <a id="lang-btn-cn" class="lang-btn lang-btn-active">中文版</a>&nbsp;|&nbsp;
@@ -18,12 +17,9 @@
     <p>Last updated: {{ page.locale_modified }}</p>
     {% endif %}
 
-    <br><br><br>
-
     <footer>
       {% if DISQUS_SITENAME %}
       {% include "disqus_script.html" %}
-      <br><br><br>
       {% endif %}
     </footer>
     
