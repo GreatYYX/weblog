@@ -4,8 +4,10 @@
 
     {% block content %}
 
-    {% if page.title == "About" %}
+    {% if page.slug == "about" %}
       {% include 'about.html' %}
+    {% elif page.slug == "gallery" %}
+      {% include 'gallery.html' %}
     {% else %}
     <br><br><br>
 
