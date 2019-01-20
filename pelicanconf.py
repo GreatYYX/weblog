@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
+
 from __future__ import unicode_literals
 import datetime
 
 AUTHOR = u'YYX'
-SITENAME = u'YYX\'s WEBlog'
+SITENAME = u'YYX\'s Website'
 SITEURL = ''
 
 PATH = 'content'
@@ -37,13 +38,28 @@ SOCIAL = (('github', 'https://github.com/GreatYYX'),
 
 CC = 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
 
-MENUITEMS = (('Gallery', 'http://photo.yyx.me'),)
+# only use MENUITEMS to control what to display on menu
 DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_CATEGORIES_LIST = False
-DISPLAY_ARCHIVES_LIST = True
+DISPLAY_ARCHIVES_LIST = False
+DISPLAY_PAGES_ON_MENU = False
+MENUITEMS = (
+	('Posts','/posts', False),
+	('Gallery', 'http://photo.yyx.me', True),
+	('About','/about', False),
+)
 
+DIRECT_TEMPLATES = ['index', 'categories', 'tags', 'archives'] # 'authors' 
 
+# pagination
 DEFAULT_PAGINATION = 6
+PAGINATED_TEMPLATES = {
+	'index': None, 'tag': None, 'category': None, 'author': None, 'archives': DEFAULT_PAGINATION
+}
+PAGINATION_PATTERNS = (
+    (1, '{url}', '{save_as}'),
+    (2, '{base_name}/page/{number}', '{base_name}/page/{number}/index.html'),
+)
 
 USE_FOLDER_AS_CATEGORY = True
 PAGE_PATHS = ['_pages']
@@ -54,14 +70,30 @@ EXTRA_PATH_METADATA = {
 }
 # MD_EXTENSIONS = ['extra']
 
-ARTICLE_URL = 'posts/{slug}.html'
-ARTICLE_SAVE_AS = 'posts/{slug}.html'
-PAGE_URL = 'pages/{slug}.html'
-PAGE_SAVE_AS = 'pages/{slug}.html'
-PAGE_LANG_URL = 'pages/{slug}-{lang}.html'
-PAGE_LANG_SAVE_AS = 'pages/{slug}-{lang}.html'
+# index
+INDEX_SAVE_AS = 'index.html'
+# articles
+ARTICLE_URL = 'posts/{slug}'
+ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
+ARTICLE_ORDER_BY = 'date'
+# archives
+ARCHIVES_SAVE_AS = 'posts/index.html' # use archive as article list
+# tags
+TAG_URL = 'tags/{slug}'
+TAG_SAVE_AS = 'tags/{slug}/index.html'
+TAGS_SAVE_AS = 'tags/index.html'
+# categories
+CATEGORY_URL = 'categories/{slug}'
+CATEGORY_SAVE_AS = 'categories/{slug}/index.html'
+CATEGORIES_SAVE_AS = 'categories/index.html'
+# author
 AUTHOR_SAVE_AS = '' #only me
 AUTHOR_AVATAR = SITEURL + '/theme/images/cat_avatar.png'
+# pages
+PAGE_URL = '{slug}'
+PAGE_SAVE_AS = '{slug}/index.html'
+PAGE_LANG_URL = '{slug}-{lang}/index.html'
+PAGE_LANG_SAVE_AS = '{slug}-{lang}/index.html'
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True

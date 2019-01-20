@@ -111,7 +111,7 @@
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="{{ SITEURL }}/index.html" id="header-logo" title="Home"><img src="{{ SITEURL }}/theme/images/logo_min.png" width="60" height="60"></a>
+        <a href="{{ SITEURL }}/" id="header-logo" title="Home"><img src="{{ SITEURL }}/theme/images/logo_min.png" width="60" height="60"></a>
         {% if " " in AUTHOR %}
         <!-- <a href="{{ SITEURL }}" id="header-logo" title="Home">{{ AUTHOR[0] + AUTHOR[AUTHOR.index(" ")+1] }}</a> -->
         {% else %}
@@ -136,8 +136,12 @@
             <li class="{% if page_name == 'archives' %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/archives.html">Archives</a></li>
             {% endif %}
             <!-- menu item -->
-            {% for title, link in MENUITEMS %}
+            {% for title, link, external in MENUITEMS %}
+            {% if external %}
             <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
+            {% else %}
+            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}">{{ title }}</a></li>
+            {% endif %}
             {% endfor %}
             <!-- pages -->
             {% if DISPLAY_PAGES_ON_MENU %}
