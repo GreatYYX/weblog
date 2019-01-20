@@ -72,28 +72,29 @@ EXTRA_PATH_METADATA = {
 
 # index
 INDEX_SAVE_AS = 'index.html'
-# articles
+# articles & archives (use it as article list)
 ARTICLE_URL = 'posts/{slug}'
 ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
-ARTICLE_ORDER_BY = 'date'
-# archives
-ARCHIVES_SAVE_AS = 'posts/index.html' # use archive as article list
+ARCHIVES_URL = 'posts'
+ARCHIVES_SAVE_AS = 'posts/index.html'
 # tags
 TAG_URL = 'tags/{slug}'
 TAG_SAVE_AS = 'tags/{slug}/index.html'
+TAGS_URL = 'tags'
 TAGS_SAVE_AS = 'tags/index.html'
 # categories
 CATEGORY_URL = 'categories/{slug}'
 CATEGORY_SAVE_AS = 'categories/{slug}/index.html'
+CATEGORIES_URL = 'categories'
 CATEGORIES_SAVE_AS = 'categories/index.html'
-# author
-AUTHOR_SAVE_AS = '' #only me
-AUTHOR_AVATAR = SITEURL + '/theme/images/cat_avatar.png'
 # pages
 PAGE_URL = '{slug}'
 PAGE_SAVE_AS = '{slug}/index.html'
 PAGE_LANG_URL = '{slug}-{lang}/index.html'
 PAGE_LANG_SAVE_AS = '{slug}-{lang}/index.html'
+# author
+AUTHOR_SAVE_AS = '' #only me
+AUTHOR_AVATAR = SITEURL + '/theme/images/cat_avatar.png'
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
