@@ -19,12 +19,12 @@
     <meta property="og:title" content="reversing.kr四道Easy题解题攻略"/>
     <meta property="og:description" content="本文为逆向工程练习网站reversing.kr中Easy Crack、Easy Keygen、Easy Unpack及Easy ELF的解题攻略。"/>
     <meta property="og:site_name" content="YYX's Website" />
-    <meta property="og:url" content="http://blog.yyx.me/posts/reversing-kr-4-easy-challenges"/>
+    <meta property="og:url" content="http://blog.yyx.me/posts/reversing-kr-4-easy-challenges/"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="reversing.kr四道Easy题解题攻略">
     <meta name="twitter:description" content="本文为逆向工程练习网站reversing.kr中Easy Crack、Easy Keygen、Easy Unpack及Easy ELF的解题攻略。">
-    <meta name="twitter:url" content="http://blog.yyx.me/posts/reversing-kr-4-easy-challenges">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/reversing-kr-4-easy-challenges/">
 
     <!-- Feed -->
     <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
@@ -62,9 +62,9 @@
             <!-- category -->
             <!-- list -->
             <!-- menu item -->
-            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts/">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery/">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about/">About</a></li>
             <!-- pages -->
           </ul>
         </nav>
@@ -78,20 +78,20 @@
         <h1>reversing.kr四道Easy题解题攻略</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2014-09-10T23:51:00-07:00">Sep 10, 2014</time> @ <a href="http://blog.yyx.me/categories/security" title="All articles in category Security">Security</a></span>
+            <span><time datetime="2014-09-10T23:51:00-07:00">Sep 10, 2014</time> @ <a href="http://blog.yyx.me/categories/security/" title="All articles in category Security">Security</a></span>
           </div>
           <div class="w3-margin-right">
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/reversingkr" title="All articles with Reversing.Kr tag">#reversing.kr</a>
+              <a href="http://blog.yyx.me/tags/reversingkr/" title="All articles with Reversing.Kr tag">#reversing.kr</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/wargame" title="All articles with Wargame tag">#wargame</a>
+              <a href="http://blog.yyx.me/tags/wargame/" title="All articles with Wargame tag">#wargame</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/hacking" title="All articles with Hacking tag">#hacking</a>
+              <a href="http://blog.yyx.me/tags/hacking/" title="All articles with Hacking tag">#hacking</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/reversing" title="All articles with Reversing tag">#reversing</a>
+              <a href="http://blog.yyx.me/tags/reversing/" title="All articles with Reversing tag">#reversing</a>
             </span>
           </div>
         </div>
@@ -201,7 +201,7 @@
 
 <p>之后匹配字符串R3versing，并在字符串头部（esp+4处）添加字符为E。因此答案为Ea5yR3versing。</p>
 <p>这里算法由于涉及到esp的改变，因此OD跟踪起来比IDA静态分析更加简单。可以直接将程序跑起来，当程序碰到相关判断的地方（一般是cmp）会改变标志位（一般是ZF），只需要改变标志位寄存器的值让它按照你要的逻辑执行下去即可，当然你需要同时记录这些让逻辑保持正确的字符，你可以直接在栈（或数据区）中作出修改。之后当程序跑完之后，你的栈（或数据区）中就是一个正确的值。本程序栈的结构如下：</p>
-<p><img alt="OD" src="../statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg"></p>
+<p><img alt="OD" src="/statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg"></p>
 <h1>Easy Keygen</h1>
 <p>注册机题，readme要求Find the Name when the Serial is 5B134977135E7D13。程序跑起来，要求输入名字和序列号，测试了一下Name为abcde和随机的序列号，提示错误：</p>
 <div class="highlight"><pre><span></span>C:\Users\GreatYYX&gt;&quot;F:\Crack\reversingkr\Easy_KeygenMe\Easy Keygen.exe&quot;
@@ -419,7 +419,7 @@ Wrong
 <span class="nt">00401151</span>  <span class="o">|.</span>  <span class="nt">8BEC</span>          <span class="nt">mov</span> <span class="nt">ebp</span><span class="o">,</span><span class="nt">esp</span>
 <span class="nt">00401153</span>  <span class="o">|.</span>  <span class="nt">6A</span> <span class="nt">FF</span>         <span class="nt">push</span> <span class="nt">-1</span>
 <span class="nt">00401155</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">D0504000</span>   <span class="nt">push</span> <span class="nt">Easy_Unp</span><span class="p">.</span><span class="nc">004050D0</span>
-<span class="nt">0040115A</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">1C1E4000</span>   <span class="nt">push</span> <span class="nt">Easy_Unp</span><span class="p">.</span><span class="nc">00401E1C</span>                   <span class="o">;</span>  <span class="nt">Entry</span> <span class="nt">address</span><span class="o">;</span> <span class="nt">SE</span> <span class="err">处理程序安装</span>
+<span class="nt">0040115A</span>  <span class="o">|.</span>  <span class="nt">68</span> <span class="nt">1C1E4000</span>   <span class="nt">push</span> <span class="nt">Easy_Unp</span><span class="p">.</span><span class="nc">00401E1C</span>                   <span class="o">;</span>  <span class="nt">Entry</span> <span class="nt">address</span><span class="o">;</span> <span class="nt">SE</span> <span class="nt">处理程序安装</span>
 <span class="nt">0040115F</span>  <span class="o">|.</span>  <span class="nt">64</span><span class="p">:</span><span class="nd">A1</span> <span class="nt">0000000</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">eax</span><span class="o">,</span><span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">fs</span><span class="o">:</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>
 <span class="nt">00401165</span>  <span class="o">|.</span>  <span class="nt">50</span>            <span class="nt">push</span> <span class="nt">eax</span>
 <span class="nt">00401166</span>  <span class="o">|.</span>  <span class="nt">64</span><span class="p">:</span><span class="nd">8925</span> <span class="nt">00000</span><span class="o">&gt;</span><span class="nt">mov</span> <span class="nt">dword</span> <span class="nt">ptr</span> <span class="nt">fs</span><span class="o">:</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span><span class="o">,</span><span class="nt">esp</span>
@@ -515,7 +515,7 @@ Easy_ELF: ELF <span class="m">32</span>-bit LSB executable, Intel <span class="m
 
 <p>sub_804851B函数是提示正确与错误的分支函数，其中四个call，write识别出来了，其他函数跟进去看一下（我已经注释），发现是scanf、主算法函数和返回Correct字符串的函数，其中当主算法函数返回1时判为正确。</p>
 <p>然后就重点来看sub_8048451。转到图形视图，一组连续判断，只要逻辑沿着右边下来即可走通（最后eax为1，符合上面的判对条件）。</p>
-<p><img alt="IDA" src="../statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg"></p>
+<p><img alt="IDA" src="/statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg"></p>
 <p>之后大致扫描了一下程序体，发现反复调用ds段寄存器指向的段内的一些byte，点进去看一下数据区布局（在.bss段，全局变量）。</p>
 <div class="highlight"><pre><span></span><span class="nl">.bss:</span><span class="err">0804</span><span class="nf">A020</span> <span class="no">byte_804A020</span>    <span class="no">db</span> <span class="err">?</span>                    <span class="c">; DATA XREF: sub_8048434+Bo</span>
 <span class="no">.bss</span><span class="p">:</span><span class="mi">0804</span><span class="no">A020</span>                                         <span class="c">; sub_8048451:loc_8048469r ...</span>
@@ -631,13 +631,13 @@ Easy_ELF: ELF <span class="m">32</span>-bit LSB executable, Intel <span class="m
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges&amp;t=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/&amp;t=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges&amp;text=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/&amp;text=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
-            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
               <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
             </a>
           </div>

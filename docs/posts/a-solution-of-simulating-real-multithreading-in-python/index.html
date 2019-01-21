@@ -19,12 +19,12 @@
     <meta property="og:title" content="一种Python中模拟多线程计算的方案"/>
     <meta property="og:description" content="Python中由于全局锁(GIL)的限制无法使多线程在运算密集场景下发挥其威力，本文探讨一个通过多线程和多进程配合的方案来“突破”这种限制。"/>
     <meta property="og:site_name" content="YYX's Website" />
-    <meta property="og:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python"/>
+    <meta property="og:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="一种Python中模拟多线程计算的方案">
     <meta name="twitter:description" content="Python中由于全局锁(GIL)的限制无法使多线程在运算密集场景下发挥其威力，本文探讨一个通过多线程和多进程配合的方案来“突破”这种限制。">
-    <meta name="twitter:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/">
 
     <!-- Feed -->
     <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
@@ -62,9 +62,9 @@
             <!-- category -->
             <!-- list -->
             <!-- menu item -->
-            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts/">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery/">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about/">About</a></li>
             <!-- pages -->
           </ul>
         </nav>
@@ -78,20 +78,20 @@
         <h1>一种Python中模拟多线程计算的方案</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2018-08-28T05:50:00-07:00">Aug 28, 2018</time> @ <a href="http://blog.yyx.me/categories/development" title="All articles in category Development">Development</a></span>
+            <span><time datetime="2018-08-28T05:50:00-07:00">Aug 28, 2018</time> @ <a href="http://blog.yyx.me/categories/development/" title="All articles in category Development">Development</a></span>
           </div>
           <div class="w3-margin-right">
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/python" title="All articles with Python tag">#python</a>
+              <a href="http://blog.yyx.me/tags/python/" title="All articles with Python tag">#python</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/multi-processing" title="All articles with Multi-Processing tag">#multi-processing</a>
+              <a href="http://blog.yyx.me/tags/multi-processing/" title="All articles with Multi-Processing tag">#multi-processing</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/multi-threading" title="All articles with Multi-Threading tag">#multi-threading</a>
+              <a href="http://blog.yyx.me/tags/multi-threading/" title="All articles with Multi-Threading tag">#multi-threading</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/programming" title="All articles with Programming tag">#programming</a>
+              <a href="http://blog.yyx.me/tags/programming/" title="All articles with Programming tag">#programming</a>
             </span>
           </div>
         </div>
@@ -109,7 +109,7 @@
 <p>RLTK的使用场景归纳后其实就是：开始-&gt;单线程-&gt;并发/并行-&gt;单线程-&gt;并发/并行-&gt;...-&gt;单线程-&gt;结束。注意此处我没有区别并发(Concurrent)和并行(Parallel)这两个完全不同的概念，是因为此处我的目的无非就是通过某种手段实现CPU资源的最大化利用。</p>
 <p>在这个场景中，“并发/并行”可以看成一组并行的运算作业 (RLTK中主要是算Feature Vector)，运算期间各个单元是独立的（即在运算过程中不需要数据交互），如果每个作业单元的输入为<code>input[i]</code>输出单元为<code>output[i]</code>，则问题模型可以抽象成<code>output[i]=F(input[i])</code>，其中的并行部分无非就是一个黑盒函数<code>F</code>。因此无非就是在必要的时候把数据切割成多份然后丢入进程池去并行运行。</p>
 <p>这之后还需要解决的问题就是输出的返回。最简单的方案当然就是直接输出到不同的文件中，之后程序主线程等待运算结束后统一读取并合并结果，但这样的坏处是额外的磁盘IO的开销。因此方案变成，主进程中再创建一条副线程专门用于output的合并，主线程需要等所有子进程和副线程退出后才能继续执行下去。数据的输入和输出通过Queue进行交换。时间线如下：</p>
-<p><img alt="timeline" src="../statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png"></p>
+<p><img alt="timeline" src="/statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png"></p>
 <p>注意主进程中两个线程将由CPU调配交替运行，子进程中均只有各自的主线程因此无线程切换。这个设计在使用的时候需要将运算尽可能的在子进程中完成，主进程的子线程仅仅负责运算结果的获取和合并。</p>
 <p>具体代码实现 (<a href="https://github.com/usc-isi-i2/rltk/blob/09c81edd8adb450ddfde409888c2b83497877ef5/rltk/parallel_processor.py">github</a>):</p>
 <div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -317,13 +317,13 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python&amp;t=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;t=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python&amp;text=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;text=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
-            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
               <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
             </a>
           </div>

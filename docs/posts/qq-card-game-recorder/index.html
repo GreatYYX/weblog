@@ -19,12 +19,12 @@
     <meta property="og:title" content="QQ双扣记牌器实现"/>
     <meta property="og:description" content="本文讨论了腾讯QQ游戏大厅新双扣角色版记牌器的设计、数据抓取的思路及方法以及最终记牌器的实现细节。"/>
     <meta property="og:site_name" content="YYX's Website" />
-    <meta property="og:url" content="http://blog.yyx.me/posts/qq-card-game-recorder"/>
+    <meta property="og:url" content="http://blog.yyx.me/posts/qq-card-game-recorder/"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="QQ双扣记牌器实现">
     <meta name="twitter:description" content="本文讨论了腾讯QQ游戏大厅新双扣角色版记牌器的设计、数据抓取的思路及方法以及最终记牌器的实现细节。">
-    <meta name="twitter:url" content="http://blog.yyx.me/posts/qq-card-game-recorder">
+    <meta name="twitter:url" content="http://blog.yyx.me/posts/qq-card-game-recorder/">
 
     <!-- Feed -->
     <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
@@ -62,9 +62,9 @@
             <!-- category -->
             <!-- list -->
             <!-- menu item -->
-            <li class="w3-border-white w3-hover-opacity"><a href="/posts">Posts</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/gallery">Gallery</a></li>
-            <li class="w3-border-white w3-hover-opacity"><a href="/about">About</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/posts/">Posts</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/gallery/">Gallery</a></li>
+            <li class="w3-border-white w3-hover-opacity"><a href="/about/">About</a></li>
             <!-- pages -->
           </ul>
         </nav>
@@ -78,32 +78,32 @@
         <h1>QQ双扣记牌器实现</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2015-05-12T01:17:00-07:00">May 12, 2015</time> @ <a href="http://blog.yyx.me/categories/security" title="All articles in category Security">Security</a></span>
+            <span><time datetime="2015-05-12T01:17:00-07:00">May 12, 2015</time> @ <a href="http://blog.yyx.me/categories/security/" title="All articles in category Security">Security</a></span>
           </div>
           <div class="w3-margin-right">
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/crack" title="All articles with Crack tag">#crack</a>
+              <a href="http://blog.yyx.me/tags/crack/" title="All articles with Crack tag">#crack</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/reversing" title="All articles with Reversing tag">#reversing</a>
+              <a href="http://blog.yyx.me/tags/reversing/" title="All articles with Reversing tag">#reversing</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/cheater" title="All articles with Cheater tag">#cheater</a>
+              <a href="http://blog.yyx.me/tags/cheater/" title="All articles with Cheater tag">#cheater</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/game" title="All articles with Game tag">#game</a>
+              <a href="http://blog.yyx.me/tags/game/" title="All articles with Game tag">#game</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/qq" title="All articles with Qq tag">#QQ</a>
+              <a href="http://blog.yyx.me/tags/qq/" title="All articles with Qq tag">#QQ</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/ji-pai-qi" title="All articles with 记牌器 tag">#记牌器</a>
+              <a href="http://blog.yyx.me/tags/ji-pai-qi/" title="All articles with 记牌器 tag">#记牌器</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/you-xi" title="All articles with 游戏 tag">#游戏</a>
+              <a href="http://blog.yyx.me/tags/you-xi/" title="All articles with 游戏 tag">#游戏</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/qi-pai" title="All articles with 棋牌 tag">#棋牌</a>
+              <a href="http://blog.yyx.me/tags/qi-pai/" title="All articles with 棋牌 tag">#棋牌</a>
             </span>
           </div>
         </div>
@@ -340,7 +340,7 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
 <p>由于每个人对于记牌器最终功能设计的不一致，所以在写图形界面的时候也会有很大的差异。我目前粗略的实现了显示玩家剩余牌数、已经出的牌以及除了自己的牌以外还剩下的牌。</p>
 <p>这边需要特别说明一下一个不可避免的问题：玩家的座位。当玩家入座后，无论他在游戏大厅中是哪个座位，他的位置一定是显示在最下面的。我上面一直强调无论是玩家剩余的牌数还是玩家打出去的牌，都是根据大厅中的绝对位置来确定的。所以这里涉及到计算相对座位的问题，公式其实很简单：<code>相对座位 = (座位-玩家自己的座位) MOD 4</code>。</p>
 <p>最后上一张成品图：</p>
-<p><img alt="record" src="../statics/qq-card-game-recorder/recorder.jpg"></p>
+<p><img alt="record" src="/statics/qq-card-game-recorder/recorder.jpg"></p>
 <h1>DayN 完善和后话</h1>
 <p>找八阿哥（bug）当然是不可缺少的重要一步，不然怎么做第八个男人（Debug Man）呢？</p>
 <p>QQ新双扣角色版的内存数据抓取总的来说没有碰到特别大的问题，主要还是因为数据没有加密，因此可以靠猜想和CE的辅助最终找到数据。GameLogic.dll也没有加壳，所以直接就能在IDA中看反汇编，相对也降低了破解的门槛。联网游戏的破解难度就是实时性，因此很难用OD之类的工具来下断点跟踪，所以推断的能力和阅读静态反汇编的能力需要加强。</p>
@@ -365,13 +365,13 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/qq-card-game-recorder&amp;t=YYX%27s%20Website%3A%20QQ%E5%8F%8C%E6%89%A3%E8%AE%B0%E7%89%8C%E5%99%A8%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/qq-card-game-recorder/&amp;t=YYX%27s%20Website%3A%20QQ%E5%8F%8C%E6%89%A3%E8%AE%B0%E7%89%8C%E5%99%A8%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/qq-card-game-recorder&amp;text=YYX%27s%20Website%3A%20QQ%E5%8F%8C%E6%89%A3%E8%AE%B0%E7%89%8C%E5%99%A8%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/qq-card-game-recorder/&amp;text=YYX%27s%20Website%3A%20QQ%E5%8F%8C%E6%89%A3%E8%AE%B0%E7%89%8C%E5%99%A8%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
-            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/qq-card-game-recorder" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/qq-card-game-recorder/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
               <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
             </a>
           </div>
