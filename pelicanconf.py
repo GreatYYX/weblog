@@ -45,10 +45,10 @@ DISPLAY_CATEGORIES_LIST = False
 DISPLAY_ARCHIVES_LIST = False
 DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = (
-	('Posts','/posts', False),
-	('Gallery', '/gallery', False),
+	('Posts','/posts/', False),
+	('Gallery', '/gallery/', False),
 	# ('Gallery', 'http://photo.yyx.me', True),
-	('About','/about', False),
+	('About','/about/', False),
 )
 
 DIRECT_TEMPLATES = ['index', 'categories', 'tags', 'archives'] # 'authors' 
@@ -60,7 +60,7 @@ PAGINATED_TEMPLATES = {
 }
 PAGINATION_PATTERNS = (
     (1, '{url}', '{save_as}'),
-    (2, '{base_name}/page/{number}', '{base_name}/page/{number}/index.html'),
+    (2, '{base_name}/page/{number}/', '{base_name}/page/{number}/index.html'),
 )
 
 USE_FOLDER_AS_CATEGORY = True
@@ -76,26 +76,27 @@ EXTRA_PATH_METADATA = {
 # index
 INDEX_SAVE_AS = 'index.html'
 # articles & archives (use it as article list)
-ARTICLE_URL = 'posts/{slug}'
+ARTICLE_URL = 'posts/{slug}/'
 ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
-ARCHIVES_URL = 'posts'
+ARCHIVES_URL = 'posts/'
 ARCHIVES_SAVE_AS = 'posts/index.html'
 # tags
-TAG_URL = 'tags/{slug}'
+TAG_URL = 'tags/{slug}/'
 TAG_SAVE_AS = 'tags/{slug}/index.html'
-TAGS_URL = 'tags'
+TAGS_URL = 'tags/'
 TAGS_SAVE_AS = 'tags/index.html'
 # categories
-CATEGORY_URL = 'categories/{slug}'
+CATEGORY_URL = 'categories/{slug}/'
 CATEGORY_SAVE_AS = 'categories/{slug}/index.html'
-CATEGORIES_URL = 'categories'
+CATEGORIES_URL = 'categories/'
 CATEGORIES_SAVE_AS = 'categories/index.html'
 # pages
-PAGE_URL = '{slug}'
+PAGE_URL = '{slug}/'
 PAGE_SAVE_AS = '{slug}/index.html'
-PAGE_LANG_URL = '{slug}-{lang}/index.html'
+PAGE_LANG_URL = '{slug}-{lang}/'
 PAGE_LANG_SAVE_AS = '{slug}-{lang}/index.html'
 # author
+AUTHOR_URL = '' #only me
 AUTHOR_SAVE_AS = '' #only me
 AUTHOR_AVATAR = SITEURL + '/theme/images/cat_avatar.png'
 
