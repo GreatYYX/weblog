@@ -7,7 +7,7 @@ Summary_en: The article mainly discussed how to remove the ads on dnvod.tv and h
 
 ## Update: 2019-01-13
 
-多瑙最近更新了广告投放的实现，此文已经失效，请移步到[新文章](dnvod-ad-killer-v2.html)。之前的代码可通过tag `v1`来索取。
+多瑙最近更新了广告投放的实现，此文已经失效，请移步到[新文章](dnvod-ad-killer-v2)。之前的代码可通过tag `v1`来索取。
 
 # 小白通道
 
