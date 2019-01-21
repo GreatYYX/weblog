@@ -13,12 +13,12 @@ Summary_en: The integrated guitar tab of Xiaoyu by Chang Csun Yuk. Re-arrange th
 
 # Solo
 
-![xiaoyu solo](../statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.jpg)
+![xiaoyu solo]({{ SITEURL }}/statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.jpg)
 
 电子合成音效果试听：
 
 <audio controls>
-  <source src="../statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.mp3" type="audio/mpeg">
+  <source src="{{ SITEURL }}/statics/xiaoyu-guitar-solo-tab/xiaoyu-solo.mp3" type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
 
@@ -30,11 +30,11 @@ Your browser does not support the audio element.
 
 需要注意的是，原版的伴奏从我标黄色的部分开始有鼓点的配合，因此请即兴加入闷音模仿鼓的节奏，这样和Solo部分的感觉相似，可以平滑过渡，同时提升整个曲子的Feel。
 
-![xiaoyu 1](../statics/xiaoyu-guitar-solo-tab/xiaoyu-1.jpg)
+![xiaoyu 1]({{ SITEURL }}/statics/xiaoyu-guitar-solo-tab/xiaoyu-1.jpg)
 
-![xiaoyu 2](../statics/xiaoyu-guitar-solo-tab/xiaoyu-2.jpg)
+![xiaoyu 2]({{ SITEURL }}/statics/xiaoyu-guitar-solo-tab/xiaoyu-2.jpg)
 
-![xiaoyu 3](../statics/xiaoyu-guitar-solo-tab/xiaoyu-3.jpg)
+![xiaoyu 3]({{ SITEURL }}/statics/xiaoyu-guitar-solo-tab/xiaoyu-3.jpg)
 
 从遵循原版的角度来说，原版Solo结束后为：
 

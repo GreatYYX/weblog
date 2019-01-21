@@ -271,7 +271,7 @@ else if (X >= 3 && X <= 13)
 
 最后上一张成品图：
 
-![record](../statics/qq-card-game-recorder/recorder.jpg)
+![record]({{ SITEURL }}/statics/qq-card-game-recorder/recorder.jpg)
 
 # DayN 完善和后话 #
 

@@ -17,7 +17,7 @@ Summary_en: Ukulele tab of You said that C chord is... by Mayday.
 
 当时就是随便搜了个谱子，后来发现是“鱼仔”家的(原来玩Uku的时候用过他的谱子，感觉挺好的），于是就拿来瞎弹了一会。不过感觉谱子还是太单一，就稍微改编了下加入了更多变化。选调是C调，和原调一致，4/4拍，标准调弦。
 
-![ni_shuo_na_c_he_xian_jiu_shi](../statics/ni_shuo_na_c_he_xian_jiu_shi-ukulele-tab/tab.jpg)
+![ni_shuo_na_c_he_xian_jiu_shi]({{ SITEURL }}/statics/ni_shuo_na_c_he_xian_jiu_shi-ukulele-tab/tab.jpg)
 
 非和弦的地方我直接在纸上画了谱子，然后扫到电脑里的（没Ukulele的制谱软件，标注我也是按照吉他谱画的）。节奏型总共3个，和弦后面括号里的数字标注了相对应的节奏型。副歌1和主歌2中间的间奏和结尾部分可以用一点点滑音，整体会更加连贯出彩。
 

@@ -23,7 +23,7 @@ RLTK的使用场景归纳后其实就是：开始->单线程->并发/并行->单
 
 这之后还需要解决的问题就是输出的返回。最简单的方案当然就是直接输出到不同的文件中，之后程序主线程等待运算结束后统一读取并合并结果，但这样的坏处是额外的磁盘IO的开销。因此方案变成，主进程中再创建一条副线程专门用于output的合并，主线程需要等所有子进程和副线程退出后才能继续执行下去。数据的输入和输出通过Queue进行交换。时间线如下：
 
-![timeline](../statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png)
+![timeline]({{ SITEURL }} /statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png)
 
 注意主进程中两个线程将由CPU调配交替运行，子进程中均只有各自的主线程因此无线程切换。这个设计在使用的时候需要将运算尽可能的在子进程中完成，主进程的子线程仅仅负责运算结果的获取和合并。
 
@@ -215,7 +215,3 @@ class ParallelProcessor(object):
 
 - 可能可以使用协程(Coroutine)代替线程，但是这个方案如何实现有待斟酌：1.我并不清楚Python的多进程Queue是否能当作aio中的Queue使用 2.何时切换生产者和消费者的执行
 - 可以引入`multiproecssing.Manager`中基础数据类型，从而实现黑盒函数执行期间的跨进程变量修改
-
-
-
-

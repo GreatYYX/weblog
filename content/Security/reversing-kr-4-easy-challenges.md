@@ -115,7 +115,7 @@ Nebula的level11做的有点头大，这时大神Jack又发来了逆向的题目
 
 这里算法由于涉及到esp的改变，因此OD跟踪起来比IDA静态分析更加简单。可以直接将程序跑起来，当程序碰到相关判断的地方（一般是cmp）会改变标志位（一般是ZF），只需要改变标志位寄存器的值让它按照你要的逻辑执行下去即可，当然你需要同时记录这些让逻辑保持正确的字符，你可以直接在栈（或数据区）中作出修改。之后当程序跑完之后，你的栈（或数据区）中就是一个正确的值。本程序栈的结构如下：
 
-![OD](../statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg)
+![OD]({{ SITEURL }}/statics/reversing-kr-4-easy-challenges/2014-09-13_234947.jpg)
 
 # Easy Keygen #
 
@@ -450,7 +450,7 @@ sub_804851B函数是提示正确与错误的分支函数，其中四个call，wr
 
 然后就重点来看sub_8048451。转到图形视图，一组连续判断，只要逻辑沿着右边下来即可走通（最后eax为1，符合上面的判对条件）。
 
-![IDA](../statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg)
+![IDA]({{ SITEURL }}/statics/reversing-kr-4-easy-challenges/2014-09-13_153330.jpg)
 
 之后大致扫描了一下程序体，发现反复调用ds段寄存器指向的段内的一些byte，点进去看一下数据区布局（在.bss段，全局变量）。
 
