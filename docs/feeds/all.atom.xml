@@ -275,7 +275,7 @@
 &lt;li&gt;可能可以使用协程(Coroutine)代替线程，但是这个方案如何实现有待斟酌：1.我并不清楚Python的多进程Queue是否能当作aio中的Queue使用 2.何时切换生产者和消费者的执行&lt;/li&gt;
 &lt;li&gt;可以引入&lt;code&gt;multiproecssing.Manager&lt;/code&gt;中基础数据类型，从而实现黑盒函数执行期间的跨进程变量修改&lt;/li&gt;
 &lt;/ul&gt;</content><category term="python"></category><category term="multi-processing"></category><category term="multi-threading"></category><category term="programming"></category></entry><entry><title>多瑙视频广告移除思路及实现</title><link href="http://blog.yyx.me/posts/dnvod-ad-killer/" rel="alternate"></link><published>2018-02-11T11:06:00-08:00</published><updated>2018-02-11T11:06:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2018-02-11:/posts/dnvod-ad-killer/</id><summary type="html">&lt;p&gt;本文主要阐述了多瑙视频网站(dnvod.tv)广告移除的思路及可行实现。&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Update: 2019-01-13&lt;/h2&gt;
-&lt;p&gt;多瑙最近更新了广告投放的实现，此文已经失效，请移步到&lt;a href="dnvod-ad-killer-v2"&gt;新文章&lt;/a&gt;。之前的代码可通过tag &lt;code&gt;v1&lt;/code&gt;来索取。&lt;/p&gt;
+&lt;p&gt;多瑙最近更新了广告投放的实现，此文已经失效，请移步到&lt;a href="/posts/dnvod-ad-killer-v2"&gt;新文章&lt;/a&gt;。之前的代码可通过tag &lt;code&gt;v1&lt;/code&gt;来索取。&lt;/p&gt;
 &lt;h1&gt;小白通道&lt;/h1&gt;
 &lt;p&gt;首先代码仓库和使用方法送上：&lt;a href="https://github.com/GreatYYX/dnvod-ad-killer/tree/v1"&gt;https://github.com/GreatYYX/dnvod-ad-killer/tree/v1&lt;/a&gt;。然后不用往下看了。&lt;/p&gt;
 &lt;h1&gt;背景铺垫&lt;/h1&gt;
