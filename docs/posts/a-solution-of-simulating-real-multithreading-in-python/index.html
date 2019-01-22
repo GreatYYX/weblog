@@ -19,43 +19,43 @@
     <meta property="og:title" content="一种Python中模拟多线程计算的方案"/>
     <meta property="og:description" content="Python中由于全局锁(GIL)的限制无法使多线程在运算密集场景下发挥其威力，本文探讨一个通过多线程和多进程配合的方案来“突破”这种限制。"/>
     <meta property="og:site_name" content="YYX's Website" />
-    <meta property="og:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/"/>
+    <meta property="og:url" content="https://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="一种Python中模拟多线程计算的方案">
     <meta name="twitter:description" content="Python中由于全局锁(GIL)的限制无法使多线程在运算密集场景下发挥其威力，本文探讨一个通过多线程和多进程配合的方案来“突破”这种限制。">
-    <meta name="twitter:url" content="http://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/">
+    <meta name="twitter:url" content="https://blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/">
 
     <!-- Feed -->
-    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
-    <link rel="alternate" type="application/atom+xml" href="http://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
     <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/style.css">
-    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/jqcloud.css"> -->
-    <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="http://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
 
     <!-- Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="http://blog.yyx.me//theme/images/favicon-32x32.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://blog.yyx.me//theme/images/favicon-32x32.png">
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <!-- <script src="http://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
+    <!-- <script src="https://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script src="http://blog.yyx.me/theme/js/main.js"></script>
+    <script src="https://blog.yyx.me/theme/js/main.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="http://blog.yyx.me/" id="header-logo" title="Home"><img src="http://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"></a>
-        <!-- <a href="http://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
+        <a href="https://blog.yyx.me/" id="header-logo" title="Home"><img src="https://blog.yyx.me/theme/images/logo_min.png" width="60" height="60"></a>
+        <!-- <a href="https://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
         <nav id="header-menu">
           <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
           <ul class="w3-hide-small">
@@ -78,20 +78,20 @@
         <h1>一种Python中模拟多线程计算的方案</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2018-08-28T05:50:00-07:00">Aug 28, 2018</time> @ <a href="http://blog.yyx.me/categories/development/" title="All articles in category Development">Development</a></span>
+            <span><time datetime="2018-08-28T05:50:00-07:00">Aug 28, 2018</time> @ <a href="https://blog.yyx.me/categories/development/" title="All articles in category Development">Development</a></span>
           </div>
           <div class="w3-margin-right">
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/python/" title="All articles with Python tag">#python</a>
+              <a href="https://blog.yyx.me/tags/python/" title="All articles with Python tag">#python</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/multi-processing/" title="All articles with Multi-Processing tag">#multi-processing</a>
+              <a href="https://blog.yyx.me/tags/multi-processing/" title="All articles with Multi-Processing tag">#multi-processing</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/multi-threading/" title="All articles with Multi-Threading tag">#multi-threading</a>
+              <a href="https://blog.yyx.me/tags/multi-threading/" title="All articles with Multi-Threading tag">#multi-threading</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="http://blog.yyx.me/tags/programming/" title="All articles with Programming tag">#programming</a>
+              <a href="https://blog.yyx.me/tags/programming/" title="All articles with Programming tag">#programming</a>
             </span>
           </div>
         </div>
@@ -317,13 +317,13 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;t=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;t=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;text=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://twitter.com/share?url=https%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/&amp;text=YYX%27s%20Website%3A%20%E4%B8%80%E7%A7%8DPython%E4%B8%AD%E6%A8%A1%E6%8B%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E6%A1%88" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
-            <a href="https://plus.google.com/share?url=http%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+            <a href="https://plus.google.com/share?url=https%3A//blog.yyx.me/posts/a-solution-of-simulating-real-multithreading-in-python/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
               <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
             </a>
           </div>
