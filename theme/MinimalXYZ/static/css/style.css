@@ -431,6 +431,37 @@ section#content .lang-section-hide {
   height: auto;
 }
 
+#photo-container div.image {
+  min-height: 100px;
+  min-weight: 100px;
+  display: inline-block;
+}
+
+#photo-container a img:hover {
+  opacity: 1;
+}
+
+.image {
+  display: inline-block;
+}
+
+.image .tint {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: rgb(0,0,0,0.8);
+}
+
+.image:hover .tint {
+  opacity: 1;
+}
+
 .center-logo {
   margin: auto;
 }
