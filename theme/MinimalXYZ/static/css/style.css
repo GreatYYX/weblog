@@ -431,6 +431,10 @@ section#content .lang-section-hide {
   height: auto;
 }
 
+.center-logo {
+  margin: auto;
+}
+
 /* spinner */
 /* enable it by <div class="lds-facebook"><div></div><div></div><div></div></div>*/
 .lds-facebook {
