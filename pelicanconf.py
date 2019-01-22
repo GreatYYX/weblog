@@ -6,7 +6,8 @@ import datetime
 
 AUTHOR = u'YYX'
 SITENAME = u'YYX\'s Website'
-SITEURL = ''
+SITEURL = '' # used by links
+SITEDOMAIN = 'yyx.me'
 
 PATH = 'content'
 OUTPUT_PATH = 'docs' # for Github, also need to change path in Makefile and develop_server.sh
