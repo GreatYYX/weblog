@@ -77,7 +77,7 @@ Helios 44系列为M42卡口，从最初的44到44-2，再到44M以及44M-7，中
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04754.jpg)
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04763.jpg)
 
-又或者是人像（是时候祭出小天自诩的盛世容颜了）：
+又或者是人像（是时候祭出Github网红[小天](https://github.com/ruotianluo)自诩的盛世容颜了）：
 
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04775.jpg)
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04778.jpg)
