@@ -13,7 +13,7 @@ Summary_en: Subjective introduction and review of Russian lens: Helios 44-2 58mm
 
 # 历史
 
-要说八羽怪，首先得从二战说起。当年已是光学巨巨[蔡司](https://en.wikipedia.org/wiki/Carl_Zeiss_AG)拥有众多名镜，其中经典的[Planar](https://en.wikipedia.org/wiki/Zeiss_Planar)双高斯结构（[Double-Gauss lens](https://en.wikipedia.org/wiki/Double-Gauss_lens)）的镜头一直是世界各大标头的榜样。“双高斯”中的“高斯”得名自那个超级牛逼的数学家高斯，他为了解决天文台望远镜像差问题而设计的一种由两片新月形镜片组成的结构。后人再加入一组镜像的高斯结构便成了可以用在相机镜头中的双高斯。而Planar正是基于经过一系列改良的双高斯结构。基于早期版本的Planar（f/8, f/4.5），蔡司从1920年开始做了[Biotar](https://de.wikipedia.org/wiki/Biotar)系列（f/2）并在1953年做出了Planar的f/2.8版本。Biotar系列的一个特色是漩涡散景（Swirly bokeh）：即焦外奶油般化开，并呈漩涡状。该现象的成因是由于早期双高斯结构在光圈全开时像场边缘部位的球形畸变校正不彻底，导致焦外光斑被压缩成椭圆形状，且越靠近边缘变形越厉害。而这一光学缺陷恰恰造就了B头特色。
+要说八羽怪，首先得从二战说起。当年已是光学巨头的[蔡司](https://en.wikipedia.org/wiki/Carl_Zeiss_AG)拥有众多名镜，其中经典的[Planar](https://en.wikipedia.org/wiki/Zeiss_Planar)双高斯结构（[Double-Gauss lens](https://en.wikipedia.org/wiki/Double-Gauss_lens)）的镜头一直是世界各大标头的榜样。“双高斯”中的“高斯”得名自那个超级牛逼的数学家高斯，他为了解决天文台望远镜像差问题而设计的一种由两片新月形镜片组成的结构。后人再加入一组镜像的高斯结构便成了可以用在相机镜头中的双高斯。而Planar正是基于经过一系列改良的双高斯结构。基于早期版本的Planar（f/8, f/4.5），蔡司从1920年开始做了[Biotar](https://de.wikipedia.org/wiki/Biotar)系列（f/2）并在1953年做出了Planar的f/2.8版本。Biotar系列的一个特色是漩涡散景（Swirly bokeh）：即焦外奶油般化开，并呈漩涡状。该现象的成因是由于早期双高斯结构在光圈全开时像场边缘部位的球形畸变校正不彻底，导致焦外光斑被压缩成椭圆形状，且越靠近边缘变形越厉害。而这一光学缺陷恰恰造就了B头特色。
 
 ![Double gauss, Planar]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/double-gauss.jpg "Guass objective, Double-Guass and Zeiss Planar (from Wikipedia)")
 
@@ -95,7 +95,7 @@ Helios 44系列为M42卡口，从最初的44到44-2，再到44M以及44M-7，中
 
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04721.jpg)
 
-光线稍微强烈一些后，尤其是边缘，解析度下降的非常厉害，有一点朦胧的感觉。同时可以看到紫边。
+光线稍微强烈一些后，尤其是边缘，解析度下降的非常厉害，有一点柔焦的感觉。同时可以看到紫边。
 
 ![helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/DSC04813.jpg)
 
