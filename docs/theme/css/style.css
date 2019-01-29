@@ -25,7 +25,7 @@ h2 {
 
 h3 {
   font-weight: bold;
-  font-size: 18pt;
+  font-size: 16pt;
 }
 
 h4 {
@@ -465,6 +465,14 @@ section#content .lang-section-hide {
 
 .center-logo {
   margin: auto;
+}
+
+.image-caption {
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 10pt;
+  font-style: italic;
 }
 
 /* spinner */
