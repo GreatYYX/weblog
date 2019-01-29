@@ -9,7 +9,7 @@ Summary_en: Subjective introduction and review of Russian lens: Helios 44-2 58mm
 
 还在用感动牌60D的时候就知道了八羽怪，尤其是大名鼎鼎的旋焦散景。只不过佳能玩转接有点麻烦，又有法兰距的问题，因为是光学取景器追求感觉的话还要换对焦屏，所以一直没有上手。一晃六七年过去了，入了索尼大法的门，总算也能顺理成章的玩玩老镜头转接了。虽然Amazon上也有这个头买，不过貌似大多都是44m，而我就是比较执念44-2，同时为了挑个还可以的成色，于是在马云爸爸处购得一枚并让邵总稍回。把玩了一段时间，断断续续拍了几组照片，特此拼凑非常不客观且不负责任的一篇介绍及测评。
 
-资料参考大多来自wikipedia，部分来自早年看的中英文摄影论坛、知乎。
+资料参考大多来自Wikipedia，部分来自早年看的中英文摄影论坛、知乎。
 
 # 历史
 
@@ -21,7 +21,7 @@ Summary_en: Subjective introduction and review of Russian lens: Helios 44-2 58mm
 
 Helios 44系列为M42卡口，从最初的44到44-2，再到44M以及44M-7，中间经历了非常多代的更迭，机械结构、镀膜技术等等得到不断改进。目前44-2和44M保有量还不错，因此还有一些成色不错的货。八羽怪得名于其8片光圈叶片，系列中当属Helios 44-2 58mm F2最正宗。
 
-![Biotar 58 f2, Helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/biotar_helios.jpg "Carl Zeiss Jena Biotar 58mm f/2 and Helios 44-2 50mm f2 (from Wikipedia)")
+![Biotar 58 f2, Helios 44-2]({{ SITEURL }}/statics/subjective-camera-lens-helios-44-2-review/biotar_helios.jpg "Carl Zeiss Jena Biotar 58mm f/2 and Helios 44-2 58mm f2 (from Wikipedia)")
 
 # 上手
 
