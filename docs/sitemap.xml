@@ -5,7 +5,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/</loc>
-<lastmod>2019-01-29T14:01:13-00:00</lastmod>
+<lastmod>2021-12-06T15:01:21-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -20,6 +20,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://blog.yyx.me/gallery/</loc>
 <lastmod>2014-08-14T12:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/posts/planck-40-keyboard/</loc>
+<lastmod>2021-12-05T05:09:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -144,6 +151,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>https://blog.yyx.me/categories/diy/</loc>
+<lastmod>2021-12-05T05:09:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>https://blog.yyx.me/categories/music/</loc>
 <lastmod>2016-10-17T18:41:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -167,6 +181,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://blog.yyx.me/categories/web/</loc>
 <lastmod>2014-08-14T16:17:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/tags/keyboard/</loc>
+<lastmod>2021-12-05T05:09:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

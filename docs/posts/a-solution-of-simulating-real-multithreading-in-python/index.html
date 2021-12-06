@@ -113,7 +113,7 @@
 <p><img alt="timeline" src="/statics/a-solution-of-simulating-real-multithreading-in-python/timeline.png"></p>
 <p>注意主进程中两个线程将由CPU调配交替运行，子进程中均只有各自的主线程因此无线程切换。这个设计在使用的时候需要将运算尽可能的在子进程中完成，主进程的子线程仅仅负责运算结果的获取和合并。</p>
 <p>具体代码实现 (<a href="https://github.com/usc-isi-i2/rltk/blob/09c81edd8adb450ddfde409888c2b83497877ef5/rltk/parallel_processor.py">github</a>):</p>
-<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module is designed for breaking the restriction of Python Global Interpreter Lock (GIL): It uses multi-processing (compute-intensive operations) and multi-threading (return data collecting) to accelerate computing.</span>
 <span class="sd">Once it&#39;s initialized, it creates a sub process pool, all the added data will be dispatched to different sub processes for parallel computing. The result sends back and consumes in another thread in current main process. The Inter Process Communication (IPC) between main process and sub processes is based on queue.</span>
 <span class="sd">Example::</span>
@@ -138,7 +138,7 @@
 <span class="sd">    print(result)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">queue</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
@@ -187,7 +187,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">num_of_processor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">max_size_per_input_queue</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_size_per_output_queue</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                 <span class="n">output_handler</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+                 <span class="n">output_handler</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_of_processor</span> <span class="o">=</span> <span class="n">num_of_processor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_queues</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">max_size_per_input_queue</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_of_processor</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_queues</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">max_size_per_output_queue</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_of_processor</span><span class="p">)]</span>
@@ -234,7 +234,7 @@
 <span class="sd">        Add data to one of the input queues.</span>
 <span class="sd">        (main process, unblocked, using round robin to find next available queue)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queues</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_queue_index</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">input_queue_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_queue_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_processor</span>
             <span class="k">try</span><span class="p">:</span>
@@ -248,7 +248,7 @@
 <span class="sd">        Process’s activity. It handles queue IO and invokes user&#39;s input handler.</span>
 <span class="sd">        (subprocess, blocked, only two queues can be used to communicate with main process)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ParallelProcessor</span><span class="o">.</span><span class="n">CMD_STOP</span><span class="p">:</span>
                 <span class="c1"># print(idx, &#39;stop&#39;)</span>
@@ -271,7 +271,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_handler</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># print(self.output_queues)</span>
             <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_queues</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_queue_index</span><span class="p">]</span>
             <span class="k">try</span><span class="p">:</span>
@@ -286,8 +286,7 @@
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_queues</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># all finished</span>
                     <span class="k">return</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_queue_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_queue_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_queues</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>设计中input queue和output queue均限制了大小并在填满后阻塞，直到各自的消费者（分别是子进程、主进程的子线程）消费掉相应产品后才会继续执行，保证了内存不会被撑爆。比如：主进程的子线程无法快速消费运算结果-&gt;阻塞子进程output queue-&gt;阻塞主进程主线程输入input queue。</p>
 <p>实现本身采用了相对底层的模块完成，没有使用<code>multiprocessing</code>自带的进程池和<code>JoinableQueue</code>是为了保留更多的自定义扩展可能性。</p>
@@ -378,7 +377,7 @@
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2019          yyx.me
+          2014&dash;2021          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>

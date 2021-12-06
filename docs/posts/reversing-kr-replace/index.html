@@ -107,99 +107,91 @@
 <h1>调试和分析</h1>
 <p>首先查壳，拖入PEiD，<code>Microsoft Visual C++ 6.0</code>，无壳。</p>
 <p>拖入OD，查找Name，根据只能输入数字为线索，找到<code>GetDlgItemInt</code>，跟到代码，下断。程序跑起来，输入任意数字后单步步过运行，逐渐缩小范围，多次测试后找到使程序崩溃的地方——<code>call Replace.0040466F</code>，进去看程序代码：</p>
-<div class="highlight"><pre><span></span>0040466F   $  C600 90                     mov byte ptr ds:[eax],0x90
-00404672   ?  C3                          retn
-00404673   ?  0081 05D08440               add byte ptr ds:[ecx+0x4084D005],al
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mi">0040466</span><span class="n">F</span><span class="w">   </span><span class="err">$</span><span class="w">  </span><span class="n">C600</span><span class="w"> </span><span class="mi">90</span><span class="w">                     </span><span class="n">mov</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:</span><span class="o">[</span><span class="n">eax</span><span class="o">]</span><span class="p">,</span><span class="mh">0x90</span><span class="w"></span>
+<span class="mi">00404672</span><span class="w">   </span><span class="vm">?</span><span class="w">  </span><span class="n">C3</span><span class="w">                          </span><span class="n">retn</span><span class="w"></span>
+<span class="mi">00404673</span><span class="w">   </span><span class="vm">?</span><span class="w">  </span><span class="mi">0081</span><span class="w"> </span><span class="mi">05</span><span class="n">D08440</span><span class="w">               </span><span class="k">add</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:</span><span class="o">[</span><span class="n">ecx+0x4084D005</span><span class="o">]</span><span class="p">,</span><span class="n">al</span><span class="w"></span>
+</code></pre></div>
 
 <p>这段代码做了一件很好玩的事：把1个byte的0x90填充到ds:[eax]处。ds:[eax]说明这个具体的位置是根据当时eax寄存器的值确定的，0x90如果在数据段就是个不可打印的数据，而在代码段则是<code>NOP</code>指令。这里的设想一定要大胆，很可能这段话是用来填充代码段的——也就是说，为了“废掉”某个或者某段指令（当然<code>NOP</code>在Exploit的时候很可能做为模糊跳转技术中的缓冲）。不过目前状态eax的值不在ds指向的范围内，因此造成程序崩溃。</p>
 <p>虽然现在找出了崩溃点，不过貌似没什么作用，我们重新加载程序起来，输入123456，还是断在刚才的地方：</p>
-<div class="highlight"><pre><span></span><span class="mo">00401050</span>   <span class="p">.</span>  <span class="mi">6</span><span class="n">A</span> <span class="mo">00</span>         <span class="n">push</span> <span class="mh">0x0</span>                                 <span class="p">;</span> <span class="o">/</span><span class="n">IsSigned</span> <span class="o">=</span> <span class="nb">FALSE</span>
-<span class="mo">00401052</span>   <span class="p">.</span>  <span class="mi">6</span><span class="n">A</span> <span class="mo">00</span>         <span class="n">push</span> <span class="mh">0x0</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">pSuccess</span> <span class="o">=</span> <span class="nb">NULL</span>
-<span class="mo">00401054</span>   <span class="p">.</span>  <span class="mi">68</span> <span class="n">EA030000</span>   <span class="n">push</span> <span class="mh">0x3EA</span>                               <span class="p">;</span> <span class="o">|</span><span class="n">ControlID</span> <span class="o">=</span> <span class="mi">3</span><span class="n">EA</span> <span class="p">(</span><span class="mf">1002.</span><span class="p">)</span>
-<span class="mo">0040105</span><span class="mi">9</span>   <span class="p">.</span>  <span class="mi">56</span>            <span class="n">push</span> <span class="n">esi</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">hWnd</span>
-<span class="mo">0040105</span><span class="n">A</span>   <span class="p">.</span>  <span class="n">FF15</span> <span class="mi">9</span><span class="n">C504000</span> <span class="n">call</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">GetDlgItemIn</span><span class="o">&gt;</span><span class="p">;</span> <span class="err">\</span><span class="n">GetDlgItemInt</span>
-<span class="mo">00401060</span>   <span class="p">.</span>  <span class="n">A3</span> <span class="n">D0844000</span>   <span class="n">mov</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="nl">ds</span><span class="p">:[</span><span class="mh">0x4084D0</span><span class="p">],</span><span class="n">eax</span>
-<span class="mo">00401065</span>   <span class="p">.</span>  <span class="n">E8</span> <span class="mo">05360000</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.0040466F</span>
-<span class="mo">0040106</span><span class="n">A</span>   <span class="p">.</span>  <span class="mi">33</span><span class="n">C0</span>          <span class="n">xor</span> <span class="n">eax</span><span class="p">,</span><span class="n">eax</span>
-<span class="mo">0040106</span><span class="n">C</span>   <span class="p">.</span>  <span class="n">E9</span> <span class="mf">1F</span><span class="mi">360000</span>   <span class="n">jmp</span> <span class="n">Replace</span><span class="mf">.00404690</span>
-<span class="mo">00401071</span>   <span class="o">&gt;</span>  <span class="n">EB</span> <span class="mi">11</span>         <span class="n">jmp</span> <span class="n">XReplace</span><span class="mf">.00401084</span>
-<span class="mo">00401073</span>   <span class="p">.</span>  <span class="mi">68</span> <span class="mi">34</span> <span class="mi">60</span> <span class="mi">40</span> <span class="mi">0</span><span class="o">&gt;</span><span class="n">ascii</span> <span class="s">&quot;h4`@&quot;</span><span class="p">,</span><span class="mi">0</span>                           <span class="p">;</span>  <span class="n">Correct</span><span class="o">!</span>
-<span class="mo">0040107</span><span class="mi">8</span>   <span class="p">.</span>  <span class="mi">68</span> <span class="n">E9030000</span>   <span class="n">push</span> <span class="mh">0x3E9</span>                               <span class="p">;</span> <span class="o">|</span><span class="n">ControlID</span> <span class="o">=</span> <span class="mf">3E9</span> <span class="p">(</span><span class="mf">1001.</span><span class="p">)</span>
-<span class="mo">0040107</span><span class="n">D</span>   <span class="p">.</span>  <span class="mi">56</span>            <span class="n">push</span> <span class="n">esi</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">hWnd</span>
-<span class="mo">0040107</span><span class="n">E</span>   <span class="p">.</span>  <span class="n">FF15</span> <span class="n">A0504000</span> <span class="n">call</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">SetDlgItemTe</span><span class="o">&gt;</span><span class="p">;</span> <span class="err">\</span><span class="n">SetDlgItemTextA</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mo">00401050</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">6</span><span class="n">A</span><span class="w"> </span><span class="mo">00</span><span class="w">         </span><span class="n">push</span><span class="w"> </span><span class="mh">0x0</span><span class="w">                                 </span><span class="p">;</span><span class="w"> </span><span class="o">/</span><span class="n">IsSigned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">FALSE</span><span class="w"></span>
+<span class="mo">00401052</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">6</span><span class="n">A</span><span class="w"> </span><span class="mo">00</span><span class="w">         </span><span class="n">push</span><span class="w"> </span><span class="mh">0x0</span><span class="w">                                 </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">pSuccess</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"></span>
+<span class="mo">00401054</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">68</span><span class="w"> </span><span class="n">EA030000</span><span class="w">   </span><span class="n">push</span><span class="w"> </span><span class="mh">0x3EA</span><span class="w">                               </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">ControlID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="n">EA</span><span class="w"> </span><span class="p">(</span><span class="mf">1002.</span><span class="p">)</span><span class="w"></span>
+<span class="mo">0040105</span><span class="mi">9</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">56</span><span class="w">            </span><span class="n">push</span><span class="w"> </span><span class="n">esi</span><span class="w">                                 </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">hWnd</span><span class="w"></span>
+<span class="mo">0040105</span><span class="n">A</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="n">FF15</span><span class="w"> </span><span class="mi">9</span><span class="n">C504000</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">GetDlgItemIn</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="err">\</span><span class="n">GetDlgItemInt</span><span class="w"></span>
+<span class="mo">00401060</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="n">A3</span><span class="w"> </span><span class="n">D0844000</span><span class="w">   </span><span class="n">mov</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:[</span><span class="mh">0x4084D0</span><span class="p">],</span><span class="n">eax</span><span class="w"></span>
+<span class="mo">00401065</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="n">E8</span><span class="w"> </span><span class="mo">05360000</span><span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">Replace</span><span class="mf">.0040466F</span><span class="w"></span>
+<span class="mo">0040106</span><span class="n">A</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">33</span><span class="n">C0</span><span class="w">          </span><span class="n">xor</span><span class="w"> </span><span class="n">eax</span><span class="p">,</span><span class="n">eax</span><span class="w"></span>
+<span class="mo">0040106</span><span class="n">C</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="n">E9</span><span class="w"> </span><span class="mf">1F</span><span class="mi">360000</span><span class="w">   </span><span class="n">jmp</span><span class="w"> </span><span class="n">Replace</span><span class="mf">.00404690</span><span class="w"></span>
+<span class="mo">00401071</span><span class="w">   </span><span class="o">&gt;</span><span class="w">  </span><span class="n">EB</span><span class="w"> </span><span class="mi">11</span><span class="w">         </span><span class="n">jmp</span><span class="w"> </span><span class="n">XReplace</span><span class="mf">.00401084</span><span class="w"></span>
+<span class="mo">00401073</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">68</span><span class="w"> </span><span class="mi">34</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="mi">40</span><span class="w"> </span><span class="mi">0</span><span class="o">&gt;</span><span class="n">ascii</span><span class="w"> </span><span class="s">&quot;h4`@&quot;</span><span class="p">,</span><span class="mi">0</span><span class="w">                           </span><span class="p">;</span><span class="w">  </span><span class="n">Correct</span><span class="o">!</span><span class="w"></span>
+<span class="mo">0040107</span><span class="mi">8</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">68</span><span class="w"> </span><span class="n">E9030000</span><span class="w">   </span><span class="n">push</span><span class="w"> </span><span class="mh">0x3E9</span><span class="w">                               </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">ControlID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3E9</span><span class="w"> </span><span class="p">(</span><span class="mf">1001.</span><span class="p">)</span><span class="w"></span>
+<span class="mo">0040107</span><span class="n">D</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="mi">56</span><span class="w">            </span><span class="n">push</span><span class="w"> </span><span class="n">esi</span><span class="w">                                 </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">hWnd</span><span class="w"></span>
+<span class="mo">0040107</span><span class="n">E</span><span class="w">   </span><span class="p">.</span><span class="w">  </span><span class="n">FF15</span><span class="w"> </span><span class="n">A0504000</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">SetDlgItemTe</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="err">\</span><span class="n">SetDlgItemTextA</span><span class="w"></span>
+</code></pre></div>
 
 <p>大致看一下这段代码，获取输入数据后call一次，jmp2次之后就到了Correct提示的地方。这个大致的代码分布记在心中，继续往下分析。</p>
 <p>可以看到在<code>GetDlgItemInt</code>后把值写到了ds:[0x4084D0]，长度为dword。在数据窗口跳转到这个地址（可以在数据上下内存断点做监控）：</p>
-<div class="highlight"><pre><span></span>004084D0  40 E2 01 00 00 00 00 00 00 00 00 00 00 00 00     @?.............
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mf">004084</span><span class="n">D0</span>  <span class="mf">40</span> <span class="n">E2</span> <span class="mf">01</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span> <span class="mf">00</span>     <span class="err">@?</span><span class="mf">.............</span>
+</code></pre></div>
 
 <p>发现写入值为01E240（就是16进制的123456）。这里注意几点，第一是存储的顺序为little-endian，第二是因为读入的是int所以长度为dword，第三直接存储了这个数字而没有转化成字符串。</p>
 <p>之后进入一个函数<code>call Replace.0040466F</code>，跟进去：</p>
-<div class="highlight"><pre><span></span>0040466F   $  E8 06000000   call Replace.0040467A
-00404674      81            db 81
-00404675   .  05 D0844000   add eax,Replace.004084D0
-0040467A   .  C705 16604000&gt;mov dword ptr ds:[0x406016],0x619060EB
-00404684   .  E8 00000000   call Replace.00404689
-00404689  /$  FF05 D0844000 inc dword ptr ds:[0x4084D0]
-0040468F  \.  C3            retn
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mf">0040466</span><span class="n">F</span>   <span class="err">$</span>  <span class="n">E8</span> <span class="mf">06000000</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.0040467</span><span class="n">A</span>
+<span class="mf">00404674</span>      <span class="mf">81</span>            <span class="n">db</span> <span class="mf">81</span>
+<span class="mf">00404675</span>   <span class="mf">.</span>  <span class="mf">05</span> <span class="n">D0844000</span>   <span class="n">add</span> <span class="n">eax</span><span class="p">,</span><span class="n">Replace</span><span class="mf">.004084</span><span class="n">D0</span>
+<span class="mf">0040467</span><span class="n">A</span>   <span class="mf">.</span>  <span class="n">C705</span> <span class="mf">16604000</span><span class="o">&gt;</span><span class="n">mov</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x406016</span><span class="err">]</span><span class="p">,</span><span class="mf">0</span><span class="n">x619060EB</span>
+<span class="mf">00404684</span>   <span class="mf">.</span>  <span class="n">E8</span> <span class="mf">00000000</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.00404689</span>
+<span class="mf">00404689</span>  <span class="o">/</span><span class="err">$</span>  <span class="n">FF05</span> <span class="n">D0844000</span> <span class="n">inc</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x4084D0</span><span class="err">]</span>
+<span class="mf">0040468</span><span class="n">F</span>  <span class="err">\</span><span class="mf">.</span>  <span class="n">C3</span>            <span class="n">retn</span>
+</code></pre></div>
 
 <p>可以看到<code>0040466F</code>的函数用call的办法跳转到了<code>0040467A</code>（call当jmp用），这样反汇编器在反汇编的时候会从<code>0040467A</code>这个地址开始汇编，而被截断处前面这段机器码由于无法构成一个或几个完整的指令，因此被反汇编成了一个数据（<code>db 81</code>）+一句指令。之后程序把0x619060EB这个立即数写入ds:[0x406016]，似乎没什么用。之后又通过call来当jmp来用，跳转到下面一句话，刚才在ds:[0x4084D0]保存的值自增1。之后retn又跳回<code>00404689</code>再执行一遍自增。之后再retn，此时return到了<code>00404674</code>。</p>
 <p>但是<code>00404674</code>是<code>db 81</code>啊，不是指令！对，这就是这题最有意思的地方，一段机器码用不同的方式解析，得到不同的运行结果。此时需要让OD重新理解一下这段代码，在<code>00404674</code>上BackSpace，此时，还是上面那段机器码，但反汇编代码变成了这样：</p>
-<div class="highlight"><pre><span></span>0040466F   $  E8 06000000   call Replace.0040467A
-00404674      8105 D0844000&gt;add dword ptr ds:[0x4084D0],0x601605C7
-0040467E   ?  40            inc eax
-0040467F   ?  00EB          add bl,ch
-00404681   ?  60            pushad
-00404682   ?  90            nop
-00404683   ?  61            popad
-00404684   .  E8 00000000   call Replace.00404689
-00404689  /$  FF05 D0844000 inc dword ptr ds:[0x4084D0]
-0040468F  \.  C3            retn
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mf">0040466</span><span class="n">F</span>   <span class="err">$</span>  <span class="n">E8</span> <span class="mf">06000000</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.0040467</span><span class="n">A</span>
+<span class="mf">00404674</span>      <span class="mf">8105</span> <span class="n">D0844000</span><span class="o">&gt;</span><span class="n">add</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x4084D0</span><span class="err">]</span><span class="p">,</span><span class="mf">0</span><span class="n">x601605C7</span>
+<span class="mf">0040467</span><span class="n">E</span>   <span class="err">?</span>  <span class="mf">40</span>            <span class="n">inc</span> <span class="n">eax</span>
+<span class="mf">0040467</span><span class="n">F</span>   <span class="err">?</span>  <span class="mf">00</span><span class="n">EB</span>          <span class="n">add</span> <span class="n">bl</span><span class="p">,</span><span class="n">ch</span>
+<span class="mf">00404681</span>   <span class="err">?</span>  <span class="mf">60</span>            <span class="n">pushad</span>
+<span class="mf">00404682</span>   <span class="err">?</span>  <span class="mf">90</span>            <span class="n">nop</span>
+<span class="mf">00404683</span>   <span class="err">?</span>  <span class="mf">61</span>            <span class="n">popad</span>
+<span class="mf">00404684</span>   <span class="mf">.</span>  <span class="n">E8</span> <span class="mf">00000000</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.00404689</span>
+<span class="mf">00404689</span>  <span class="o">/</span><span class="err">$</span>  <span class="n">FF05</span> <span class="n">D0844000</span> <span class="n">inc</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x4084D0</span><span class="err">]</span>
+<span class="mf">0040468</span><span class="n">F</span>  <span class="err">\</span><span class="mf">.</span>  <span class="n">C3</span>            <span class="n">retn</span>
+</code></pre></div>
 
 <p>这段代码把ds:[0x4084D0]里面的值加了0x601605C7，之后这些指令似乎没作用，到<code>00404689</code>完成自增，retn，再自增，然后这个奇怪的函数总算返回了。</p>
 <p>还记得上面说过的两个jmp吗？现在进入第一个jmp：</p>
-<div class="highlight"><pre><span></span>00404690   &gt; \A1 D0844000   mov eax,dword ptr ds:[0x4084D0]
-00404695   .  68 9F464000   push Replace.0040469F
-0040469A   .  E8 EAFFFFFF   call Replace.00404689
-0040469F   .  C705 6F464000&gt;mov dword ptr ds:[0x40466F],0xC39000C6
-004046A9   .  E8 C1FFFFFF   call Replace.0040466F
-004046AE   .  40            inc eax
-004046AF   .  E8 BBFFFFFF   call Replace.0040466F
-004046B4   .  C705 6F464000&gt;mov dword ptr ds:[0x40466F],0x6E8
-004046BE   .  58            pop eax
-004046BF   .  B8 FFFFFFFF   mov eax,-0x1
-004046C4   .^ E9 A8C9FFFF   jmp Replace.00401071
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mf">00404690</span>   <span class="o">&gt;</span> <span class="err">\</span><span class="n">A1</span> <span class="n">D0844000</span>   <span class="n">mov</span> <span class="n">eax</span><span class="p">,</span><span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x4084D0</span><span class="err">]</span>
+<span class="mf">00404695</span>   <span class="mf">.</span>  <span class="mf">68</span> <span class="mf">9</span><span class="n">F464000</span>   <span class="n">push</span> <span class="n">Replace</span><span class="mf">.0040469</span><span class="n">F</span>
+<span class="mf">0040469</span><span class="n">A</span>   <span class="mf">.</span>  <span class="n">E8</span> <span class="n">EAFFFFFF</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.00404689</span>
+<span class="mf">0040469</span><span class="n">F</span>   <span class="mf">.</span>  <span class="n">C705</span> <span class="mf">6</span><span class="n">F464000</span><span class="o">&gt;</span><span class="n">mov</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x40466F</span><span class="err">]</span><span class="p">,</span><span class="mf">0</span><span class="n">xC39000C6</span>
+<span class="mf">004046</span><span class="n">A9</span>   <span class="mf">.</span>  <span class="n">E8</span> <span class="n">C1FFFFFF</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.0040466</span><span class="n">F</span>
+<span class="mf">004046</span><span class="n">AE</span>   <span class="mf">.</span>  <span class="mf">40</span>            <span class="n">inc</span> <span class="n">eax</span>
+<span class="mf">004046</span><span class="n">AF</span>   <span class="mf">.</span>  <span class="n">E8</span> <span class="n">BBFFFFFF</span>   <span class="n">call</span> <span class="n">Replace</span><span class="mf">.0040466</span><span class="n">F</span>
+<span class="mf">004046</span><span class="n">B4</span>   <span class="mf">.</span>  <span class="n">C705</span> <span class="mf">6</span><span class="n">F464000</span><span class="o">&gt;</span><span class="n">mov</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="n">ds</span><span class="p">:</span><span class="err">[</span><span class="mf">0</span><span class="n">x40466F</span><span class="err">]</span><span class="p">,</span><span class="mf">0</span><span class="n">x6E8</span>
+<span class="mf">004046</span><span class="n">BE</span>   <span class="mf">.</span>  <span class="mf">58</span>            <span class="n">pop</span> <span class="n">eax</span>
+<span class="mf">004046</span><span class="n">BF</span>   <span class="mf">.</span>  <span class="n">B8</span> <span class="n">FFFFFFFF</span>   <span class="n">mov</span> <span class="n">eax</span><span class="p">,</span><span class="o">-</span><span class="mf">0</span><span class="n">x1</span>
+<span class="mf">004046</span><span class="n">C4</span>   <span class="mf">.</span><span class="o">^</span> <span class="n">E9</span> <span class="n">A8C9FFFF</span>   <span class="n">jmp</span> <span class="n">Replace</span><span class="mf">.00401071</span>
+</code></pre></div>
 
 <p>首先取出ds:[0x4084D0]中的值放入eax，之后又跳到前面那个ds:[0x4084D0]自增的地方，自增了1次。接着执行<code>0040469F</code>，这句指令把0xC39000C6写入ds:[0x40466F]，0x40466F就是前面程序崩溃的地址啊！也就是说，ds:[0x40466F]处是代码（数据段当代码段执行），所以0xC39000C6其实是当做指令来使用的（0xC39000C6就是让程序崩溃的那段程序的机器码），果然之后马上call了0040466F。然后eax增1，再call 0040466F，再把0x6E8放入ds:[0x40466F]（依然是当做指令执行的数据，替换崩溃代码）。之后善后返回到<code>00401071</code>。</p>
 <p>这里先不要执行，顺一下思路：此处取出ds:[0x4084D0]中的内容到eax后，执行崩溃函数，然后eax=eax+1，再执行崩溃函数。而前面分析崩溃函数可以用来抹去代码段中一个byte，这里调用两次就是2byte。回去看获取用户输入后的那段代码：</p>
-<div class="highlight"><pre><span></span>...
+<div class="highlight"><pre><span></span><code>...
 00401071   &gt;  EB 11         jmp XReplace.00401084
 ...
-</pre></div>
-
+</code></pre></div>
 
 <p>这是第二个jmp，两个字节机器码，目前这个jmp返回后就会执行这个<code>00401071</code>的jmp，而这个jmp把我们原来可以顺序执行到的Correct给绕开了！所以，我们要“废掉”这个jmp。于是乎，回到EIP所在位置，之后把eax改成<code>00401071</code>（第二个jmp的地址），执行后跳回<code>00401071</code>，这个时候程序变成了：</p>
-<div class="highlight"><pre><span></span><span class="mo">00401071</span>   <span class="o">&gt;</span> <span class="o">/</span><span class="mi">90</span>            <span class="n">nop</span>
-<span class="mo">00401072</span>   <span class="o">?</span> <span class="o">|</span><span class="mi">90</span>            <span class="n">nop</span>
-<span class="mo">00401073</span>   <span class="p">.</span> <span class="o">|</span><span class="mi">68</span> <span class="mi">34</span> <span class="mi">60</span> <span class="mi">40</span> <span class="mi">0</span><span class="o">&gt;</span><span class="n">ascii</span> <span class="s">&quot;h4`@&quot;</span><span class="p">,</span><span class="mi">0</span>                           <span class="p">;</span>  <span class="n">Correct</span><span class="o">!</span>
-<span class="mo">0040107</span><span class="mi">8</span>   <span class="p">.</span> <span class="o">|</span><span class="mi">68</span> <span class="n">E9030000</span>   <span class="n">push</span> <span class="mh">0x3E9</span>                               <span class="p">;</span> <span class="o">|</span><span class="n">ControlID</span> <span class="o">=</span> <span class="mf">3E9</span> <span class="p">(</span><span class="mf">1001.</span><span class="p">)</span>
-<span class="mo">0040107</span><span class="n">D</span>   <span class="p">.</span> <span class="o">|</span><span class="mi">56</span>            <span class="n">push</span> <span class="n">esi</span>                                 <span class="p">;</span> <span class="o">|</span><span class="n">hWnd</span>
-<span class="mo">0040107</span><span class="n">E</span>   <span class="p">.</span> <span class="o">|</span><span class="n">FF15</span> <span class="n">A0504000</span> <span class="n">call</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">SetDlgItemTe</span><span class="o">&gt;</span><span class="p">;</span> <span class="err">\</span><span class="n">SetDlgItemTextA</span>
-<span class="mo">004010</span><span class="mi">84</span>   <span class="o">&gt;</span> <span class="o">|</span><span class="n">B8</span> <span class="mo">01000000</span>   <span class="n">mov</span> <span class="n">eax</span><span class="p">,</span><span class="mh">0x1</span>
-<span class="mo">004010</span><span class="mi">89</span>   <span class="p">.</span> <span class="o">|</span><span class="mi">90</span>            <span class="n">nop</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mo">00401071</span><span class="w">   </span><span class="o">&gt;</span><span class="w"> </span><span class="o">/</span><span class="mi">90</span><span class="w">            </span><span class="n">nop</span><span class="w"></span>
+<span class="mo">00401072</span><span class="w">   </span><span class="o">?</span><span class="w"> </span><span class="o">|</span><span class="mi">90</span><span class="w">            </span><span class="n">nop</span><span class="w"></span>
+<span class="mo">00401073</span><span class="w">   </span><span class="p">.</span><span class="w"> </span><span class="o">|</span><span class="mi">68</span><span class="w"> </span><span class="mi">34</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="mi">40</span><span class="w"> </span><span class="mi">0</span><span class="o">&gt;</span><span class="n">ascii</span><span class="w"> </span><span class="s">&quot;h4`@&quot;</span><span class="p">,</span><span class="mi">0</span><span class="w">                           </span><span class="p">;</span><span class="w">  </span><span class="n">Correct</span><span class="o">!</span><span class="w"></span>
+<span class="mo">0040107</span><span class="mi">8</span><span class="w">   </span><span class="p">.</span><span class="w"> </span><span class="o">|</span><span class="mi">68</span><span class="w"> </span><span class="n">E9030000</span><span class="w">   </span><span class="n">push</span><span class="w"> </span><span class="mh">0x3E9</span><span class="w">                               </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">ControlID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3E9</span><span class="w"> </span><span class="p">(</span><span class="mf">1001.</span><span class="p">)</span><span class="w"></span>
+<span class="mo">0040107</span><span class="n">D</span><span class="w">   </span><span class="p">.</span><span class="w"> </span><span class="o">|</span><span class="mi">56</span><span class="w">            </span><span class="n">push</span><span class="w"> </span><span class="n">esi</span><span class="w">                                 </span><span class="p">;</span><span class="w"> </span><span class="o">|</span><span class="n">hWnd</span><span class="w"></span>
+<span class="mo">0040107</span><span class="n">E</span><span class="w">   </span><span class="p">.</span><span class="w"> </span><span class="o">|</span><span class="n">FF15</span><span class="w"> </span><span class="n">A0504000</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="nl">ds</span><span class="p">:[</span><span class="o">&lt;&amp;</span><span class="n">USER32</span><span class="p">.</span><span class="n">SetDlgItemTe</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="err">\</span><span class="n">SetDlgItemTextA</span><span class="w"></span>
+<span class="mo">004010</span><span class="mi">84</span><span class="w">   </span><span class="o">&gt;</span><span class="w"> </span><span class="o">|</span><span class="n">B8</span><span class="w"> </span><span class="mo">01000000</span><span class="w">   </span><span class="n">mov</span><span class="w"> </span><span class="n">eax</span><span class="p">,</span><span class="mh">0x1</span><span class="w"></span>
+<span class="mo">004010</span><span class="mi">89</span><span class="w">   </span><span class="p">.</span><span class="w"> </span><span class="o">|</span><span class="mi">90</span><span class="w">            </span><span class="n">nop</span><span class="w"></span>
+</code></pre></div>
 
 <p>第二个可恶的jmp被成功干掉，并顺利执行了Correct！</p>
 <p>到这里就快成功了！下面我们需要做很重要的一步，让程序自己算出正确的eax并完成整个逻辑，最终弹出正确的提示。</p>
@@ -289,7 +281,7 @@
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2019          yyx.me
+          2014&dash;2021          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>

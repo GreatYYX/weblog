@@ -115,18 +115,17 @@
 <p>其实主要是破解两个问题：1.移除视频前70s的广告和等待时间 2.移除那些闪闪发光的小广告。</p>
 <h3>移除视频前等待</h3>
 <p>对于第一点，本身网站界面加载的也只有基本的框架，评论、集数、广告均由js创建而来。而加载后最显而易见的就是视频播放区的这段dom：</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">object</span> <span class="err">...</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">object</span> <span class="err">...</span><span class="p">&gt;</span>
     ...
     <span class="p">&lt;</span><span class="nt">param</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;movie&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;/_player/954684356/ckplayer.swf&quot;</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">param</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;flashvars&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;f=rtmp://s1-r1.dnvod.tv/kvod/mp4:lxj-hpfd-01-021E92666.mp4&amp;amp;loaded=loadedHandler&amp;amp;s=0&amp;amp;b=0&amp;amp;c=0&amp;amp;a=&amp;amp;i=//static.dnvod.tv/images/logo-group.jpg&amp;amp;l=http://static.dnvod.tv/upload/video/201802081401510175878s.jpg|...&amp;amp;r=http://public.dnvod.tv/c/c?position%3db%26i%3d376%26r%3d4|...&amp;amp;t=10|10|10|10|10|10|10...&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;100%&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;100%&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;ckplayer_a1&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ckplayer_a1&quot;</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;middle&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;application/x-shockwave-flash&quot;</span> <span class="na">pluginspage</span><span class="o">=</span><span class="s">&quot;http://www.macromedia.com/go/getflashplayer&quot;</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">embed</span> <span class="err">...</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">object</span><span class="p">&gt;</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>这段html比较长，重点部分主要是一个<code>object</code>标签里面的两个<code>param</code>及一个<code>embed</code>。从这儿的第一个<code>param</code>可以看出采用了一个叫做ckplayer的播放器，我查了下是个国人开发的通用的网页视频播放器。第二个<code>param</code>是真正干活的地方了，利用<code>flashvar</code>把网页参数传入播放器中。凭空猜测，<code>f</code>是具体的视频地址，<code>l</code>是左边广告，<code>r</code>是右边广告，<code>t</code>是每个广告时间，每组广告图片采用<code>|</code>分割。于是上神器burp修改request的payload，不过竟然没有成功。这个思路是最最直接最最简单的，理论上来说应该是可行的，不过可能我当时实验时候有失误，于是阴差阳错的放弃了这个方法（后面会阐述这反而成了优势）。</p>
 <p>之后就从js上下手，过了一遍加载的js。有一个混淆了js特别值得注意，<code>playerselection-1.2.7.90.js</code>。过一下反混淆器，代码的大致架子基本能还原出来（相比binary下反汇编的作业环境，js的这个的可读性还真不错）。快速scan一遍代码，感觉<code>settimeout</code>最可能作为突破点，毕竟倒计时在js里面最直观的做法就是用这个函数。一个个过下去发现有个的值被设置成<code>70000</code>，这不会就是70秒（70000ms）的广告吧？不好意思，对。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">loadedHandler</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">loadedHandler</span><span class="p">()</span> <span class="p">{</span>
     <span class="p">...</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;noads&#39;</span><span class="p">])</span> <span class="p">{</span>
@@ -135,122 +134,118 @@
                 <span class="k">if</span> <span class="p">(</span><span class="nx">_0xf706x34</span> <span class="o">&amp;&amp;</span> <span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">])</span> <span class="p">{</span>
                     <span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">]()</span>
                 <span class="p">}</span>
-            <span class="p">},</span> <span class="mi">70000</span><span class="p">)</span> <span class="c1">// &lt;---- HERE!!!!! OMG F*** IT</span>
+            <span class="p">},</span> <span class="mf">70000</span><span class="p">)</span> <span class="c1">// &lt;---- HERE!!!!! OMG F*** IT</span>
         <span class="p">}</span>
     <span class="p">};</span>
     <span class="p">...</span>
 <span class="p">}</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>随手在burp里把response body（注意这次不是改request是改response）改成10000，画面依然显示70s广告，不过到60s的时候就自动结束了。于是再接再厉，改成5000（此时记得<code>header</code>中的<code>content-length</code>也需要修改，否则malformat的包会被Chrome丢弃）。尝试把这个数字再改小就存在了没有了倒计时可广告仍然存在的问题，于是又定位了其他几个<code>settimeout</code>：</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">CheckPlay</span><span class="p">(</span><span class="nx">_0xf706x8c</span><span class="p">,</span> <span class="nx">_0xf706x8d</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">...</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.playtimer&#39;</span><span class="p">)[</span><span class="s1">&#39;text&#39;</span><span class="p">]((</span><span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">_0xf706x8c</span><span class="p">)[</span><span class="s1">&#39;toHHMMSS&#39;</span><span class="p">]());</span>
-        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">CheckPlay</span><span class="p">(</span><span class="o">--</span><span class="nx">_0xf706x8c</span><span class="p">)</span>
-        <span class="p">},</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="n">CheckPlay</span><span class="p">(</span><span class="n">_0xf706x8c</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x8d</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.playtimer&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_0xf706x8c</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;toHHMMSS&#39;</span><span class="o">]</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">CheckPlay</span><span class="p">(</span><span class="o">--</span><span class="n">_0xf706x8c</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">PlayAds</span><span class="p">(</span><span class="nx">_0xf706xf</span><span class="p">,</span> <span class="nx">_0xf706x5</span><span class="p">,</span> <span class="nx">_0xf706x6</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xae</span> <span class="o">=</span> <span class="nx">_0xf706xf</span><span class="p">[</span><span class="s1">&#39;split&#39;</span><span class="p">](</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xaf</span> <span class="o">=</span> <span class="nx">_0xf706x5</span><span class="p">[</span><span class="s1">&#39;split&#39;</span><span class="p">](</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xb0</span> <span class="o">=</span> <span class="nx">_0xf706x6</span><span class="p">[</span><span class="s1">&#39;split&#39;</span><span class="p">](</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xb1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">_0xf706x3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">_0xf706x3</span> <span class="o">&lt;</span> <span class="nx">_0xf706xae</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">];</span> <span class="nx">_0xf706x3</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_0xf706xae</span><span class="p">[</span><span class="nx">_0xf706x3</span><span class="p">][</span><span class="s1">&#39;indexOf&#39;</span><span class="p">](</span><span class="s1">&#39;swf&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">_0xf706xae</span><span class="p">[</span><span class="s1">&#39;splice&#39;</span><span class="p">](</span><span class="nx">_0xf706x3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="nx">_0xf706xaf</span><span class="p">[</span><span class="s1">&#39;splice&#39;</span><span class="p">](</span><span class="nx">_0xf706x3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="nx">_0xf706xb0</span><span class="p">[</span><span class="s1">&#39;splice&#39;</span><span class="p">](</span><span class="nx">_0xf706x3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="nx">_0xf706x3</span><span class="o">--</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">_0xf706xb1</span> <span class="o">+=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">_0xf706xb0</span><span class="p">[</span><span class="nx">_0xf706x3</span><span class="p">])</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="nx">callAdd</span><span class="p">(</span><span class="nx">_0xf706xae</span><span class="p">,</span> <span class="nx">_0xf706xaf</span><span class="p">,</span> <span class="nx">_0xf706xb0</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xb2</span> <span class="o">=</span> <span class="nx">_0xf706xb1</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">_0xf706xb3</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">_0xf706xb4</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span>
-        <span class="nx">_0xf706xb4</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">](</span><span class="nx">_0xf706xb2</span><span class="o">--</span><span class="p">)</span>
-    <span class="p">},</span> <span class="mi">980</span><span class="p">);</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.ads-control&#39;</span><span class="p">)[</span><span class="s1">&#39;remove&#39;</span><span class="p">]();</span>
-        <span class="kd">var</span> <span class="nx">_0xf706xb4</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span>
-        <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">_0xf706xb3</span><span class="p">);</span>
-        <span class="nx">_0xf706xb4</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">](</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">CKobject</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">CKobject</span><span class="p">[</span><span class="s1">&#39;getObjectById&#39;</span><span class="p">](</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;ckid&#39;</span><span class="p">])[</span><span class="s1">&#39;videoPlay&#39;</span><span class="p">]()</span>
-        <span class="p">}</span>
-    <span class="p">},</span> <span class="nx">_0xf706xb1</span> <span class="o">*</span> <span class="nx">_0xf706xb1</span> <span class="o">*</span> <span class="mi">1020</span><span class="p">)</span>
-<span class="p">}</span>
+<span class="k">function</span><span class="w"> </span><span class="n">PlayAds</span><span class="p">(</span><span class="n">_0xf706xf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xf</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">][</span><span class="n">&#39;indexOf&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;swf&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">_0xf706xaf</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">_0xf706x3</span><span class="o">--</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">parseInt</span><span class="p">(</span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">callAdd</span><span class="p">(</span><span class="n">_0xf706xae</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setInterval</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706xb2</span><span class="o">--</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">980</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.ads-control&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;remove&#39;</span><span class="o">]</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">clearInterval</span><span class="p">(</span><span class="n">_0xf706xb3</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CKobject</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">CKobject</span><span class="o">[</span><span class="n">&#39;getObjectById&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;ckid&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;videoPlay&#39;</span><span class="o">]</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1020</span><span class="p">)</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">EmbedFlash</span><span class="p">(</span><span class="nx">_0xf706x24</span><span class="p">,</span> <span class="nx">_0xf706x2b</span><span class="p">,</span> <span class="nx">_0xf706x2a</span><span class="p">,</span> <span class="nx">_0xf706x4f</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">_0xf706x50</span> <span class="o">=</span> <span class="nx">_0xf706x2b</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;playlistM&#39;</span><span class="p">]</span> <span class="o">||</span> <span class="o">!</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;playlistM&#39;</span><span class="p">][</span><span class="s1">&#39;length&#39;</span><span class="p">])</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_0xf706x4f</span> <span class="o">&amp;&amp;</span> <span class="nx">_0xf706x4f</span><span class="p">[</span><span class="s1">&#39;wa&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">_0xf706x4f</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="p">...</span>
-            <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">_vp</span><span class="p">.</span><span class="nx">TirggerPending</span><span class="p">,</span> <span class="nx">_0xf706x4f</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="p">...</span>
-<span class="p">}</span>
-</pre></div>
-
+<span class="k">function</span><span class="w"> </span><span class="n">EmbedFlash</span><span class="p">(</span><span class="n">_0xf706x24</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2a</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x50</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">][</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706x4f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;wa&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="p">...</span><span class="w"></span>
+<span class="w">            </span><span class="n">setTimeout</span><span class="p">(</span><span class="n">_vp</span><span class="p">.</span><span class="n">TirggerPending</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+</code></pre></div>
 
 <p>其中最关键的应该就是<code>PlayAds</code>这个函数了，基本就是读取广告然后丢到Flash中，这里的<code>settimeout</code>用于时间到了之后把广告的div移调。另外<code>CheckPlay</code>是用来检测状态改变的(相当于刷新器)，因此需要把值改的要比较小，否则就会出现上面的值改小了却不生效的情况。</p>
 <h3>移除广告</h3>
 <p>有时候灵光一闪真的很重要，还记得当年比CTF睡觉时候突然有思路爬起来增援刷夜的老曾和潘神的情况。判断AdBlock这类插件是否存在的原理上面已经说了，就是只要设定一个timeout，过了timeout之后看这个资源有没有下载成功即可。因此直接屏蔽资源肯定是不行的，思路就变成了伪造一个正常的资源。之后就想到CSS1/2标准不完善的时候一个hack div的技巧，于是构造了一个1px x 1px的透明gif图片，直接替换掉所有广告图片，这样对于检测程序来说，依然认为ad下载成功，而事实上什么都看不到喽。</p>
 <h1>自动化去广告</h1>
 <p>这里没有采用开发一个Chrome Extension的方案，原因主要是Chrome团队是很激进的（褒义词），为了推动web标准进步和增强浏览器安全问题费尽了心思，比如这儿修改response body本身会或者将会受到Chrome API的限制。于是直接就用炉火纯青的中间人攻击(mitm)解决这个问题，网上随便找了个<a href="https://github.com/abhinavsingh/proxy.py">HTTP Proxy</a>，code写的不错，全是Python原生库。之后主要修改下处理response body的环节：</p>
-<div class="highlight"><pre><span></span> def _process_response(self, data):
-        # parse incoming response packet
-        # only for non-https requests
-        if not self.request.method == b&quot;CONNECT&quot;:
-            self.response.parse(data)
+<div class="highlight"><pre><span></span><code> <span class="n">def</span> <span class="n">_process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># parse incoming response packet</span>
+        <span class="c1"># only for non-https requests</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;CONNECT&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        # print self.request.host_, self.request.url_
-        if self.request.host_ and self.request.host_.endswith(&#39;dnvod.tv&#39;):
-            # ads
-            one_px_gif_data = &#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;
-            if self.request.url_ and self.request.url_.startswith(&#39;/upload/video&#39;):
-                if os.path.splitext(self.request.url_)[-1] in (&#39;.jpg&#39;, &#39;.gif&#39;):
-                    data = base64.b64decode(one_px_gif_data)
+        <span class="c1"># print self.request.host_, self.request.url_</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
+            <span class="c1"># ads</span>
+            <span class="n">one_px_gif_data</span> <span class="o">=</span> <span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
 
-            # count down
-            if self.request.url_ and self.request.url_ == &#39;/js/2016/playerselection-1.2.7.90.js&#39;:
-                with open(&#39;dn_replace.js&#39;, &#39;r&#39;) as f:
-                    data = f.read()
+            <span class="c1"># count down</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="o">==</span> <span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
+                <span class="n">with</span> <span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-        # queue data for client
-        self.client.queue(data)
-</pre></div>
-
+        <span class="c1"># queue data for client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 
 <p>我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。</p>
 <p>之后浏览器代理挂好，对于<code>*.dnvod.tv</code>的流量转向这个代理即可。</p>
 <h2>Update: 2018-02-25</h2>
 <p>据网友Orooz反应，程序在Windows下不可用，测试后发现原本使用的HTTP Proxy在Windows下无法正常工作，遂使用<a href="https://github.com/inaz2/proxy2">proxy2</a>替换之。原理完全一样，直接贴修改的代码。</p>
-<div class="highlight"><pre><span></span>def response_handler(self, req, req_body, res, res_body):
-        url = urlparse.urlparse(req.path)
-        url_domain = url.netloc
-        url_path = url.path
+<div class="highlight"><pre><span></span><code><span class="n">def</span> <span class="n">response_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">req_body</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">res_body</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">url_domain</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">netloc</span>
+        <span class="n">url_path</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">path</span>
 
-        if url_domain and url_domain.endswith(&#39;dnvod.tv&#39;):
-            # ads
-            one_px_gif_data = &#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;
-            if url_path and url_path.startswith(&#39;/upload/video&#39;):
-                if os.path.splitext(url_path)[-1] in (&#39;.jpg&#39;, &#39;.gif&#39;):
-                    res_body = base64.b64decode(one_px_gif_data)
+        <span class="k">if</span> <span class="n">url_domain</span> <span class="ow">and</span> <span class="n">url_domain</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
+            <span class="c1"># ads</span>
+            <span class="n">one_px_gif_data</span> <span class="o">=</span> <span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
+            <span class="k">if</span> <span class="n">url_path</span> <span class="ow">and</span> <span class="n">url_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">url_path</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
+                    <span class="n">res_body</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
 
-            # count down
-            if url_path and url_path == &#39;/js/2016/playerselection-1.2.7.90.js&#39;:
-                with open(&#39;dn_replace.js&#39;, &#39;r&#39;) as f:
-                    res_body = f.read()
+            <span class="c1"># count down</span>
+            <span class="k">if</span> <span class="n">url_path</span> <span class="ow">and</span> <span class="n">url_path</span> <span class="o">==</span> <span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
+                <span class="n">with</span> <span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">res_body</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-            return res_body
-</pre></div>
-
+            <span class="k">return</span> <span class="n">res_body</span>
+</code></pre></div>
 
 <p>意外收获是该Proxy支持HTTPS的mitm。</p>
 <h1>后续</h1>
@@ -340,7 +335,7 @@
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2019          yyx.me
+          2014&dash;2021          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>

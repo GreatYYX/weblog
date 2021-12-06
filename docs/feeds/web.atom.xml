@@ -38,10 +38,9 @@
 &lt;p&gt;在&lt;a href="https://pip.pypa.io/en/latest/installing.html"&gt;https://pip.pypa.io/en/latest/installing.html&lt;/a&gt;下载get-pip.py。打开cmd，进入get-pip.py所在目录，之后执行&lt;code&gt;python get-pip.py&lt;/code&gt;，pip和setuptool都会安装好。&lt;/p&gt;
 &lt;h2&gt;安装Pelican和Markdown&lt;/h2&gt;
 &lt;p&gt;装好了pip就方便了，直接执行以下命令。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install pelican
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip install pelican
 pip install markdown
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;之后将Python目录下的script目录路径加入环境变量Path中。&lt;/p&gt;
 &lt;h2&gt;安装Git工具&lt;/h2&gt;
@@ -58,12 +57,11 @@ pip install markdown
 &lt;p&gt;当碰到问题时候记得查阅手册，这部分在手册&lt;a href="http://docs.getpelican.com/"&gt;http://docs.getpelican.com/&lt;/a&gt;的getting started中。&lt;/p&gt;
 &lt;h2&gt;创建框架&lt;/h2&gt;
 &lt;p&gt;所谓的框架就是一个静态Blog的生成骨架，Pelican只需要一句命令即可（先cd到要生成的目录中）：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pelican-quickstart
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pelican-quickstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;运行命令后根据提示设置，会生成默认的配置文件。此时Pelican已经为我们构建了框架，结构如下:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yourproject/
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yourproject/
 ├── content             #写好的Markdown格式的博文
 │   └── (pages)         #Markdown格式的静态界面(比如About，同WP的Page)
 ├── output              #通过Pelican最终生成的html界面
@@ -72,12 +70,11 @@ pip install markdown
 ├── Makefile            #make的自动化脚本
 ├── pelicanconf.py      #主配置文件(测试环境)
 └── publishconf.py      #主配置文件的扩展，用于(生产环境)
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;写文章&lt;/h2&gt;
 &lt;p&gt;这里其实和Pelican没多大关系了。这里使用&lt;a href="http://wowubuntu.com/markdown/"&gt;Makedown语法&lt;/a&gt;写文章，并保存为.md文件。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="kd"&gt;super&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="kd"&gt;super&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;
 &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;
 &lt;span class="n"&gt;Category&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt;
 &lt;span class="n"&gt;Tags&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;publishing&lt;/span&gt;
@@ -86,19 +83,17 @@ pip install markdown
 &lt;span class="n"&gt;Summary&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Short&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;feeds&lt;/span&gt;
 
 &lt;span class="n"&gt;This&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt; &lt;span class="kd"&gt;super&lt;/span&gt; &lt;span class="n"&gt;blog&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="err"&gt;#正文内容&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;上面是官方给出的模板，可以看到正文内容前为文章的meta数据，你可以制定文章的标题、日期、类别、标签、路径名、作者、摘要等(这些信息部分会出现在最终生成html的meta数据中，当然这取决于主题文件是否引用这些数据)。这些里面只有Title和Date是必须的(默认配置下，Date要自己指定是不是很BT，法国人的思维真是……)。meta块之后就用Makrdown写文章啦~当然你可以和我上面说的一样搞一个Markdown的可视化编辑器，写起来很愉快。Markdown语法实现不了的直接用html的语法即可。&lt;/p&gt;
 &lt;h2&gt;Pelican重要的操作命令&lt;/h2&gt;
 &lt;p&gt;目录中的makefile非常重要，通过make调用makefile中的命令即可完成相关操作。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make html           #创建静态界面
-make regenerate     #修改后自动创建静态界面
-make serve          #创建服务器
-make devserver      #相当于regenerate+serve
-make publish        #生成用于发布的html
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;html&lt;/span&gt;           &lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="err"&gt;创建静态界面&lt;/span&gt;
+&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;regenerate&lt;/span&gt;     &lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="err"&gt;修改后自动创建静态界面&lt;/span&gt;
+&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;serve&lt;/span&gt;          &lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="err"&gt;创建服务器&lt;/span&gt;
+&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;devserver&lt;/span&gt;      &lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="err"&gt;相当于&lt;/span&gt;&lt;span class="n"&gt;regenerate&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;serve&lt;/span&gt;
+&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;publish&lt;/span&gt;        &lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="err"&gt;生成用于发布的&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;手册上还有其他一些命令，请自行发掘。&lt;/p&gt;
 &lt;h2&gt;生成与预览&lt;/h2&gt;
@@ -109,14 +104,13 @@ make publish        #生成用于发布的html
 &lt;p&gt;先去Github注册账号，比如用户名是username，然后Create New Repository, Repository的名字必须为username.github.io（网上流传的.com的貌似已经无效了，所以看手册是多么的重要）。&lt;/p&gt;
 &lt;p&gt;创建好了之后直接点上面的绿色的set up in desktop就会打开桌面端的Git图形化操作界面。之后会让你同步一个本地的目录，这样本地的目录就和远程的关联好了。commit之后sync即可。&lt;/p&gt;
 &lt;p&gt;当然也可以用gitshell，命令也很简单。首先进入需要上传的目录，之后执行(具体命令含义可以看相关git教程)：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git init
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git init
 git remote origin https://github.com/username/username.github.io.git
 git pull
 git add .
 git commit -m &amp;quot;update&amp;quot;
 git push origin master
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;大概等几分钟之后即可访问username.github.io。至此，一个完整的Pelican+Github生成静态Blog的流程已经完成。&lt;/p&gt;
 &lt;h2&gt;一些问题和处理&lt;/h2&gt;
@@ -132,13 +126,12 @@ git push origin master
 &lt;p&gt;通过主题制作，基本可以搞明白大部分Pelican配置的含义。另外，由于这块内容本身覆盖知识面很广，这里只能按照Pelican中特有的一些规定展开，周边的前端知识只能说到一些必要的，其他方面还请读者自行补充。&lt;/p&gt;
 &lt;h2&gt;主题结构&lt;/h2&gt;
 &lt;p&gt;首先创建主题目录，我准备放在yourproject/theme目录下，此时打开&lt;code&gt;pelicanconf.py&lt;/code&gt;，添加如下字段：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;THEME = &amp;quot;theme&amp;quot;             #主题目录
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;THEME = &amp;quot;theme&amp;quot;             #主题目录
 THEME_STATIC_DIR = &amp;#39;theme&amp;#39;  #生成后的主题目录
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;手册上给出如下主题结构，这写文件可以放在yourproject/theme目录下（具体哪儿都可以通过配置文件指定）。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;├── static
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;├── static
 │   ├── css
 │   └── images
 └── templates
@@ -153,10 +146,9 @@ THEME_STATIC_DIR = &amp;#39;theme&amp;#39;  #生成后的主题目录
     ├── page.html             // page界面（自定义的界面）
     ├── tag.html              // 每个不同tag的界面
     └── tags.html             // 总tag界面，可以创建tag云
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;看到上面的目录构造可以基本明白各个文件的作用了。static中的文件会被完整复制到生成目录中，而templates中的文件则会通过Pelican处理。&lt;/p&gt;
 &lt;p&gt;需要特别说明的是，不是所有文件都是必须的，比如我的Blog就我一个人写文章，只有一个作者，所以author和authors我就不用，你可以保留文件，之后把里面内容删除即可。当然你也可以创建文件，采用Jinjia的包含语句包含到其他界面中，这在后面会说明。&lt;/p&gt;
 &lt;h2&gt;主题和配置&lt;/h2&gt;
-&lt;p&gt;待续……&lt;/p&gt;</content><category term="github"></category><category term="pelican"></category><category term="bootstrap"></category></entry></feed>
+&lt;p&gt;待续……&lt;/p&gt;</content><category term="Web"></category><category term="github"></category><category term="pelican"></category><category term="bootstrap"></category></entry></feed>

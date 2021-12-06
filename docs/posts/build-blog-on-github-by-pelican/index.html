@@ -137,10 +137,9 @@
 <p>在<a href="https://pip.pypa.io/en/latest/installing.html">https://pip.pypa.io/en/latest/installing.html</a>下载get-pip.py。打开cmd，进入get-pip.py所在目录，之后执行<code>python get-pip.py</code>，pip和setuptool都会安装好。</p>
 <h2>安装Pelican和Markdown</h2>
 <p>装好了pip就方便了，直接执行以下命令。</p>
-<div class="highlight"><pre><span></span>pip install pelican
+<div class="highlight"><pre><span></span><code>pip install pelican
 pip install markdown
-</pre></div>
-
+</code></pre></div>
 
 <p>之后将Python目录下的script目录路径加入环境变量Path中。</p>
 <h2>安装Git工具</h2>
@@ -157,12 +156,11 @@ pip install markdown
 <p>当碰到问题时候记得查阅手册，这部分在手册<a href="http://docs.getpelican.com/">http://docs.getpelican.com/</a>的getting started中。</p>
 <h2>创建框架</h2>
 <p>所谓的框架就是一个静态Blog的生成骨架，Pelican只需要一句命令即可（先cd到要生成的目录中）：</p>
-<div class="highlight"><pre><span></span>pelican-quickstart
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>pelican-quickstart
+</code></pre></div>
 
 <p>运行命令后根据提示设置，会生成默认的配置文件。此时Pelican已经为我们构建了框架，结构如下:</p>
-<div class="highlight"><pre><span></span>yourproject/
+<div class="highlight"><pre><span></span><code>yourproject/
 ├── content             #写好的Markdown格式的博文
 │   └── (pages)         #Markdown格式的静态界面(比如About，同WP的Page)
 ├── output              #通过Pelican最终生成的html界面
@@ -171,12 +169,11 @@ pip install markdown
 ├── Makefile            #make的自动化脚本
 ├── pelicanconf.py      #主配置文件(测试环境)
 └── publishconf.py      #主配置文件的扩展，用于(生产环境)
-</pre></div>
-
+</code></pre></div>
 
 <h2>写文章</h2>
 <p>这里其实和Pelican没多大关系了。这里使用<a href="http://wowubuntu.com/markdown/">Makedown语法</a>写文章，并保存为.md文件。</p>
-<div class="highlight"><pre><span></span><span class="n">Title</span><span class="o">:</span> <span class="n">My</span> <span class="kd">super</span> <span class="n">title</span>
+<div class="highlight"><pre><span></span><code><span class="n">Title</span><span class="o">:</span> <span class="n">My</span> <span class="kd">super</span> <span class="n">title</span>
 <span class="n">Date</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">03</span> <span class="mi">10</span><span class="o">:</span><span class="mi">20</span>
 <span class="n">Category</span><span class="o">:</span> <span class="n">Python</span>
 <span class="n">Tags</span><span class="o">:</span> <span class="n">pelican</span><span class="o">,</span> <span class="n">publishing</span>
@@ -185,19 +182,17 @@ pip install markdown
 <span class="n">Summary</span><span class="o">:</span> <span class="n">Short</span> <span class="n">version</span> <span class="k">for</span> <span class="n">index</span> <span class="n">and</span> <span class="n">feeds</span>
 
 <span class="n">This</span> <span class="k">is</span> <span class="n">the</span> <span class="n">content</span> <span class="n">of</span> <span class="n">my</span> <span class="kd">super</span> <span class="n">blog</span> <span class="n">post</span><span class="o">.</span> <span class="err">#正文内容</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>上面是官方给出的模板，可以看到正文内容前为文章的meta数据，你可以制定文章的标题、日期、类别、标签、路径名、作者、摘要等(这些信息部分会出现在最终生成html的meta数据中，当然这取决于主题文件是否引用这些数据)。这些里面只有Title和Date是必须的(默认配置下，Date要自己指定是不是很BT，法国人的思维真是……)。meta块之后就用Makrdown写文章啦~当然你可以和我上面说的一样搞一个Markdown的可视化编辑器，写起来很愉快。Markdown语法实现不了的直接用html的语法即可。</p>
 <h2>Pelican重要的操作命令</h2>
 <p>目录中的makefile非常重要，通过make调用makefile中的命令即可完成相关操作。</p>
-<div class="highlight"><pre><span></span>make html           #创建静态界面
-make regenerate     #修改后自动创建静态界面
-make serve          #创建服务器
-make devserver      #相当于regenerate+serve
-make publish        #生成用于发布的html
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="n">make</span> <span class="n">html</span>           <span class="p">#</span><span class="err">创建静态界面</span>
+<span class="n">make</span> <span class="n">regenerate</span>     <span class="p">#</span><span class="err">修改后自动创建静态界面</span>
+<span class="n">make</span> <span class="n">serve</span>          <span class="p">#</span><span class="err">创建服务器</span>
+<span class="n">make</span> <span class="n">devserver</span>      <span class="p">#</span><span class="err">相当于</span><span class="n">regenerate</span><span class="o">+</span><span class="n">serve</span>
+<span class="n">make</span> <span class="n">publish</span>        <span class="p">#</span><span class="err">生成用于发布的</span><span class="n">html</span>
+</code></pre></div>
 
 <p>手册上还有其他一些命令，请自行发掘。</p>
 <h2>生成与预览</h2>
@@ -208,14 +203,13 @@ make publish        #生成用于发布的html
 <p>先去Github注册账号，比如用户名是username，然后Create New Repository, Repository的名字必须为username.github.io（网上流传的.com的貌似已经无效了，所以看手册是多么的重要）。</p>
 <p>创建好了之后直接点上面的绿色的set up in desktop就会打开桌面端的Git图形化操作界面。之后会让你同步一个本地的目录，这样本地的目录就和远程的关联好了。commit之后sync即可。</p>
 <p>当然也可以用gitshell，命令也很简单。首先进入需要上传的目录，之后执行(具体命令含义可以看相关git教程)：</p>
-<div class="highlight"><pre><span></span>git init
+<div class="highlight"><pre><span></span><code>git init
 git remote origin https://github.com/username/username.github.io.git
 git pull
 git add .
 git commit -m &quot;update&quot;
 git push origin master
-</pre></div>
-
+</code></pre></div>
 
 <p>大概等几分钟之后即可访问username.github.io。至此，一个完整的Pelican+Github生成静态Blog的流程已经完成。</p>
 <h2>一些问题和处理</h2>
@@ -231,13 +225,12 @@ git push origin master
 <p>通过主题制作，基本可以搞明白大部分Pelican配置的含义。另外，由于这块内容本身覆盖知识面很广，这里只能按照Pelican中特有的一些规定展开，周边的前端知识只能说到一些必要的，其他方面还请读者自行补充。</p>
 <h2>主题结构</h2>
 <p>首先创建主题目录，我准备放在yourproject/theme目录下，此时打开<code>pelicanconf.py</code>，添加如下字段：</p>
-<div class="highlight"><pre><span></span>THEME = &quot;theme&quot;             #主题目录
+<div class="highlight"><pre><span></span><code>THEME = &quot;theme&quot;             #主题目录
 THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
-</pre></div>
-
+</code></pre></div>
 
 <p>手册上给出如下主题结构，这写文件可以放在yourproject/theme目录下（具体哪儿都可以通过配置文件指定）。</p>
-<div class="highlight"><pre><span></span>├── static
+<div class="highlight"><pre><span></span><code>├── static
 │   ├── css
 │   └── images
 └── templates
@@ -252,8 +245,7 @@ THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
     ├── page.html             // page界面（自定义的界面）
     ├── tag.html              // 每个不同tag的界面
     └── tags.html             // 总tag界面，可以创建tag云
-</pre></div>
-
+</code></pre></div>
 
 <p>看到上面的目录构造可以基本明白各个文件的作用了。static中的文件会被完整复制到生成目录中，而templates中的文件则会通过Pelican处理。</p>
 <p>需要特别说明的是，不是所有文件都是必须的，比如我的Blog就我一个人写文章，只有一个作者，所以author和authors我就不用，你可以保留文件，之后把里面内容删除即可。当然你也可以创建文件，采用Jinjia的包含语句包含到其他界面中，这在后面会说明。</p>
@@ -340,7 +332,7 @@ THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2019          yyx.me
+          2014&dash;2021          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>

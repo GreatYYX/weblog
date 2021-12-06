@@ -127,45 +127,42 @@
 <p>我选了第二种，抓取工具是Cheat Engine，直接从内存抓取。首先初步判断下需要抓取的数据：所有玩家的当前剩余的牌数，所有玩家每次出的牌，自己的座位，发牌后自己的牌（你一定得不到别人的牌面，这些都在服务器上，如果你能得到那就直接做作弊器了）。</p>
 <h2>玩家剩余牌数</h2>
 <p>这是思路最简单且最好抓的一步。一个思维正常的程序猿一般都会用整数类型来记录，也就是有符号整形，因此直接抓DWORD长度数据，根据牌数量变化，不断缩小范围，依次在内存中找出4个玩家的剩余牌数位置，找到位置后用CE查找谁access/write了这些位置，这就是我们要找的地址。</p>
-<div class="highlight"><pre><span></span>DOWN:   &quot;GameLogic.dll&quot;+3CF20
+<div class="highlight"><pre><span></span><code>DOWN:   &quot;GameLogic.dll&quot;+3CF20
 LEFT:   &quot;GameLogic.dll&quot;+3CE30
 UP:     &quot;GameLogic.dll&quot;+3D100
 RIGHT:  &quot;GameLogic.dll&quot;+3D010
-</pre></div>
-
+</code></pre></div>
 
 <p>这里的的DOWN、LEFT、UP、RIGHT是我用来表示玩家的座位的，这些座位是大厅中座位的绝对位置，理解这点很重要。从拿到这些数据来看，这些位置是静态的（相对GameLogic.dll加载基址的偏移），So easy!</p>
 <h2>自身座位号</h2>
 <p>这是一个比较奇葩但必须解决的问题。还是假设企鹅的程序猿是不脑残的，那座位号应该是设计成连续排布的，可能是0-3，也可能是1-4（当然如果是个标准程序猿应该选前者，除非他是base为1的VB党），座位号的排列可能是顺时针，也可能是逆时针，当然还有可能跳着排列（这个可能性很小）。于是排列组合一下，每种情况起始位置可能有4种，算上顺时针逆时针就是有4x2=8种，所以0-3和1-4在连续排布情况下有16种可能性。在云计算的年代，16是个多么渺小的数据，直接brutal force，每种测试一次就行。测试方法就是选取16种中的一种，假设当前这个case成立，那这个座位应该是X，进入下一个座位，应该是Y，这样依次测试，如果每次抓出来的数据都符合判断，就是这个case了。</p>
-<div class="highlight"><pre><span></span>  2
+<div class="highlight"><pre><span></span><code>  2
 1   3
   0
-</pre></div>
-
+</code></pre></div>
 
 <p>最后得到的结果是上面这种情况，0是DOWN，1是LEFT，2是UP，3是RIGHT，这些位置依然是大厅中的绝对位置。这里要提一句，找座位的时候可能会找到一个地址，每次都自增1，当时我还以为是这个，后来发现换了超过4个座位后它的数据依然在增长，测试后发现它是用来记录玩家在这桌入座了几次，不知企鹅程序猿设计这个数据有什么用……</p>
 <p>我天真的以为座位号确定了，那座位号在内存中的位置也就确定了。但是当我点进去看access的地址处的反汇编的时候：</p>
-<div class="highlight"><pre><span></span>02D30214 - 8B 4D F4  - mov ecx,[ebp-0C]
-02D30217 - 8B 55 F8  - mov edx,[ebp-08]
-02D3021A - 89 14 88   - mov [eax+ecx*4],edx &lt;&lt;
-02D3021D - 6A 01 - push 01
-02D3021F - 66 8B 45 F4  - mov ax,[ebp-0C]
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="mf">02</span><span class="n">D30214</span> <span class="o">-</span> <span class="mf">8</span><span class="n">B</span> <span class="mf">4</span><span class="n">D</span> <span class="n">F4</span>  <span class="o">-</span> <span class="n">mov</span> <span class="n">ecx</span><span class="p">,</span><span class="err">[</span><span class="n">ebp</span><span class="o">-</span><span class="mf">0</span><span class="n">C</span><span class="err">]</span>
+<span class="mf">02</span><span class="n">D30217</span> <span class="o">-</span> <span class="mf">8</span><span class="n">B</span> <span class="mf">55</span> <span class="n">F8</span>  <span class="o">-</span> <span class="n">mov</span> <span class="n">edx</span><span class="p">,</span><span class="err">[</span><span class="n">ebp</span><span class="o">-</span><span class="mf">08</span><span class="err">]</span>
+<span class="mf">02</span><span class="n">D3021A</span> <span class="o">-</span> <span class="mf">89</span> <span class="mf">14</span> <span class="mf">88</span>   <span class="o">-</span> <span class="n">mov</span> <span class="err">[</span><span class="n">eax</span><span class="o">+</span><span class="n">ecx</span><span class="o">*</span><span class="mf">4</span><span class="err">]</span><span class="p">,</span><span class="n">edx</span> <span class="o">&lt;&lt;</span>
+<span class="mf">02</span><span class="n">D3021D</span> <span class="o">-</span> <span class="mf">6</span><span class="n">A</span> <span class="mf">01</span> <span class="o">-</span> <span class="n">push</span> <span class="mf">01</span>
+<span class="mf">02</span><span class="n">D3021F</span> <span class="o">-</span> <span class="mf">66</span> <span class="mf">8</span><span class="n">B</span> <span class="mf">45</span> <span class="n">F4</span>  <span class="o">-</span> <span class="n">mov</span> <span class="n">ax</span><span class="p">,</span><span class="err">[</span><span class="n">ebp</span><span class="o">-</span><span class="mf">0</span><span class="n">C</span><span class="err">]</span>
+</code></pre></div>
 
 <p>很遗憾，这玩意地址不是固定的，因此需要找它的指针，很可能还要找它指针的指针，甚至更多层。当我找了两层之后，发现依然是变化的地址。无奈调出IDA完整的看了下这段反汇编，发现竟然是基于ebp的传入参数，因此是不固定的。此时突然想到CE有个自动找指针的功能，于是请出这个牛X的大杀器，瞬间1个G的指针数据就算出来了（这凭人手来找得找到什么时候），发现竟然有5层左右的指针调用，还都是不同基址的，筛选下2-3层的调用，找到一个相对可以接受的偏移：<code>[[["GameLogic.dll"+3DCB4]+88]+4]</code>，而且基址和前面算玩家剩余牌数的一致，Perfect!</p>
 <h2>牌面数据</h2>
 <p>牌面数据的推断简直就是拼脑洞。初步想一下牌面可能涉及到数据是花色和点数，虽然花色在双扣中是没有意义的，但是对于游戏的显示来说，花色是必须要的，因为花色是牌属性的一部分。当你想到这儿的时候你会发现，牌的存储很可能是一个自定义的数据类型，而这个类型的格式是不知道的，自定义格式中每个字段长度也是不知道的，双扣有两副牌，因此包含大小王在内有等于或超过两张以上的重复牌，每次出牌数量是不确定的，因此也不知道此时内存中牌有几张，这一组牌用什么方式被表示。我凭借自认为碉堡的智商在脑洞大开的情况下猜测了几次，发现这个捷径走不了，老老实实开IDA看反汇编去……</p>
 <p>首先判断牌面的数据处理应该也是在GameLogic.dll中，直接分析这个模块文件，当然一般情况下不可能从头看反汇编，这样的搜索效率太低了。查看一下模块的导出表，没有有价值的函数入口，于是从字符串找突破口。字符串中出现诸如<code>CCardsGameLogic::OnGameStart\n</code>样子的函数名，点进去发现是回调函数，还有类似<code>RefreshCardsInHand\n</code>的debug用的字符串，不过这些位置的上下文都没有提供有价值的信息。又尝试了一些方式都没有很好的突破口，但是作为一个懒人，怎么能向从头刷代码那么low的方式低头呢？于是准备继续开脑洞……</p>
 <p>猜测一下特征数据。每副牌54张，双扣一共2副牌108张，4个人打，每个人就是27张。初始化的时候应该会每个人发27张牌，那时候应该会有个循环分配这27张牌。于是直接在IDA中找立即数27，发现一处有价值的代码：</p>
-<div class="highlight"><pre><span></span><span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="c">; int __stdcall sub_10020D8C(COleControl *)</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">D8C</span> <span class="no">sub_10020D8C</span>    <span class="no">proc</span> <span class="no">near</span>               <span class="c">; CODE XREF: sub_10007D2E+97p</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">D8C</span>                                         <span class="c">; sub_100081D9+151p ...</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">D8C</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_10</span>          <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">10</span><span class="no">h</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_C</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">0</span><span class="no">Ch</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_8</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">8</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_4</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">4</span>
+<div class="highlight"><pre><span></span><code><span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="c1">; int __stdcall sub_10020D8C(COleControl *)</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">sub_10020D8C</span>    <span class="no">proc</span> <span class="no">near</span>               <span class="c1">; CODE XREF: sub_10007D2E+97p</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span>                                         <span class="c1">; sub_100081D9+151p ...</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_10</span>          <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-10</span><span class="no">h</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_C</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-0</span><span class="no">Ch</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_8</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-8</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">var_4</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-4</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span> <span class="no">arg_0</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span>  <span class="mi">8</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">D8C</span>                 <span class="no">push</span>    <span class="no">ebp</span>
@@ -177,17 +174,17 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">D9D</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_8</span><span class="p">],</span> <span class="no">eax</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA0</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="mi">0</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA7</span>                 <span class="no">jmp</span>     <span class="no">short</span> <span class="no">loc_10020DB2</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span> <span class="c">; ---------------------------------------------------------------------------</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DA9</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span> <span class="no">loc_10020DA9</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020D8C+68j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DA9</span>                 <span class="no">mov</span>     <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span> <span class="c1">; ---------------------------------------------------------------------------</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span> <span class="no">loc_10020DA9</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020D8C+68j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DA9</span>                 <span class="no">mov</span>     <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DAC</span>                 <span class="no">add</span>     <span class="no">eax</span><span class="p">,</span> <span class="mi">1</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DAF</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="no">eax</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DB2</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DB2</span> <span class="no">loc_10020DB2</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020D8C+1Bj</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DB2</span>                 <span class="no">mov</span>     <span class="no">ecx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">]</span> <span class="c">; this</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DB5</span>                 <span class="no">call</span>    <span class="err">?</span><span class="no">GetClientSite@COleControl@@QAEPAUIOleClientSite@@XZ</span> <span class="c">; COleControl::GetClientSite(void)</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DBA</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="no">eax</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DB2</span> <span class="no">loc_10020DB2</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020D8C+1Bj</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DB2</span>                 <span class="no">mov</span>     <span class="no">ecx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">]</span> <span class="c1">; this</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DB5</span>                 <span class="no">call</span>    <span class="err">?</span><span class="no">GetClientSite@COleControl@@QAEPAUIOleClientSite@@XZ</span> <span class="c1">; COleControl::GetClientSite(void)</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DBA</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="no">eax</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DBD</span>                 <span class="no">jge</span>     <span class="no">short</span> <span class="no">loc_10020DF6</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DBF</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="mi">1</span><span class="no">Bh</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DC3</span>                 <span class="no">jg</span>      <span class="no">short</span> <span class="no">loc_10020DF6</span>
@@ -206,34 +203,32 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DEC</span>                 <span class="no">mov</span>     <span class="no">edx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_8</span><span class="p">]</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DEF</span>                 <span class="no">mov</span>     <span class="no">byte</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">edx</span><span class="err">+</span><span class="no">ecx</span><span class="p">*</span><span class="mi">4</span><span class="err">+</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF4</span>                 <span class="no">jmp</span>     <span class="no">short</span> <span class="no">loc_10020DA9</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span> <span class="c">; ---------------------------------------------------------------------------</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DF6</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span> <span class="no">loc_10020DF6</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020D8C+31j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DF6</span>                                         <span class="c">; sub_10020D8C+37j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DF6</span>                 <span class="no">xor</span>     <span class="no">eax</span><span class="p">,</span> <span class="no">eax</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span> <span class="c1">; ---------------------------------------------------------------------------</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span> <span class="no">loc_10020DF6</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020D8C+31j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span>                                         <span class="c1">; sub_10020D8C+37j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF6</span>                 <span class="no">xor</span>     <span class="no">eax</span><span class="p">,</span> <span class="no">eax</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DF8</span>                 <span class="no">mov</span>     <span class="no">esp</span><span class="p">,</span> <span class="no">ebp</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFA</span>                 <span class="no">pop</span>     <span class="no">ebp</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFB</span>                 <span class="no">retn</span>    <span class="mi">4</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFB</span> <span class="no">sub_10020D8C</span>    <span class="no">endp</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>F5到C语言后关键部分是这样的：</p>
-<div class="highlight"><pre><span></span><span class="p">...</span>
-<span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">COleControl</span><span class="o">::</span><span class="n">GetClientSite</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">27</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)(</span><span class="n">v2</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">sub_10020DFE</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)(</span><span class="n">v2</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
-    <span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)(</span><span class="n">v2</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">...</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="p">...</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">COleControl</span><span class="o">::</span><span class="n">GetClientSite</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">27</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">v2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sub_10020DFE</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">v2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">v2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+</code></pre></div>
 
 <p>可以看出这类似于一个数组操作，而数组每个元素中至少有4个byte长度的值（可以看成是一个自定义数据类型），分别是：第0个不清楚，第3个是第1个经过运算的结果，第2个恒为0。点进去看表示第3个和第1个元素之间的函数<code>sub_10020DFE</code>：</p>
-<div class="highlight"><pre><span></span><span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">sub_10020DFE</span>    <span class="no">proc</span> <span class="no">near</span>               <span class="c">; CODE XREF: sub_10020D8C+48p</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">DFE</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">var_8</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">8</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">var_4</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">-</span><span class="mi">4</span>
+<div class="highlight"><pre><span></span><code><span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">sub_10020DFE</span>    <span class="no">proc</span> <span class="no">near</span>               <span class="c1">; CODE XREF: sub_10020D8C+48p</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">var_8</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-8</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">var_4</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="mi">-4</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span> <span class="no">arg_0</span>           <span class="err">=</span> <span class="no">dword</span> <span class="no">ptr</span>  <span class="mi">8</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">DFE</span>                 <span class="no">push</span>    <span class="no">ebp</span>
@@ -246,80 +241,75 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E11</span>                 <span class="no">jnz</span>     <span class="no">short</span> <span class="no">loc_10020E1C</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E13</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="mi">0</span><span class="no">Eh</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1A</span>                 <span class="no">jmp</span>     <span class="no">short</span> <span class="no">loc_10020E4B</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span> <span class="c">; ---------------------------------------------------------------------------</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E1C</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span> <span class="no">loc_10020E1C</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020DFE+13j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E1C</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">],</span> <span class="mi">1</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span> <span class="c1">; ---------------------------------------------------------------------------</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span> <span class="no">loc_10020E1C</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020DFE+13j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E1C</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">],</span> <span class="mi">1</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E20</span>                 <span class="no">jnz</span>     <span class="no">short</span> <span class="no">loc_10020E2B</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E22</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="mi">0</span><span class="no">Ch</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E29</span>                 <span class="no">jmp</span>     <span class="no">short</span> <span class="no">loc_10020E4B</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span> <span class="c">; ---------------------------------------------------------------------------</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E2B</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span> <span class="no">loc_10020E2B</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020DFE+22j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E2B</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">],</span> <span class="mi">0</span><span class="no">Eh</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span> <span class="c1">; ---------------------------------------------------------------------------</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span> <span class="no">loc_10020E2B</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020DFE+22j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2B</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">],</span> <span class="mi">0</span><span class="no">Eh</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E2F</span>                 <span class="no">jz</span>      <span class="no">short</span> <span class="no">loc_10020E37</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E31</span>                 <span class="no">cmp</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">arg_0</span><span class="p">],</span> <span class="mi">0</span><span class="no">Fh</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E35</span>                 <span class="no">jnz</span>     <span class="no">short</span> <span class="no">loc_10020E42</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E37</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E37</span> <span class="no">loc_10020E37</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020DFE+31j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E37</span>                 <span class="no">mov</span>     <span class="no">ecx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E37</span> <span class="no">loc_10020E37</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020DFE+31j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E37</span>                 <span class="no">mov</span>     <span class="no">ecx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E3A</span>                 <span class="no">add</span>     <span class="no">ecx</span><span class="p">,</span> <span class="mi">1</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E3D</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="no">ecx</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E40</span>                 <span class="no">jmp</span>     <span class="no">short</span> <span class="no">loc_10020E4B</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span> <span class="c">; ---------------------------------------------------------------------------</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E42</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span> <span class="no">loc_10020E42</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020DFE+37j</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E42</span>                 <span class="no">mov</span>     <span class="no">edx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span> <span class="c1">; ---------------------------------------------------------------------------</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span> <span class="no">loc_10020E42</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020DFE+37j</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E42</span>                 <span class="no">mov</span>     <span class="no">edx</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E45</span>                 <span class="no">sub</span>     <span class="no">edx</span><span class="p">,</span> <span class="mi">2</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E48</span>                 <span class="no">mov</span>     <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">],</span> <span class="no">edx</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4B</span>
-<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4B</span> <span class="no">loc_10020E4B</span><span class="p">:</span>                           <span class="c">; CODE XREF: sub_10020DFE+1Cj</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E4B</span>                                         <span class="c">; sub_10020DFE+2Bj ...</span>
-<span class="no">.text</span><span class="p">:</span><span class="mi">10020</span><span class="no">E4B</span>                 <span class="no">mov</span>     <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4B</span> <span class="no">loc_10020E4B</span><span class="p">:</span>                           <span class="c1">; CODE XREF: sub_10020DFE+1Cj</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4B</span>                                         <span class="c1">; sub_10020DFE+2Bj ...</span>
+<span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4B</span>                 <span class="no">mov</span>     <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">ebp</span><span class="err">+</span><span class="no">var_4</span><span class="p">]</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E4E</span>                 <span class="no">mov</span>     <span class="no">esp</span><span class="p">,</span> <span class="no">ebp</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E50</span>                 <span class="no">pop</span>     <span class="no">ebp</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E51</span>                 <span class="no">retn</span>    <span class="mi">4</span>
 <span class="nl">.text:</span><span class="err">10020</span><span class="nf">E51</span> <span class="no">sub_10020DFE</span>    <span class="no">endp</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>这段翻译过来就是：</p>
-<div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="err">第一个元素</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="err">第三个元素</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">X</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="mi">12</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">X</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="mi">14</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">X</span> <span class="o">==</span> <span class="mi">14</span> <span class="o">||</span> <span class="n">X</span> <span class="o">==</span> <span class="mi">15</span><span class="p">)</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="mi">13</span><span class="p">)</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="mi">2</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">第一个元素</span><span class="w"></span>
+<span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">第三个元素</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="w"></span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="w"></span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">13</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+</code></pre></div>
 
 <p>这时候果断脑补：第一个元素可能是1~15，刚好是15种牌的点数（3~10，J，Q，K，A，2，小王F，大王Z）。假设第1个元素就是点数了，那第3个元素是什么呢？根据上面的算法画出对应的表：</p>
-<div class="highlight"><pre><span></span><span class="gh">| 3 ~ K  |  A  |  2  |  F  |  Z  |</span>
+<div class="highlight"><pre><span></span><code><span class="gh">| 3 ~ K  |  A  |  2  |  F  |  Z  |</span>
 <span class="gh">----------------------------------</span>
 <span class="o">|</span> 1 ~ 11 |  12 |  14 |  15 |  16 |
-</pre></div>
-
+</code></pre></div>
 
 <p>有理由这样推测：第3个元素是用来比较牌的点数大小的，而至于为什么A和2之间空一个数，很可能是为顺子设计的，因为顺子只能从3连到A。</p>
 <p>在验证猜想之前还需要做一件事，就是确定牌是按照从大到小还是从小到大排列的，同时确定大小比较是根据牌的点数数值（第1个元素）还是点数大小（第3个元素）决定的。只有四种可能性，依然直接穷举测试。打开CE，设定数据长度为byte，测试牌面点数。最后得到的结论是，牌在内存中是按照点数大小从大到小排列的（最大的牌是数组的起始）。在验证内存数据的过程中，同时确定了每张牌的存储空间是4bytes，前面没法确定的第0个元素实际上是花色：</p>
-<div class="highlight"><pre><span></span>  王  黑桃  红桃  梅花  方片
+<div class="highlight"><pre><span></span><code>  王  黑桃  红桃  梅花  方片
 -----------------------------
   0    1     2     3     4
-</pre></div>
-
+</code></pre></div>
 
 <p>至此，每张牌在内存中的表示方法已经确定：<code>[花色][点数][0][大小]</code>，每个属性各占1byte，每张牌占4bytes。无论所有玩家出的牌还是玩家自己的牌，只要找到最大一张牌的花色位置和牌的数量，根据每张牌占4bytes，就可以从内存中拿出这组牌数据。下面是我找到的各种情况下最大牌的起始位置（和找座位号时候确定指针的方法一致）：</p>
-<div class="highlight"><pre><span></span>玩家手里的牌：     [[&quot;GameLogic.dll&quot;+3DAB8]+108]
+<div class="highlight"><pre><span></span><code>玩家手里的牌：     [[&quot;GameLogic.dll&quot;+3DAB8]+108]
 下家最后出的牌:    [[&quot;GameLogic.dll&quot;+3DABC]+118]
 上家最后出的牌:    [[&quot;GameLogic.dll&quot;+3DABC]+2f8]
 左家最后出的牌:    [[&quot;GameLogic.dll&quot;+3DABC]+28]
 右家最后出的牌:    [[&quot;GameLogic.dll&quot;+3DABC]+208]
-</pre></div>
-
+</code></pre></div>
 
 <p>所有基址基于GameLogic.dll，而且最后出的牌第一次偏移都是0x3DABC，Good job!</p>
 <h1>Day2 实现逻辑</h1>
@@ -426,7 +416,7 @@ RIGHT:  &quot;GameLogic.dll&quot;+3D010
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2019          yyx.me
+          2014&dash;2021          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>
