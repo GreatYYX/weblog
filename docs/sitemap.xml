@@ -5,7 +5,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/</loc>
-<lastmod>2021-12-06T15:01:21-00:00</lastmod>
+<lastmod>2021-12-06T15:18:49-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -26,7 +26,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/posts/planck-40-keyboard/</loc>
-<lastmod>2021-12-05T05:09:00-08:00</lastmod>
+<lastmod>2021-12-06T15:18:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -152,7 +152,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/categories/diy/</loc>
-<lastmod>2021-12-05T05:09:00-07:53</lastmod>
+<lastmod>2021-12-06T15:18:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -187,7 +187,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/tags/keyboard/</loc>
-<lastmod>2021-12-05T05:09:00-07:53</lastmod>
+<lastmod>2021-12-06T15:18:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
