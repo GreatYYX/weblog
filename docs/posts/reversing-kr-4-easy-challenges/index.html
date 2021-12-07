@@ -19,24 +19,27 @@
     <meta property="og:title" content="reversing.kr四道Easy题解题攻略"/>
     <meta property="og:description" content="本文为逆向工程练习网站reversing.kr中Easy Crack、Easy Keygen、Easy Unpack及Easy ELF的解题攻略。"/>
     <meta property="og:site_name" content="YYX's Website" />
-    <meta property="og:url" content="../../posts/reversing-kr-4-easy-challenges/"/>
+    <meta property="og:url" content="https://blog.yyx.me/posts/reversing-kr-4-easy-challenges/"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="reversing.kr四道Easy题解题攻略">
     <meta name="twitter:description" content="本文为逆向工程练习网站reversing.kr中Easy Crack、Easy Keygen、Easy Unpack及Easy ELF的解题攻略。">
-    <meta name="twitter:url" content="../../posts/reversing-kr-4-easy-challenges/">
+    <meta name="twitter:url" content="https://blog.yyx.me/posts/reversing-kr-4-easy-challenges/">
 
     <!-- Feed -->
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../../theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="../../theme/css/csshake.min.css">
-    <link rel="stylesheet" type="text/css" href="../../theme/css/style.css">
-    <!-- <link rel="stylesheet" type="text/css" href="../../theme/css/jqcloud.css"> -->
-    <link rel="stylesheet" type="text/css" href="../../theme/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="../../theme/css/pygments-highlight-github.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/csshake.min.css">
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/jqcloud.css"> -->
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
 
     <!-- Icon -->
@@ -44,16 +47,16 @@
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <!-- <script src="../../theme/js/jqcloud.min.js"></script> -->
+    <!-- <script src="https://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script src="../../theme/js/main.js"></script>
+    <script src="https://blog.yyx.me/theme/js/main.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-white">
       <header id="header">
-        <a href="../../" id="header-logo" title="Home"><img class="shake-crazy" src="../../theme/images/logo_min.svg" width="50" height="50"></a>
-        <!-- <a href="../.." id="header-logo" title="Home">Y</a> -->
+        <a href="https://blog.yyx.me/" id="header-logo" title="Home"><img class="shake-crazy" src="https://blog.yyx.me/theme/images/logo_min.svg" width="50" height="50"></a>
+        <!-- <a href="https://blog.yyx.me" id="header-logo" title="Home">Y</a> -->
         <nav id="header-menu">
           <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" id="nav-expand-btn" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>
           <ul class="w3-hide-small">
@@ -76,20 +79,20 @@
         <h1>reversing.kr四道Easy题解题攻略</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2014-09-10T23:51:00-07:00">Sep 10, 2014</time> @ <a href="../../categories/security/" title="All articles in category Security">Security</a></span>
+            <span><time datetime="2014-09-10T23:51:00-07:00">Sep 10, 2014</time> @ <a href="https://blog.yyx.me/categories/security/" title="All articles in category Security">Security</a></span>
           </div>
           <div class="w3-margin-right">
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="../../tags/reversingkr/" title="All articles with Reversing.Kr tag">#reversing.kr</a>
+              <a href="https://blog.yyx.me/tags/reversingkr/" title="All articles with Reversing.Kr tag">#reversing.kr</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="../../tags/wargame/" title="All articles with Wargame tag">#wargame</a>
+              <a href="https://blog.yyx.me/tags/wargame/" title="All articles with Wargame tag">#wargame</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="../../tags/hacking/" title="All articles with Hacking tag">#hacking</a>
+              <a href="https://blog.yyx.me/tags/hacking/" title="All articles with Hacking tag">#hacking</a>
             </span>
             <span class="w3-tag w3-hover-light-grey yyx-text-yellow yyx-tag-transparent">
-              <a href="../../tags/reversing/" title="All articles with Reversing tag">#reversing</a>
+              <a href="https://blog.yyx.me/tags/reversing/" title="All articles with Reversing tag">#reversing</a>
             </span>
           </div>
         </div>
@@ -609,13 +612,13 @@ Easy_ELF: ELF <span class="m">32</span>-bit LSB executable, Intel <span class="m
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=../../posts/reversing-kr-4-easy-challenges/&amp;t=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/&amp;t=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=../../posts/reversing-kr-4-easy-challenges/&amp;text=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="http://twitter.com/share?url=https%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/&amp;text=YYX%27s%20Website%3A%20reversing.kr%E5%9B%9B%E9%81%93Easy%E9%A2%98%E8%A7%A3%E9%A2%98%E6%94%BB%E7%95%A5" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
-            <a href="https://plus.google.com/share?url=../../posts/reversing-kr-4-easy-challenges/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
+            <a href="https://plus.google.com/share?url=https%3A//blog.yyx.me/posts/reversing-kr-4-easy-challenges/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
               <i class="fa fa-google-plus"></i> <!-- <span>Google</span> -->
             </a>
           </div>
@@ -623,6 +626,42 @@ Easy_ELF: ELF <span class="m">32</span>-bit LSB executable, Intel <span class="m
           <br><br><br>
 
 
+<div id="disqus_thread" class="w3-margin-bottom"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT 
+     *  THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR 
+     *  PLATFORM OR CMS.
+     *  
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: 
+     *  https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        // Replace PAGE_URL with your page's canonical URL variable
+        this.page.url = PAGE_URL;  
+        
+        // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.identifier = PAGE_IDENTIFIER; 
+    };
+    */
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://yyxblog.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the 
+    <a href="https://disqus.com/?ref_noscript" rel="nofollow">
+        comments powered by Disqus.
+    </a>
+</noscript>
 
         </footer>
       </div>
@@ -638,6 +677,14 @@ Easy_ELF: ELF <span class="m">32</span>-bit LSB executable, Intel <span class="m
       </div>
     </footer>
 
-
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-64342434-1', 'auto');
+      ga('send', 'pageview');
+    </script>
   </body>
 </html>

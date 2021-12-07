@@ -9,19 +9,19 @@
 &lt;p&gt;100%键盘通过去掉大部分人不常用的数字键区成为了80%键盘，再去掉方向键和功能键（包括F1-F12）则进一步成为了60%键盘。其中的60%键盘又通过加回方向键和部分功能键细分出了64和68键盘。而近期键盘圈比较热门的70%键盘则又加回了更多的功能键和旋钮（encoder）。&lt;/p&gt;
 &lt;p&gt;40%键盘的布局把一排数字键也进行了阉割，因此整个键盘只有4排，其中3排字母1排空格和modifiers。显而易见的是，数字键和大部分符号将无法通过直接输入完成而需要组合键的参与。但通过牺牲按键直接性所带来的优势就是更加科学的手指移动：手指停止的位置在从下向上数的第3排，主体活动范围在第2-4排，这样每个除了大拇指以外的手指的移动范围基本在上下一行的范围内，减少手指的移动理论上可以提高字符输入的效率和准确性。当然对于打字时候手指运动不科学甚至是一指残的朋友，此类键盘的使用效率会异常的低下。&lt;/p&gt;
 &lt;p&gt;传统键盘布局中的大空格带来的另一个问题是大拇指的极度浪费。作为最强壮的手指之一，它们的命运大部分时候是在比他们更大的空格上歇着，这显然有些浪费资源了。普朗克中的Grid和MIT布局，都是通过在空格两边分别放入两个Fn键来解决问题：左边的lower和右边的raise分别对应两只大拇指，通过大拇指的按压，激活新的按键层，从而自然而然的实现组合输入。整个键盘的按键只有1u一种、或者1u和2u两种宽度。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="plank-3-layouts" src="/statics/planck-40-keyboard/planck-3-layouts.png" title="Planck layouts (screenshot from Youtube)"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="plank-3-layouts" src="/statics/planck-40-keyboard/planck-3-layouts.png" title="Planck layouts: 2 space bar, MIT, Grid resp. (screenshot from Youtube)"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="plank-mit-layout" src="/statics/planck-40-keyboard/planck-mit-layout.png" title="Planck MIT layout (from OLKB)"&gt;&lt;/p&gt;
 &lt;p&gt;Ortholinear的布局是一个对习惯比较突破的尝试。我小时候一直认为我们使用的staggered键盘布局是因为人体工学的考量，殊不知其实是因为打字机时代按键轴问题造成的习惯的延续。横平竖直的ortholinear反而成了异类，其实手指应该会是更加适合这个布局（当然有曲度的版本应该会更加ergonomic一些）。题外话是我们平时用的键盘的按键位置基本都是Qwerty的，据传也不是因为它的分布有助于加快打字，仅仅是因为打字机年代为了不卡壳需要用这个方案限制输入的速度，更加科学的符合输入频率分布的是Dvorak等这些。当然一切都是向固有习惯的妥协，毕竟大部分产品的受众面是大多数的普通人。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="printing-machine" src="/statics/planck-40-keyboard/printing-machine.jpeg" title="Planck MIT layout (from BBC News)"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="printing-machine" src="/statics/planck-40-keyboard/printing-machine.jpeg" title="Printing machine (from BBC News)"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="qwerty-vs-dvorak" src="/statics/planck-40-keyboard/qwerty-vs-dvorak.jpeg" title="Qwerty vs Dvorak (from Ars Technica)"&gt;&lt;/p&gt;
 &lt;h2&gt;选型和组装&lt;/h2&gt;
-&lt;p&gt;在购买前我看了某宝上的普朗克方案(和其他40%键盘)，相较于60%等玩的人非常的少。考虑到社区活跃性和QMK的开源固件，最后还是偏向于Jack Humbert的Maxdrop和OLKB的合作款Planck rev6。该款Planck空格处支持Grid、MIT、双空格等多种布局，其中双空格是我预想中的布局（后面会说原因）。为了QMK牺牲了蓝牙，希望无线多模的小伙伴还是选择闭源的方案吧。&lt;/p&gt;
+&lt;p&gt;在购买前我看了某宝上的普朗克方案(和其他40%键盘)，相较于60%等玩的人非常的少。考虑到社区活跃性和QMK的开源固件，最后还是偏向于Jack Humbert的Massdrop和OLKB的合作款Planck rev6。该款Planck空格处支持Grid、MIT、双空格等多种布局，其中双空格是我预想中的布局（后面会说原因）。为了QMK牺牲了蓝牙，希望无线多模的小伙伴还是选择闭源的方案吧。&lt;/p&gt;
 &lt;p&gt;到货后的简单开箱：包含PCB、金属定位版、铝外壳、卫星轴（stabilizer）、type C线、螺丝和锁紧工具，最后还有没什么卵用的说明书。需要自己准备轴体和键帽。其中PCB上，支持（非光学）轴体热插拔，使用的凯华Kailh的轴坐，这样就不用焊接了。底面贴片的LED（underglow），但无轴间LED，RGB光污染爱好者绕道吧，虽然Jack在板子上留了二极管的孔。外壳上有两种高度，我买的high-pro，即高外壳，只露出键帽，还有mid-pro的中外壳，会露出定位版和轴，成为所谓的悬浮式键盘。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="my-planck-open-box" src="/statics/planck-40-keyboard/my-planck-open-box.png" title="Planck open box"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="my-planck-unboxing" src="/statics/planck-40-keyboard/my-planck-unboxing.png" title="Planck unboxing"&gt;&lt;/p&gt;
 &lt;p&gt;轴我主要用了国内今年特别火的猛男专用TTC金粉和TTC月白，前者覆盖字母区，后者和TTC金茶一起覆盖其他区域。这样做的原因是我本身喜欢触发压力较低的线性轴体的打字手感，但手放在空格和modifier上的时候怕因为金粉压力克数太低引发误触，因此用段落轴来区分手感同时防止误触。最左下角我一般不会去按，成为Fn键用于调用控制键盘本身和多媒体的层，使用高特的紫轴来区分手感。传统热插拔的最大好处是轴体多可玩性强，光学热插拔现阶段暂时还是丰富性太差，而且使用轴座后的插拔寿命理论上好于轴套。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="my-planck-switch-installation" src="/statics/planck-40-keyboard/my-planck-switch-installation.png" title="Planck switch installation"&gt;&lt;/p&gt;
 &lt;p&gt;键帽目前暂时使用了廉价的ABS无刻透明键帽，希望通过强制盲打用于快速适应键盘，手感众所周知的平庸。后期可能会自己做键帽或者换PBT材质的SA/DSA键帽。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="my-planck-finish" src="/statics/planck-40-keyboard/my-planck-finish.png" title="My Planck"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="my-planck-finish" src="/statics/planck-40-keyboard/my-planck-finish.png" title="Planck with translucent ABS keycaps"&gt;&lt;/p&gt;
 &lt;p&gt;声音角度来说没有damper感觉还是差了点什么，后期考虑买点eva发泡塑料填充一下空腔。&lt;/p&gt;
 &lt;h2&gt;键位设计和使用感受&lt;/h2&gt;
 &lt;p&gt;理想很美好，现实很骨感。首先Planck默认刷的MIT布局，而我组的双空格方案，因此没法直接使用。只能用QMK Configurator先大致撸了基本层，编译并使用QMK Tool刷入固件，这样算是基本可以用起来了。然后再不断根据习惯修改各层按键。&lt;/p&gt;
@@ -36,5 +36,5 @@
 &lt;p&gt;目前从使用上来说还没有完全适应，主要原因并不是字母区全盲打，而是ortholinear导致键位的错位以及符号区盲打输入的难度。另外，感觉在中文社区热度不高的一大原因应该就是中文输入的复杂度问题。拼音输入法需要不断选择输入的内容，因此数字区的访问频率远高于纯英文主体的内容输入。&lt;/p&gt;
 &lt;p&gt;当然无刻40%键盘最大的优势同时也是限制就是：手本身基本没有大范围移动，也必须强制双手的参与。手部的小范围移动在熟练布局后的速度应该是非常可观的。但一个手位置错误将导致完全没法输入，因为整个输入就是两个手的手感的配合。也因此手离开键盘后必须完全归位，杜绝了偷懒的可能性。&lt;/p&gt;
 &lt;h1&gt;后记&lt;/h1&gt;
-&lt;p&gt;有句话说，一个人步入中年的标志就是对周围事物失去兴趣，喜欢折腾一些没什么卵用的东西。当然键盘作为最主要的外设，每天基本都会触摸，还是非常实用的。期待使用一段时间之后能在流畅性上有比较好的突破直到正式中年时起飞上宇宙。&lt;/p&gt;
-&lt;p&gt;国内键盘圈大部分还是玩客制化键帽和外壳，快感的来源需要动辄几千几万的投入。相比之下，技术向的玩法比较倾向于去尝试更加新奇或者更加ergo的布局、更加有意思的技术以及自己手工制作的键帽或者外壳。比如&lt;a href="https://github.com/BenRoe/awesome-mechanical-keyboard/blob/master/docs/README.md"&gt;Awesome keyboard&lt;/a&gt;就提供了相当丰富资源来完全自主的设计各种稀奇古怪键盘。估摸着我下一块键盘会试试Lily58，一次满足入坑split keyboard和玩through hole的愿望。总之，期望国产厂商在创新、制造和品控上再接再厉，也期望国内客制化圈更加开放和多元。&lt;/p&gt;</content><category term="DIY"></category><category term="keyboard"></category></entry></feed>
+&lt;p&gt;有句话说，一个人步入中年的标志就是对周围事物（以及异性）失去兴趣，喜欢折腾一些没什么卵用的东西。当然键盘作为最主要的外设，基本每天都还是会触摸，可谓实用的。期待使用一段时间之后能在流畅性上有比较好的突破，直到正式中年时起飞上宇宙。&lt;/p&gt;
+&lt;p&gt;国内键盘圈大部分还是玩客制化键帽和外壳，快感的来源需要动辄几千几万的投入。相比之下，技术向的玩法比较倾向于去尝试更加新奇或者更加ergo的布局、更加有意思的技术以及自己手工制作的键帽或者外壳。诸如&lt;a href="https://github.com/BenRoe/awesome-mechanical-keyboard/blob/master/docs/README.md"&gt;Awesome keyboard&lt;/a&gt;就提供了相当丰富资源来完全自主的设计各种稀奇古怪键盘。估摸着我下一块键盘会试试Lily58，一次满足入坑split keyboard和玩through hole的愿望。总之，期望国产厂商在创新、制造和品控上再接再厉，也期望国内客制化圈更加开放和多元。&lt;/p&gt;</content><category term="DIY"></category><category term="keyboard"></category></entry></feed>
