@@ -25,23 +25,23 @@ Planck键盘具有两个比较显著的特征：1）40%键盘 2）Ortholinear的
 
 传统键盘布局中的大空格带来的另一个问题是大拇指的极度浪费。作为最强壮的手指之一，它们的命运大部分时候是在比他们更大的空格上歇着，这显然有些浪费资源了。普朗克中的Grid和MIT布局，都是通过在空格两边分别放入两个Fn键来解决问题：左边的lower和右边的raise分别对应两只大拇指，通过大拇指的按压，激活新的按键层，从而自然而然的实现组合输入。整个键盘的按键只有1u一种、或者1u和2u两种宽度。
 
-![plank-3-layouts]({{ SITEURL }}/statics/planck-40-keyboard/planck-3-layouts.png "Planck layouts (screenshot from Youtube)")
+![plank-3-layouts]({{ SITEURL }}/statics/planck-40-keyboard/planck-3-layouts.png "Planck layouts: 2 space bar, MIT, Grid resp. (screenshot from Youtube)")
 
 ![plank-mit-layout]({{ SITEURL }}/statics/planck-40-keyboard/planck-mit-layout.png "Planck MIT layout (from OLKB)")
 
 Ortholinear的布局是一个对习惯比较突破的尝试。我小时候一直认为我们使用的staggered键盘布局是因为人体工学的考量，殊不知其实是因为打字机时代按键轴问题造成的习惯的延续。横平竖直的ortholinear反而成了异类，其实手指应该会是更加适合这个布局（当然有曲度的版本应该会更加ergonomic一些）。题外话是我们平时用的键盘的按键位置基本都是Qwerty的，据传也不是因为它的分布有助于加快打字，仅仅是因为打字机年代为了不卡壳需要用这个方案限制输入的速度，更加科学的符合输入频率分布的是Dvorak等这些。当然一切都是向固有习惯的妥协，毕竟大部分产品的受众面是大多数的普通人。
 
-![printing-machine]({{ SITEURL }}/statics/planck-40-keyboard/printing-machine.jpeg "Planck MIT layout (from BBC News)")
+![printing-machine]({{ SITEURL }}/statics/planck-40-keyboard/printing-machine.jpeg "Printing machine (from BBC News)")
 
 ![qwerty-vs-dvorak]({{ SITEURL }}/statics/planck-40-keyboard/qwerty-vs-dvorak.jpeg "Qwerty vs Dvorak (from Ars Technica)")
 
 ## 选型和组装
 
-在购买前我看了某宝上的普朗克方案(和其他40%键盘)，相较于60%等玩的人非常的少。考虑到社区活跃性和QMK的开源固件，最后还是偏向于Jack Humbert的Maxdrop和OLKB的合作款Planck rev6。该款Planck空格处支持Grid、MIT、双空格等多种布局，其中双空格是我预想中的布局（后面会说原因）。为了QMK牺牲了蓝牙，希望无线多模的小伙伴还是选择闭源的方案吧。
+在购买前我看了某宝上的普朗克方案(和其他40%键盘)，相较于60%等玩的人非常的少。考虑到社区活跃性和QMK的开源固件，最后还是偏向于Jack Humbert的Massdrop和OLKB的合作款Planck rev6。该款Planck空格处支持Grid、MIT、双空格等多种布局，其中双空格是我预想中的布局（后面会说原因）。为了QMK牺牲了蓝牙，希望无线多模的小伙伴还是选择闭源的方案吧。
 
 到货后的简单开箱：包含PCB、金属定位版、铝外壳、卫星轴（stabilizer）、type C线、螺丝和锁紧工具，最后还有没什么卵用的说明书。需要自己准备轴体和键帽。其中PCB上，支持（非光学）轴体热插拔，使用的凯华Kailh的轴坐，这样就不用焊接了。底面贴片的LED（underglow），但无轴间LED，RGB光污染爱好者绕道吧，虽然Jack在板子上留了二极管的孔。外壳上有两种高度，我买的high-pro，即高外壳，只露出键帽，还有mid-pro的中外壳，会露出定位版和轴，成为所谓的悬浮式键盘。
 
-![my-planck-open-box]({{ SITEURL }}/statics/planck-40-keyboard/my-planck-open-box.png "Planck open box")
+![my-planck-unboxing]({{ SITEURL }}/statics/planck-40-keyboard/my-planck-unboxing.png "Planck unboxing")
 
 轴我主要用了国内今年特别火的猛男专用TTC金粉和TTC月白，前者覆盖字母区，后者和TTC金茶一起覆盖其他区域。这样做的原因是我本身喜欢触发压力较低的线性轴体的打字手感，但手放在空格和modifier上的时候怕因为金粉压力克数太低引发误触，因此用段落轴来区分手感同时防止误触。最左下角我一般不会去按，成为Fn键用于调用控制键盘本身和多媒体的层，使用高特的紫轴来区分手感。传统热插拔的最大好处是轴体多可玩性强，光学热插拔现阶段暂时还是丰富性太差，而且使用轴座后的插拔寿命理论上好于轴套。
 
@@ -49,7 +49,7 @@ Ortholinear的布局是一个对习惯比较突破的尝试。我小时候一直
 
 键帽目前暂时使用了廉价的ABS无刻透明键帽，希望通过强制盲打用于快速适应键盘，手感众所周知的平庸。后期可能会自己做键帽或者换PBT材质的SA/DSA键帽。
 
-![my-planck-finish]({{ SITEURL }}/statics/planck-40-keyboard/my-planck-finish.png "My Planck")
+![my-planck-finish]({{ SITEURL }}/statics/planck-40-keyboard/my-planck-finish.png "Planck with translucent ABS keycaps")
 
 声音角度来说没有damper感觉还是差了点什么，后期考虑买点eva发泡塑料填充一下空腔。
 
@@ -79,9 +79,9 @@ Ortholinear的布局是一个对习惯比较突破的尝试。我小时候一直
 
 # 后记
 
-有句话说，一个人步入中年的标志就是对周围事物失去兴趣，喜欢折腾一些没什么卵用的东西。当然键盘作为最主要的外设，每天基本都会触摸，还是非常实用的。期待使用一段时间之后能在流畅性上有比较好的突破直到正式中年时起飞上宇宙。
+有句话说，一个人步入中年的标志就是对周围事物（以及异性）失去兴趣，喜欢折腾一些没什么卵用的东西。当然键盘作为最主要的外设，基本每天都还是会触摸，可谓实用的。期待使用一段时间之后能在流畅性上有比较好的突破，直到正式中年时起飞上宇宙。
 
-国内键盘圈大部分还是玩客制化键帽和外壳，快感的来源需要动辄几千几万的投入。相比之下，技术向的玩法比较倾向于去尝试更加新奇或者更加ergo的布局、更加有意思的技术以及自己手工制作的键帽或者外壳。比如[Awesome keyboard](https://github.com/BenRoe/awesome-mechanical-keyboard/blob/master/docs/README.md)就提供了相当丰富资源来完全自主的设计各种稀奇古怪键盘。估摸着我下一块键盘会试试Lily58，一次满足入坑split keyboard和玩through hole的愿望。总之，期望国产厂商在创新、制造和品控上再接再厉，也期望国内客制化圈更加开放和多元。
+国内键盘圈大部分还是玩客制化键帽和外壳，快感的来源需要动辄几千几万的投入。相比之下，技术向的玩法比较倾向于去尝试更加新奇或者更加ergo的布局、更加有意思的技术以及自己手工制作的键帽或者外壳。诸如[Awesome keyboard](https://github.com/BenRoe/awesome-mechanical-keyboard/blob/master/docs/README.md)就提供了相当丰富资源来完全自主的设计各种稀奇古怪键盘。估摸着我下一块键盘会试试Lily58，一次满足入坑split keyboard和玩through hole的愿望。总之，期望国产厂商在创新、制造和品控上再接再厉，也期望国内客制化圈更加开放和多元。
 
 
 
