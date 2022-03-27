@@ -5,7 +5,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/</loc>
-<lastmod>2021-12-06T21:54:15-00:00</lastmod>
+<lastmod>2022-03-27T14:43:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -20,6 +20,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://blog.yyx.me/gallery/</loc>
 <lastmod>2014-08-14T12:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/posts/ski-customization/</loc>
+<lastmod>2022-03-24T16:31:00-07:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -152,7 +159,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/categories/diy/</loc>
-<lastmod>2021-12-06T15:18:00-07:53</lastmod>
+<lastmod>2022-03-24T16:31:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -181,6 +188,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://blog.yyx.me/categories/web/</loc>
 <lastmod>2014-08-14T16:17:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/tags/ski/</loc>
+<lastmod>2022-03-24T16:31:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/tags/snowboard/</loc>
+<lastmod>2022-03-24T16:31:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
