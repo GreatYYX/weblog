@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>YYX's Website - DIY</title><link href="https://blog.yyx.me/" rel="alternate"></link><link href="https://blog.yyx.me/feeds/diy.atom.xml" rel="self"></link><id>https://blog.yyx.me/</id><updated>2022-03-24T16:31:00-07:00</updated><entry><title>定制化双板打造全过程</title><link href="https://blog.yyx.me/posts/ski-customization/" rel="alternate"></link><published>2022-03-24T16:31:00-07:00</published><updated>2022-03-24T16:31:00-07:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2022-03-24:/posts/ski-customization/</id><summary type="html">&lt;p&gt;本文记录了对双板设计和制作自定义板花，板底、边刃和板面修复及日常维护的全过程。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;背景&lt;/h1&gt;
 &lt;p&gt;上雪季末收了一幅双板，准备给叽歪入坑用，但对于板花的设计风格并不是特别中意。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Original skis" src="/statics/ski-customization/original_skis.jpg" title="原来的板子基本没拍照，找了半天也只有这张图，当时已经拆掉了一侧的binding"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Original skis" src="/statics/ski-customization/original_skis.jpg" title="原来的板子基本没拍照，找了半天也只有这张图，当时已经拆掉了一侧的后binding"&gt;&lt;/p&gt;
 &lt;p&gt;某日刷Instagram看到Faction的Agent 2.0 X，粉色搭配简单的线条非常好看，老夫的少女心遂被收割，于是决定动手改造一下手头的板子，把它做成独一无二的样子。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Faction Agent 2.0 Skis 2021" src="/statics/ski-customization/faction_agent_2.0x.jpg" title="Faction Agent 2.0 X Skis 2021"&gt;&lt;/p&gt;
 &lt;h1&gt;设计&lt;/h1&gt;
@@ -37,7 +37,7 @@
 &lt;/ul&gt;
 &lt;p&gt;总结完毕，但兴致已无。于是中间缓了好久，直到去年11月中这个雪季开始才又进入了deadline驱动模式。&lt;/p&gt;
 &lt;h2&gt;去除旧漆&lt;/h2&gt;
-&lt;p&gt;这次多了一个步骤，除去之前的漆面。这个工程比先前直接打磨玻璃纤维麻烦了不止一点点。由于漆面厚，砂纸上会不断沾上漆于是需要不断更换。这款雪板的板面也不是大平面，于是各种边角处的漆非常难以去除。只能再买了一套rotary tool用于清理犄角旮旯的部分。但其实老漆太厚阻力很大，砂纸都不太滑的动，最后直接使用一字螺丝刀来刮去大部分漆，再使用砂纸打磨。断断续续弄了两个月总算基本清理了之前的漆，开始进入新一轮的喷漆了。&lt;/p&gt;
+&lt;p&gt;这次多了一个步骤，除去之前的漆面。这个工程比先前直接打磨玻璃纤维麻烦了不止一点点。由于漆面厚，砂纸上会不断沾上漆于是需要不断更换。这款雪板的板面也不是大平面，于是各种边角处的漆非常难以去除。只能再买了一套rotary tool用于清理犄角旮旯的部分。但其实老漆太厚阻力很大，砂纸都不太滑的动，最后直接使用一字螺丝刀来刮去大部分漆，再使用砂纸打磨。断断续续弄了两周总算基本清理了之前的漆，开始进入新一轮的喷漆了。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Re-sanding" src="/statics/ski-customization/resanding.jpg" title="Re-sanding"&gt;&lt;/p&gt;
 &lt;h2&gt;再次喷漆&lt;/h2&gt;
 &lt;p&gt;这次严格遵循喷漆逻辑，每层薄且均匀，坚决不贪，喷多层。每层之间间隔严格按照温度和window的要求来执行，且使用砂纸打磨。绘制部分和上次基本一样，但已经做过一次明显熟练了很多，且没有出现染色。最后的清漆直接换了一款评价不错的漆，实在受不起再次因为清漆翻车导致全盘重来的结果。值得一提的是，这次还采用了一个对照组，即每次喷板之前，先在纸板上喷一层，如果喷完后纸板上的漆状况不对，那就可以针对的做出分析和修正，再去板上喷。&lt;/p&gt;
@@ -60,7 +60,7 @@
 &lt;p&gt;这个问题出现在朋友的板上，这里顺带记录一下。修复过程依然是使用eproxy粘合刃和板，需要完善的清理刃和板，同时需要大量的c-clamp来定型直到胶水充分硬化。Eproxy不容易流动，可以使用热熔枪来辅助从而使得浇水填满缝隙。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Detached edge fix" src="/statics/ski-customization/detached_edge_fix.jpg" title="Detached edge fix"&gt;&lt;/p&gt;
 &lt;h1&gt;后续&lt;/h1&gt;
-&lt;p&gt;叽歪对这个颜色还是很满意的，于是乎找借口配了一套相同色系的衣服……&lt;/p&gt;
+&lt;p&gt;叽歪对这个颜色还是很满意的，于是乎以此为借口配了一套相同色系的衣服……&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Show time!" src="/statics/ski-customization/showtime.jpg" title="Show time!"&gt;&lt;/p&gt;
 &lt;p&gt;由于这个雪季对她来说像是重新开始，板漆的耐久程度也明显不及被玻璃纤维保护原漆，经过接近一个雪季的反复蹂躏之后，边缘部分已经有了明显的掉漆。目前计划待雪季结束修补一下板花，然后……趁机买个新板吧……&lt;/p&gt;</content><category term="DIY"></category><category term="ski"></category><category term="snowboard"></category></entry><entry><title>40%客制化机械键盘“普朗克”打造手记</title><link href="https://blog.yyx.me/posts/planck-40-keyboard/" rel="alternate"></link><published>2021-12-06T15:18:00-08:00</published><updated>2021-12-06T15:18:00-08:00</updated><author><name>YYX</name></author><id>tag:blog.yyx.me,2021-12-06:/posts/planck-40-keyboard/</id><summary type="html">&lt;p&gt;最近入手了垂涎已久的普朗克键盘套件，本文记录了从前期选择，到组装配置，以及日常使用的心得。&lt;/p&gt;</summary><content type="html">&lt;h1&gt;开篇&lt;/h1&gt;
 &lt;p&gt;机械键盘大概从我本科后期开始一度成为外社区的热点，到如今十余年下来，行业不断洗牌：昔日的行业大佬Cherry近乎跌下神坛，国产的客制化键盘无论散件、套件、成品质量和创新程度都已经开始引领新一轮风潮。机械键盘的可玩性从外壳、轴体、键帽，到按键排列、布局等等几乎渗透每个角落。我个人也从最初使用的ANSI 108键全键盘，到后来的87键游戏，再到61键日常干活，一路感受了从薄膜到青红茶轴的手感变迁（暂缺长时间使用静电容的感受）。&lt;/p&gt;

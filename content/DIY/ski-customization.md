@@ -9,7 +9,7 @@ Summary_en: This article shows how to design and customize the graphics on skis 
 
 上雪季末收了一幅双板，准备给叽歪入坑用，但对于板花的设计风格并不是特别中意。
 
-![Original skis]({{ SITEURL }}/statics/ski-customization/original_skis.jpg "原来的板子基本没拍照，找了半天也只有这张图，当时已经拆掉了一侧的binding")
+![Original skis]({{ SITEURL }}/statics/ski-customization/original_skis.jpg "原来的板子基本没拍照，找了半天也只有这张图，当时已经拆掉了一侧的后binding")
 
 某日刷Instagram看到Faction的Agent 2.0 X，粉色搭配简单的线条非常好看，老夫的少女心遂被收割，于是决定动手改造一下手头的板子，把它做成独一无二的样子。
 
@@ -74,7 +74,7 @@ Summary_en: This article shows how to design and customize the graphics on skis 
 
 ## 去除旧漆
 
-这次多了一个步骤，除去之前的漆面。这个工程比先前直接打磨玻璃纤维麻烦了不止一点点。由于漆面厚，砂纸上会不断沾上漆于是需要不断更换。这款雪板的板面也不是大平面，于是各种边角处的漆非常难以去除。只能再买了一套rotary tool用于清理犄角旮旯的部分。但其实老漆太厚阻力很大，砂纸都不太滑的动，最后直接使用一字螺丝刀来刮去大部分漆，再使用砂纸打磨。断断续续弄了两个月总算基本清理了之前的漆，开始进入新一轮的喷漆了。
+这次多了一个步骤，除去之前的漆面。这个工程比先前直接打磨玻璃纤维麻烦了不止一点点。由于漆面厚，砂纸上会不断沾上漆于是需要不断更换。这款雪板的板面也不是大平面，于是各种边角处的漆非常难以去除。只能再买了一套rotary tool用于清理犄角旮旯的部分。但其实老漆太厚阻力很大，砂纸都不太滑的动，最后直接使用一字螺丝刀来刮去大部分漆，再使用砂纸打磨。断断续续弄了两周总算基本清理了之前的漆，开始进入新一轮的喷漆了。
 
 ![Re-sanding]({{ SITEURL }}/statics/ski-customization/resanding.jpg "Re-sanding")
 
@@ -120,7 +120,7 @@ Summary_en: This article shows how to design and customize the graphics on skis 
 
 # 后续
 
-叽歪对这个颜色还是很满意的，于是乎找借口配了一套相同色系的衣服……
+叽歪对这个颜色还是很满意的，于是乎以此为借口配了一套相同色系的衣服……
 
 ![Show time!]({{ SITEURL }}/statics/ski-customization/showtime.jpg "Show time!")
 
