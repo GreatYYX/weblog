@@ -35,7 +35,7 @@ Summary_en: The origin and meme discovery of North America ski and snowboard res
 
 # Big Bear Mountain Resorts - Snow Summit
 
-- Zzyzx park: 非常特色的名字了，本身的Zzyzx路口在I-15高速从San Bernardino向Las Vegas的路上，每次看到都会温习一遍怎么读这个奇怪的路名。在ss的雪道用上这个名字也算是本地特色了。[[Ref-1](https://www.nps.gov/moja/learn/historyculture/zzyzx.htm)][[Ref-2](https://wewhoroam.com/zzyzx-road/)]
+- Zzyzx park: 非常大洛杉矶地区特色的名字了，本身的Zzyzx路口在I-15高速从San Bernardino向Las Vegas的路上，每次看到都会温习一遍怎么读这个奇怪的路名。在ss的雪道用上这个名字也算是本地特色了。[[Ref-1](https://www.nps.gov/moja/learn/historyculture/zzyzx.htm)][[Ref-2](https://wewhoroam.com/zzyzx-road/)]
 - 7 Down: ss的7号缆车，从顶上一路滑到底非常顺畅的大蓝道。我猜测叫这个名字也很可能同时是为了和七喜(7 Up)呼应。
 - Jo's/Dicky's/Tommi's: 这三条雪道都是人名命名的。资料显示Tommi和Jo是两夫妻，Dick是孩子，他们是早期大熊湖雪场产业的owner。[[Ref-1](https://bigbeartodaymag.com/uncategorized/despite-odds-jo-tyndall-alexander-became-woman-who-ran-a-ski-resort/)][[Ref-2](https://blog.rsvacations.net/2012/12/15/saturday-sampler-a-little-snow-summit-history/)]
 
@@ -53,13 +53,16 @@ Summary_en: The origin and meme discovery of North America ski and snowboard res
 - Discovery: 新手道缆车，比Schoolyard进阶一点，而且有初级公园的features，给人一种在学习过程中不断探索的感觉。该缆车下雪道的命名也很有意思，Sesame Street（著名动画片芝麻街）和Apple Pie，公园叫Disco Playground（寓意贴切又和Discovery的前缀相呼应）。
 - Chair 23: 非常有特点的一条缆车。Bottom station向后连接着非常长的配重缆绳，可见底下的配重块质量之大（竟然没有用水配重），用以平衡山顶的妖风。Up station封闭式的设计以及可以关上的两侧出口（我竟然一直都没有发现出口是可以关闭的）可以保护下缆车的人和station自身的安全。
 - Dropout Chutes & Wipeout Chutes: 23号缆车左右两侧的双黑雪道，名字取的很有节奏很对仗。
-- Kiwi Flats: 包括周边一众非常狭窄的遍布石头的双黑悬崖应该是Mammoth最难的地形部分了。
+- Kiwi Flats: 包括周边一众非常狭窄的遍布石头的双黑悬崖应该是Mammoth最难的地形部分了。至于名字中为何有kiwi目前无从考证，但从词本身猜测可能就直译成猕猴桃，或者是不能飞的鸟（flightless bird），亦或是新西兰人（New Zealander）。
+- McCoy Station & Dave's Run: 来自于Mammoth的创始人Dave McCoy。Dave出生在El Segundo（LAX机场边），2020年104岁时去世于Bishop。他的老婆Roma是Bishop当地人，和Dave一样很长寿，2021年去世时候也已是100岁高龄。[[Ref-1](https://skiinghistory.org/not-just-another-mammoth-mountain-history)]
+- Haven’t the Forggiest: C9边的一条trail，意思就是have no idea at all。
+- Cornice Bowl: 算是山顶最不吃雪况单黑道了，不过雪不好的时候顶上一段很冰，毕竟cornice的意思就是"an overhanging mass of hardened snow at the edge of a mountain precipice"（悬崖边冻结的大冰块）。
 
-Mammoth的缆车将在接下来的日子里迎来一波大改造，包括Outpost那3条缆车变成高速缆车，以及Broadway这类主干道变成6人以上的高速缆车。[[Ref-1](https://liftblog.com/2017/07/10/mapping-mammoths-next-new-lifts/)]
+Mammoth的缆车将在接下来的日子里迎来一波大改造，包括The Outpost那3条缆车变成高速缆车，以及Broadway这类主干道变成6人以上的高速缆车。[[Ref-1](https://liftblog.com/2017/07/10/mapping-mammoths-next-new-lifts/)]
 
 # June Mountain
 
-六月山的缆车布局比较奇特：从最底下的base到半山腰只有J1一趟双人慢速缆车，而从半山腰开始到Rainbow和June Summit山顶才有各路高速缆车。其中最下面的一个缆车上写着“Yan”让我一度以为这是缆车的名字。其实Yan是[Yan Lift](https://en.wikipedia.org/wiki/Yan_Lift)这家已经破产了的缆车制造公司的名字（Mammoth有非常多的Yan产的缆车）。巧合的是，Yan的第一台高速缆车就是在June Mountain架设的，其后蔓延到了诸多雪场。如今Yan缆车的命运多是已经被淘汰，亦或是被翻新。[[Ref-1](https://liftblog.com/2016/03/15/yan-high-speed-quads-20-years-later/)]
+六月山的缆车布局比较奇特：从最底下的base到半山腰只有J1一趟双人慢速缆车，而从半山腰开始到Rainbow和June Summit山顶才有各路高速缆车。其中最下面的一个缆车上写着“Yan”让我一度以为这是缆车的名字。其实Yan是[Yan Lift](https://en.wikipedia.org/wiki/Yan_Lift)这家已经破产了的缆车制造公司的名字（Mammoth有非常多的Yan产的缆车）。巧合的是，Yan的第一台高速缆车就是在June Mountain架设的，其后蔓延到了诸多雪场。Yan的缆车发生了非常多的事故以至于如今它们的命运多是已经被淘汰，亦或是被翻新。[[Ref-1](https://liftblog.com/2016/03/15/yan-high-speed-quads-20-years-later/)]
 
 - J5: 六月山的现存的缆车都是字母J开头+数字编号。其中不存在的J5是最晚在这儿建造的双人缆车但也最早拆除的缆车，缆车沿线的tower已经锈迹斑斑但还没有拆除，而原本这个缆车其实可以分担一部分J1的人流压力。[[Ref-1](https://liftblog.com/j5-june-mountain-ca/)]
 - Matterhorn: 以阿尔卑斯著名山峰马特洪峰命名。
@@ -84,27 +87,31 @@ Mammoth的缆车将在接下来的日子里迎来一波大改造，包括Outpost
 
 # Alta
 
-[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-alta-ski)
-[Ref-2](http://www.centralpt.com/databaseindshowitem.aspx?id=71998&oid=490039&pid)
+[[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-alta-ski)] [[Ref-2](http://www.centralpt.com/databaseindshowitem.aspx?id=71998&oid=490039&pid)]
 
 # Brighton
 
-Utah第一个雪场，也是一个完整装备高速缆车，且提供夜场的雪场。当然也是单板胜地，平整的大雪道简直就是新手快乐村，从此忘了什么是卡刃。长长的连续的小树林子也是非常具有可玩性。和Alta/Snowbird所在的Little Cottonwood Canyon相望，Brighton和Solitude所在的Big Cottonwood Canyon曾经也是矿山。[[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-brighton)]
+Utah第一个雪场，也是一个所有地区高速缆车可达，且提供夜场的雪场。当然也是单板胜地，平整的大雪道简直就是新手快乐村，从此忘了什么是卡刃。长长的连续的小树林子也是非常具有可玩性。和Alta/Snowbird所在的Little Cottonwood Canyon相望，Brighton和Solitude所在的Big Cottonwood Canyon曾经也是矿山。[[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-brighton)]
 
 - Great Western: Brighton最西边的山，顺理成章的大西部。
 - Milly: Millicent山峰的缆车，昵称Milly。
+- Majestic: 显然这个名字没有女王大人（Majesty）来的生猛有趣。这个缆车本身其实是Deer Valley的Ruby四人缆车，2002年从DV换高速缆车后拆下并在2004年装到了这里用以替换之前的双座缆车。[[Ref-1](https://liftblog.com/majestic-brighton-ut/)][[Ref-2](http://www.skilifts.org/old/chairlift_removal_majestic.htm)]
 
 # Solitude
 
-[Ref-1](https://www.skiutah.com/blog/authors/lexi/family-solitude-mountain-resort)
+作为我个人挺喜欢的一个小雪场，可以享受Apex的平坦和宽敞，Eagle的成片的蘑菇，Summit的各种地形，Honeycomb堆叠起来的厚粉，小而有趣。对于boarder来说，大多都会选择再开2mile到Brighton，因此Solitude反而会fill up的比较晚。传说中因为Alta的洗手间是保留给住它lodge的顾客的，因此创始人一气之下任性的创建了Solitude。目前Solitude被Deer Valley的管理公司收购并管理。[[Ref-1](https://www.skiutah.com/blog/authors/lexi/family-solitude-mountain-resort)]
 
-# Snow Basin
+# Snowbasin
 
-[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories)
+远在SLC向北40mile左右的Ogden的雪场，当SLC的Canyon因为雪天被关闭或者被人卷的水泄不通的时候，转头去Snowbasin不失为一种明智的策略。作为2002年冬奥会Downhill和Super-G（超级大回转）的比赛场地，USFS（美国林业局）捐赠给了雪盆占其目前60%的国家森林的土地，让它一跃成为了举世闻名的雪场。[[Ref-1](https://www.snowbasin.com/about/history/)]
 
-# Deer valley
+- Allen Peak Tram: 通向山顶的一小段独一无二的tram，外部印有各获奖国国旗标志。天气晴朗时候能同时看到Nevada, Idaho, Wyoming, Utah and Colorado五个state。
+- John Paul: 命名来自于Ogden本地人John Paul Jones，他在Snowbasin学会了ski的技能。二战期间军队雇用了很多具有双板滑雪技能的士兵，他们穿着雪地吉利服踩着双板快速穿梭在敌阵之中以打对方措手不及。其中近千名第十山地小队（10th Mountain Division）的士兵在二战中丧生，也包括在意大利战死的John。
+- Wildcat: 这个缆车在历史上不断更迭:1948年初代完成（单坐木质tower），1964年变成双座，1973年升级为三座，最终在2017年成为6座高速缆车。加之Little Cat缆车，可以看出雪盆对于Wildcat地区的开发利用是比较重视的。值得一提的是，这个缆车也是2010年恐怖片Frozen的拍摄地。[[Ref-1](https://en.wikipedia.org/wiki/Frozen_(2010_American_film))][[Ref-2](https://liftblog.com/snowbasin-ut/)]
 
-[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-deer)
+# Deer Valley
+
+几年前因为没注意到ski-only的限制，机缘巧合的在鹿谷的绿道开始了双板初体验。当2022年底再一次来到这儿，才突然发现它的奇妙：区别于很多一座或者几座大山的雪场，鹿谷更像一堆小山中建造的度假村，各种ski-in-ski-out的5星级酒店遍布山间，酒店和酒店之间通过雪道相连，因此它拥有庞大数量的缆车且有好多还是双向缆车。[[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-deer)]
 
 # Jackson Hole
 
