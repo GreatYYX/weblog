@@ -5,7 +5,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://blog.yyx.me/</loc>
-<lastmod>2022-03-27T14:58:27-00:00</lastmod>
+<lastmod>2023-02-24T17:51:04-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -20,6 +20,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://blog.yyx.me/gallery/</loc>
 <lastmod>2014-08-14T12:00:00-07:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://blog.yyx.me/posts/ski-resort-trail-name-origin/</loc>
+<lastmod>2023-01-10T00:49:00-08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -158,6 +165,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>https://blog.yyx.me/categories/discovery/</loc>
+<lastmod>2023-01-10T00:49:00-07:53</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>https://blog.yyx.me/categories/diy/</loc>
 <lastmod>2022-03-24T16:31:00-07:53</lastmod>
 <changefreq>daily</changefreq>
@@ -193,15 +207,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>https://blog.yyx.me/tags/ski/</loc>
-<lastmod>2022-03-24T16:31:00-07:53</lastmod>
+<loc>https://blog.yyx.me/tags/snowboard/</loc>
+<lastmod>2023-01-10T00:49:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://blog.yyx.me/tags/snowboard/</loc>
-<lastmod>2022-03-24T16:31:00-07:53</lastmod>
+<loc>https://blog.yyx.me/tags/ski/</loc>
+<lastmod>2023-01-10T00:49:00-07:53</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
