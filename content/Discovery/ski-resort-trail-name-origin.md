@@ -87,7 +87,14 @@ Mammoth的缆车将在接下来的日子里迎来一波大改造，包括The Out
 
 # Alta
 
+大名鼎鼎的Alta是北美最早开发的一批雪场（拥有美国第二台缆车，第一台在Sun Valley），也是目前美国仅存的3个ski-only的雪场之一（另外两个事Mad River Glen和Deer Valley）。Alta最早是银矿，几次繁荣和没落之后最终变成鬼城，直到Alta Lift Company和林业局介入开始开发。Alta最早雇用了挪威滑手Alf Engen协助开发和教学，目前的滑雪学校也是他命名的。
 [[Ref-1](https://www.skiutah.com/blog/authors/lexi/ski-utah-resort-histories-alta-ski)] [[Ref-2](http://www.centralpt.com/databaseindshowitem.aspx?id=71998&oid=490039&pid)]
+
+- Albion: 拉丁语中white land的意思，也是古英国的代称。
+- Blackjack: 黑杰克，矿名，回雪鸟的路。与其说是路，不如说是ski patrol在野雪里踩出来的痕迹。
+- Schuss Gully: Colins缆车边的trail，德语"a straight downhill run on skis"的意思。
+- Rustler: 直译是偷牛贼，当然也可能直接就是用名字命名的，只不过这个名字的家族发源于蒙大拿且后期迁移到了美东，看不出和Alta的直接关系。Rustler lodge和它面对的雪道都以此命名。
+- Glory Hole: 让我想到了加州Lake Berryessa湖水坝上的著名泄洪口。
 
 # Brighton
 
@@ -103,11 +110,12 @@ Utah第一个雪场，也是一个所有地区高速缆车可达，且提供夜�
 
 # Snowbasin
 
-远在SLC向北40mile左右的Ogden的雪场，当SLC的Canyon因为雪天被关闭或者被人卷的水泄不通的时候，转头去Snowbasin不失为一种明智的策略。作为2002年冬奥会Downhill和Super-G（超级大回转）的比赛场地，USFS（美国林业局）捐赠给了雪盆占其目前60%的国家森林的土地，让它一跃成为了举世闻名的雪场。[[Ref-1](https://www.snowbasin.com/about/history/)]
+远在SLC向北40mile左右的Ogden市，命名来自于给当地发展做出巨大贡献的加拿大人Peter Ogden。当SLC的Canyon因为雪天被关闭或者被人卷的水泄不通的时候，转头去Ogden的Snowbasin雪场不失为一种明智的策略。作为2002年冬奥会Downhill和Super-G（超级大回转）的比赛场地，USFS（美国林业局）捐赠给了雪盆占其目前60%的国家森林的土地，让它一跃成为了举世闻名的雪场。而雪盆给我地第一印象是拥有巨量的停车场，豪华的lodge以及广阔且多样的地形。[[Ref-1](https://www.snowbasin.com/about/history/)]
 
 - Allen Peak Tram: 通向山顶的一小段独一无二的tram，外部印有各获奖国国旗标志。天气晴朗时候能同时看到Nevada, Idaho, Wyoming, Utah and Colorado五个state。
 - John Paul: 命名来自于Ogden本地人John Paul Jones，他在Snowbasin学会了ski的技能。二战期间军队雇用了很多具有双板滑雪技能的士兵，他们穿着雪地吉利服踩着双板快速穿梭在敌阵之中以打对方措手不及。其中近千名第十山地小队（10th Mountain Division）的士兵在二战中丧生，也包括在意大利战死的John。
 - Wildcat: 这个缆车在历史上不断更迭:1948年初代完成（单坐木质tower），1964年变成双座，1973年升级为三座，最终在2017年成为6座高速缆车。加之Little Cat缆车，可以看出雪盆对于Wildcat地区的开发利用是比较重视的。值得一提的是，这个缆车也是2010年恐怖片Frozen的拍摄地。[[Ref-1](https://en.wikipedia.org/wiki/Frozen_(2010_American_film))][[Ref-2](https://liftblog.com/snowbasin-ut/)]
+- Last Chance: Strawberry地区海拔最低的一条长雪道，名字取的非常贴切：大量从山上下来的雪道不断汇聚道这条boundry边缘的traverse，以便可以顺利回到Strawberry base。一旦错过，那只能hike回程了。
 
 # Deer Valley
 
