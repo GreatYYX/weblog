@@ -45,20 +45,23 @@ Summary_en: The origin and meme discovery of North America ski and snowboard res
 
 - Cloud Nine: C9，和北美著名电竞战队同名。猛犸山9号缆车，C9指的是天空的最高层（最低是C0），尽享极乐（"a state of bliss, elation or happiness"）。
 - High-Five: 猛犸山5号缆车，击掌！
-- Quick Silver: 快银，和复联超级英雄同名。其实快银时汞的别称，因为汞常温是液体，能快速的流动。
+- Quick Silver: 快银，和复联超级英雄同名。其实快银是汞的别称，因为汞常温是液体，能快速的流动。
 - Facelift: 拉皮手术？虽然不知为何得此名但很可能只是一个谐音梗，毕竟Mammoth官方把这个缆车名写成分开的两个单词Face Lift，这样解读起来就比较合理。
+- Gold Rush: 应该是指代最早的一批来西海岸的淘金客，也是他们繁荣了加州。
 - Stump Alley: 可能夏天的时候都是树墩子？
 - Woolly's woods: 其中的Woolly是Mammoth官方吉祥物的名字（毛茸茸的猛犸象）。
 - St Anton: 取自奥地利知名滑雪胜地Sankt Anton am Arlberg。
 - Discovery: 新手道缆车，比Schoolyard进阶一点，而且有初级公园的features，给人一种在学习过程中不断探索的感觉。该缆车下雪道的命名也很有意思，Sesame Street（著名动画片芝麻街）和Apple Pie，公园叫Disco Playground（寓意贴切又和Discovery的前缀相呼应）。
-- Chair 23: 非常有特点的一条缆车。Bottom station向后连接着非常长的配重缆绳，可见底下的配重块质量之大（竟然没有用水配重），用以平衡山顶的妖风。Up station封闭式的设计以及可以关上的两侧出口（我竟然一直都没有发现出口是可以关闭的）可以保护下缆车的人和station自身的安全。
+- Chair 23: 非常有特点的一条缆车。Bottom station向后连接着非常长的配重缆绳，可见底下的配重块质量之大（竟然没有用水配重），用以平衡山顶的妖风。Up station封闭式的设计以及可以关上的两侧出口（我之前竟然一直都没有发现出口是可以关闭的）可以保护下缆车的人和station自身的安全。
 - Dropout Chutes & Wipeout Chutes: 23号缆车左右两侧的双黑雪道，名字取的很有节奏很对仗。
 - Kiwi Flats: 包括周边一众非常狭窄的遍布石头的双黑悬崖应该是Mammoth最难的地形部分了。至于名字中为何有kiwi目前无从考证，但从词本身猜测可能就直译成猕猴桃，或者是不能飞的鸟（flightless bird），亦或是新西兰人（New Zealander）。
-- McCoy Station & Dave's Run: 来自于Mammoth的创始人Dave McCoy。Dave出生在El Segundo（LAX机场边），2020年104岁时去世于Bishop。他的老婆Roma是Bishop当地人，和Dave一样很长寿，2021年去世时候也已是100岁高龄。[[Ref-1](https://skiinghistory.org/not-just-another-mammoth-mountain-history)]
+- McCoy Station & Dave's Run: 来自于Mammoth的创始人Dave McCoy。Dave出生在El Segundo（LAX机场边），后生活在Bishop直到2020年104岁去世。他的老婆Roma是Bishop当地人，和Dave一样很长寿，2021年去世时候也已是100岁高龄。Dave和Roma的认识也非常的传奇：Dave在建立最早的滑雪拖牵的时候（rope tow）需要向银行贷款，但是被拒绝了因为银行认为年轻的Dave会用来party和买醉。而当时身为银行秘书的Roma力排众议最终向Dave放贷。当然他们也走到了一起并维持了79年的婚姻直到Dave去世。[[Ref-1](https://skiinghistory.org/not-just-another-mammoth-mountain-history)][[Ref-2](https://en.wikipedia.org/wiki/Dave_McCoy)]
+- Roma's Road: 位于Dave's Run的正下方，以Dave的老婆Roma命名。最早正是作为滑雪明星的Dave带着Roma开始滑雪，hiking和钓鱼。
+- Terry's Run: 又一个以人命名的雪道。Terry Smith曾经是猛犸山的ski instructor也是竞速滑雪的教练（race coach），但在一次开3号缆车上面的铲车（earth moving machine）的事故中去世。因此为了纪念他，Broadway边上那条用来训练竞速的雪道以他来命名。[[Ref-1](https://fwsa.org/content.aspx?page_id=22&club_id=623165&module_id=357222)]
 - Haven’t the Forggiest: C9边的一条trail，意思就是have no idea at all。
 - Cornice Bowl: 算是山顶最不吃雪况单黑道了，不过雪不好的时候顶上一段很冰，毕竟cornice的意思就是"an overhanging mass of hardened snow at the edge of a mountain precipice"（悬崖边冻结的大冰块）。
-
-Mammoth的缆车将在接下来的日子里迎来一波大改造，包括The Outpost那3条缆车变成高速缆车，以及Broadway这类主干道变成6人以上的高速缆车。[[Ref-1](https://liftblog.com/2017/07/10/mapping-mammoths-next-new-lifts/)]
+- Dragon's Run & Dragon's Back: 猛犸山的边界，山脊非常像龙背。题外话是在ski boundary外侧，顺着往下滑直到Tamarack Lodge前，有一个著名景点Hole in the Wall，即在一堆岩浆形成的石头墙（lava tube）上形成了一个洞。这个洞也被戏称为Dragon's Butt Hole。
+- The Outpost: 背山缆车13和14的bottom station附近，矗立在白茫茫的一片雪原上唯一lodge。相比McCoy Station这种山中大本营，The Outpost确实很像backcountry时候前线上的哨所。
 
 # June Mountain
 
@@ -123,8 +126,33 @@ Utah第一个雪场，也是一个所有地区高速缆车可达，且提供夜�
 
 # Jackson Hole
 
-不愧是大家都趋之若鹜的滑雪胜地，碰到科州来的游客都一个个赞不绝口。
+杰克逊洞不愧是大家都趋之若鹜的滑雪胜地，碰到科州来的游客都一个个赞不绝口。
 
 - Après Vous: 法语的after you，您先上（你行你先上）。滑雪起源于欧洲贵族，带点法语德语什么的在名字里也算是一种附庸风雅吧。比如滑雪后的体验装逼来说就叫Après-ski，在雪道上叫on-piste，连双板的雪鞋和雪板的脱板值DIN都是德语Deutsches Institut fur Normung (German Institute for Standardisation)德国标准协会的缩写。
 - Teton/Casper/Teewinot: 都是怀俄明州的山。
 - Corbet's Couloir: 著名的跳崖胜地，JH的最大看点之一，命名来自于传奇滑雪教练兼向导Barry Corbet。
+
+# Big Sky
+
+大天和Jackson Hole分别位于黄石公园的北和南两侧，因此大天位于Montana境内（也因此得名因为Montana的昵称是Big Sky Country）。给我最直观的感受是雪场很大，地形丰富，几个主要缆车都带有挡风罩（bubble）和电加热座椅，而且这些缆车都采用了Doppelmayr公司最新的D-Line Technology。单独收费的tram可以拉到Lone Peak山顶，从那儿起始有非常丰富的三黑雪道（triple black diamond）。
+
+# Aspen Snowmass - Aspen Mountain
+
+- Silver Queen Gondola: [Ref](https://aspenjournalism.org/finding-the-silver-queen-the-abundant-manifestations-of-aspens-victorian-nickname/)
+
+# Aspen Snowmass - Aspen Highlands
+
+# Aspen Snowmass - Buttermilk
+
+# Aspen Snowmass - Snowmass
+
+# Winter Park
+
+# Copper
+
+# Arapahoe Basin
+
+# Steamboat
+
+
+Lift types: https://www.the-ski-guru.com/2019/12/06/different-types-lifts-resortshow-ride-them/
