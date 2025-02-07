@@ -55,9 +55,10 @@ Summary_en: The origin and meme discovery of North America ski and snowboard res
 - Chair 23: 非常有特点的一条缆车。Bottom station向后连接着非常长的配重缆绳，可见底下的配重块质量之大（竟然没有用水配重），用以平衡山顶的妖风。Up station封闭式的设计以及可以关上的两侧出口（我之前竟然一直都没有发现出口是可以关闭的）可以保护下缆车的人和station自身的安全。
 - Dropout Chutes & Wipeout Chutes: 23号缆车左右两侧的双黑雪道，名字取的很有节奏很对仗。
 - Kiwi Flats: 包括周边一众非常狭窄的遍布石头的双黑悬崖应该是Mammoth最难的地形部分了。至于名字中为何有kiwi目前无从考证，但从词本身猜测可能就直译成猕猴桃，或者是不能飞的鸟（flightless bird），亦或是新西兰人（New Zealander）。
-- McCoy Station & Dave's Run: 来自于Mammoth的创始人Dave McCoy。Dave出生在El Segundo（LAX机场边），后生活在Bishop直到2020年104岁去世。他的老婆Roma是Bishop当地人，和Dave一样很长寿，2021年去世时候也已是100岁高龄。Dave和Roma的认识也非常的传奇：Dave在建立最早的滑雪拖牵的时候（rope tow）需要向银行贷款，但是被拒绝了因为银行认为年轻的Dave会用来party和买醉。而当时身为银行秘书的Roma力排众议最终向Dave放贷。当然他们也走到了一起并维持了79年的婚姻直到Dave去世。[[Ref-1](https://skiinghistory.org/not-just-another-mammoth-mountain-history)][[Ref-2](https://en.wikipedia.org/wiki/Dave_McCoy)]
+- McCoy Station & Dave's Run: 来自于Mammoth的创始人Dave McCoy。Dave出生在El Segundo（LAX机场边），后生活在Bishop直到2020年104岁去世。他的老婆Roma是Bishop当地人，和Dave一样很长寿，2021年去世时候也已是100岁高龄。Dave和Roma的认识也非常的传奇：Dave在建立最早的滑雪拖牵的时候（rope tow）需要向银行贷款，但是被拒绝了因为银行认为年轻的Dave会用来party和买醉。而当时身为银行秘书的Roma力排众议最终向Dave放贷。当然他们也走到了一起并维持了79年的婚姻直到Dave去世。[[Ref-1](https://skiinghistory.org/not-just-another-mammoth-mountain-history)][[Ref-2](https://en.wikipedia.org/wiki/Dave_McCoy)][[Ref-3](https://www.youtube.com/watch?v=M2Js3CCnWCQ&ab_channel=MammothMountain)]
 - Roma's Road: 位于Dave's Run的正下方，以Dave的老婆Roma命名。最早正是作为滑雪明星的Dave带着Roma开始滑雪，hiking和钓鱼。
 - Terry's Run: 又一个以人命名的雪道。Terry Smith曾经是猛犸山的ski instructor也是竞速滑雪的教练（race coach），但在一次开3号缆车上面的铲车（earth moving machine）的事故中去世。因此为了纪念他，Broadway边上那条用来训练竞速的雪道以他来命名。[[Ref-1](https://fwsa.org/content.aspx?page_id=22&club_id=623165&module_id=357222)]
+- Scotty's: 该雪道是为了纪念一名非常敬业的ski patrol John Scott McAndrews。他和另外两名ski patrol于2006年4月在Facelift下面的火山口边做雪崩控制（avalanche control）的时候不幸落入坍塌的洞中，并因火山气体窒息而死。[[Ref-1](https://www.mammothmountain.com/on-the-mountain/safety/we-remember)]
 - Haven’t the Forggiest: C9边的一条trail，意思就是have no idea at all。
 - Cornice Bowl: 算是山顶最不吃雪况单黑道了，不过雪不好的时候顶上一段很冰，毕竟cornice的意思就是"an overhanging mass of hardened snow at the edge of a mountain precipice"（悬崖边冻结的大冰块）。
 - Dragon's Run & Dragon's Back: 猛犸山的边界，山脊非常像龙背。题外话是在ski boundary外侧，顺着往下滑直到Tamarack Lodge前，有一个著名景点Hole in the Wall，即在一堆岩浆形成的石头墙（lava tube）上形成了一个洞。这个洞也被戏称为Dragon's Butt Hole。
@@ -147,6 +148,9 @@ Utah第一个雪场，也是一个所有地区高速缆车可达，且提供夜�
 # Aspen Snowmass - Snowmass
 
 # Winter Park
+
+- Mary Jane: 我一直以为是一个运动员的名字，而实际上非常出乎意料的是Mary Jane其实是一个老鸨（local lady of the evening）。当年Winter Park还是矿区和伐木区的时候，聪明的玛丽把自己的色情产业经营的风生水起。后来就买下了这个trail并发扬光大变成了滑雪场，当然也有一说是客户送的。官方文档的形容也颇有意思: "while Mary Jane may have been a lady of ill repute, her namesake continues to be one the finest mountain getaways to be found anywhere in the country." 题外话是Mary Jane在俚语里是大麻的意思，所以在这地儿的缆车上麻味还挺重。[[Ref-1](https://www.winterparkresort.com/the-mountain/mountain-information/history/mary-jane-history)]
+- Dilly Dally Alley: 朗朗上口的名字一下就记住了。本身是一个很长很长的roller（波浪道），非常有趣。Dilly-dally的原意是无所事事的游荡，和滑roller时候的无忧无虑上上下下起起伏伏也算是相得益彰了。
 
 # Copper
 
