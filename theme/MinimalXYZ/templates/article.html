@@ -43,7 +43,7 @@
           <!-- <div class="adjust-width">
             <div id="author-block" class="w3-light-grey w3-border">
               <div id="author-info">
-                <a href="{{ AUTHOR_WEB }}"><img style="width: 60px; height: 60px;" src="{{ AUTHOR_AVATAR }}" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <a href="{{ AUTHOR_WEB }}"><img style="width: 60px; height: 60px;" src="{{ AUTHOR_AVATAR }}" onerror="this.src='{{ SITEURL }}/theme/images/avatar.png'" alt="Avatar"></a>
                 <div style="margin-left: 20px; margin-top: 15px;">
                   <a href="{{ AUTHOR_WEB }}"><span id="author-name" class="w3-hover-text-dark-grey">{{ article.author }}</span></a>
                   <p id="author-story">{% if article.author==AUTHOR %}{{ AUTHOR_DESCRIPTION }}{% endif %}</p>
@@ -56,10 +56,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u={{ (SITEURL + '/' + article.url)|urlencode }}&amp;t={{ (SITENAME + ': ' + article.title)|urlencode }}" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://www.facebook.com/sharer.php?u={{ (SITEURL + '/' + article.url)|urlencode }}&amp;t={{ (SITENAME + ': ' + article.title)|urlencode }}" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url={{ (SITEURL + '/' + article.url)|urlencode }}&amp;text={{ (SITENAME + ': ' + article.title)|urlencode }}" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://twitter.com/share?url={{ (SITEURL + '/' + article.url)|urlencode }}&amp;text={{ (SITENAME + ': ' + article.title)|urlencode }}" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
             <a href="https://plus.google.com/share?url={{ (SITEURL + '/' + article.url)|urlencode }}" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">

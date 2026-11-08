@@ -1,0 +1,4 @@
+pelican>=4.9
+markdown
+pelican-jinja2content
+pelican-sitemap

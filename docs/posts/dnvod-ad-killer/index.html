@@ -28,8 +28,8 @@
 
     <!-- Feed -->
     <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
-    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
-    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/security.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="https://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
@@ -40,15 +40,15 @@
     <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/jqcloud.css"> -->
     <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/font-awesome.min.css">
     <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/hljs-tomorrow-night-eighties.min.css">
 
     <!-- Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="/theme/images/favicon-32x32.png">
 
     <!-- JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://blog.yyx.me/theme/js/jquery-3.7.1.min.js"></script>
     <!-- <script src="https://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://blog.yyx.me/theme/js/highlight-9.12.0.min.js"></script>
     <script src="https://blog.yyx.me/theme/js/main.js"></script>
   </head>
 
@@ -125,74 +125,74 @@
 
 <p>这段html比较长，重点部分主要是一个<code>object</code>标签里面的两个<code>param</code>及一个<code>embed</code>。从这儿的第一个<code>param</code>可以看出采用了一个叫做ckplayer的播放器，我查了下是个国人开发的通用的网页视频播放器。第二个<code>param</code>是真正干活的地方了，利用<code>flashvar</code>把网页参数传入播放器中。凭空猜测，<code>f</code>是具体的视频地址，<code>l</code>是左边广告，<code>r</code>是右边广告，<code>t</code>是每个广告时间，每组广告图片采用<code>|</code>分割。于是上神器burp修改request的payload，不过竟然没有成功。这个思路是最最直接最最简单的，理论上来说应该是可行的，不过可能我当时实验时候有失误，于是阴差阳错的放弃了这个方法（后面会阐述这反而成了优势）。</p>
 <p>之后就从js上下手，过了一遍加载的js。有一个混淆了js特别值得注意，<code>playerselection-1.2.7.90.js</code>。过一下反混淆器，代码的大致架子基本能还原出来（相比binary下反汇编的作业环境，js的这个的可读性还真不错）。快速scan一遍代码，感觉<code>settimeout</code>最可能作为突破点，毕竟倒计时在js里面最直观的做法就是用这个函数。一个个过下去发现有个的值被设置成<code>70000</code>，这不会就是70秒（70000ms）的广告吧？不好意思，对。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">loadedHandler</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">...</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;noads&#39;</span><span class="p">])</span> <span class="p">{</span>
-            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">_0xf706x34</span> <span class="o">=</span> <span class="nx">CKobject</span><span class="p">[</span><span class="s1">&#39;getObjectById&#39;</span><span class="p">](</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;ckid&#39;</span><span class="p">]);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">_0xf706x34</span> <span class="o">&amp;&amp;</span> <span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">])</span> <span class="p">{</span>
-                    <span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">]()</span>
-                <span class="p">}</span>
-            <span class="p">},</span> <span class="mf">70000</span><span class="p">)</span> <span class="c1">// &lt;---- HERE!!!!! OMG F*** IT</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="p">...</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">loadedHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;noads&#39;</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">var</span><span class="w"> </span><span class="nx">_0xf706x34</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CKobject</span><span class="p">[</span><span class="s1">&#39;getObjectById&#39;</span><span class="p">](</span><span class="nx">_vp</span><span class="p">[</span><span class="s1">&#39;ckid&#39;</span><span class="p">]);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">_0xf706x34</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nx">_0xf706x34</span><span class="p">[</span><span class="s1">&#39;frontAdUnload&#39;</span><span class="p">]()</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">},</span><span class="w"> </span><span class="mf">70000</span><span class="p">)</span><span class="w"> </span><span class="c1">// &lt;---- HERE!!!!! OMG F*** IT</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>随手在burp里把response body（注意这次不是改request是改response）改成10000，画面依然显示70s广告，不过到60s的时候就自动结束了。于是再接再厉，改成5000（此时记得<code>header</code>中的<code>content-length</code>也需要修改，否则malformat的包会被Chrome丢弃）。尝试把这个数字再改小就存在了没有了倒计时可广告仍然存在的问题，于是又定位了其他几个<code>settimeout</code>：</p>
-<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="n">CheckPlay</span><span class="p">(</span><span class="n">_0xf706x8c</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x8d</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.playtimer&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_0xf706x8c</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;toHHMMSS&#39;</span><span class="o">]</span><span class="p">());</span><span class="w"></span>
-<span class="w">        </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">CheckPlay</span><span class="p">(</span><span class="o">--</span><span class="n">_0xf706x8c</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="n">CheckPlay</span><span class="p">(</span><span class="n">_0xf706x8c</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x8d</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.playtimer&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_0xf706x8c</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;toHHMMSS&#39;</span><span class="o">]</span><span class="p">());</span>
+<span class="w">        </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="n">CheckPlay</span><span class="p">(</span><span class="c1">--_0xf706x8c)</span>
+<span class="w">        </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">    </span><span class="err">}</span>
+<span class="err">}</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">PlayAds</span><span class="p">(</span><span class="n">_0xf706xf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xf</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">][</span><span class="n">&#39;indexOf&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;swf&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">_0xf706xaf</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">_0xf706x3</span><span class="o">--</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">parseInt</span><span class="p">(</span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">callAdd</span><span class="p">(</span><span class="n">_0xf706xae</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setInterval</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706xb2</span><span class="o">--</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">980</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.ads-control&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;remove&#39;</span><span class="o">]</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">clearInterval</span><span class="p">(</span><span class="n">_0xf706xb3</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CKobject</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">CKobject</span><span class="o">[</span><span class="n">&#39;getObjectById&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;ckid&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;videoPlay&#39;</span><span class="o">]</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1020</span><span class="p">)</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">PlayAds</span><span class="p">(</span><span class="n">_0xf706xf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xf</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x5</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x6</span><span class="o">[</span><span class="n">&#39;split&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">_0xf706x3</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">][</span><span class="n">&#39;indexOf&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;swf&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="n">_0xf706xae</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_0xf706xaf</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">&#39;splice&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706x3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_0xf706x3</span><span class="c1">--</span>
+<span class="w">        </span><span class="err">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">parseInt</span><span class="p">(</span><span class="n">_0xf706xb0</span><span class="o">[</span><span class="n">_0xf706x3</span><span class="o">]</span><span class="p">)</span>
+<span class="w">        </span><span class="err">}</span>
+<span class="w">    </span><span class="err">}</span><span class="p">;</span>
+<span class="w">    </span><span class="n">callAdd</span><span class="p">(</span><span class="n">_0xf706xae</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xaf</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb0</span><span class="p">);</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="p">;</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setInterval</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_0xf706xb2</span><span class="c1">--)</span>
+<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="mi">980</span><span class="p">);</span>
+<span class="w">    </span><span class="n">setTimeout</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.ads-control&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;remove&#39;</span><span class="o">]</span><span class="p">();</span>
+<span class="w">        </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706xb4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="s1">&#39;.second&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">clearInterval</span><span class="p">(</span><span class="n">_0xf706xb3</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_0xf706xb4</span><span class="o">[</span><span class="n">&#39;text&#39;</span><span class="o">]</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CKobject</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="n">CKobject</span><span class="o">[</span><span class="n">&#39;getObjectById&#39;</span><span class="o">]</span><span class="p">(</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;ckid&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">[</span><span class="n">&#39;videoPlay&#39;</span><span class="o">]</span><span class="p">()</span>
+<span class="w">        </span><span class="err">}</span>
+<span class="w">    </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">_0xf706xb1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1020</span><span class="p">)</span>
+<span class="err">}</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">EmbedFlash</span><span class="p">(</span><span class="n">_0xf706x24</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2a</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x50</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">][</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706x4f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;wa&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="p">...</span><span class="w"></span>
-<span class="w">            </span><span class="n">setTimeout</span><span class="p">(</span><span class="n">_vp</span><span class="p">.</span><span class="n">TirggerPending</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">EmbedFlash</span><span class="p">(</span><span class="n">_0xf706x24</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x2a</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">    </span><span class="nf">var</span><span class="w"> </span><span class="n">_0xf706x50</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_0xf706x2b</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">!</span><span class="n">_vp</span><span class="o">[</span><span class="n">&#39;playlistM&#39;</span><span class="o">][</span><span class="n">&#39;length&#39;</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_0xf706x4f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;wa&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">            </span><span class="n">setTimeout</span><span class="p">(</span><span class="n">_vp</span><span class="p">.</span><span class="n">TirggerPending</span><span class="p">,</span><span class="w"> </span><span class="n">_0xf706x4f</span><span class="o">[</span><span class="n">&#39;timeout&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">        </span><span class="err">}</span>
+<span class="w">    </span><span class="err">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="err">}</span>
 </code></pre></div>
 
 <p>其中最关键的应该就是<code>PlayAds</code>这个函数了，基本就是读取广告然后丢到Flash中，这里的<code>settimeout</code>用于时间到了之后把广告的div移调。另外<code>CheckPlay</code>是用来检测状态改变的(相当于刷新器)，因此需要把值改的要比较小，否则就会出现上面的值改小了却不生效的情况。</p>
@@ -200,51 +200,51 @@
 <p>有时候灵光一闪真的很重要，还记得当年比CTF睡觉时候突然有思路爬起来增援刷夜的老曾和潘神的情况。判断AdBlock这类插件是否存在的原理上面已经说了，就是只要设定一个timeout，过了timeout之后看这个资源有没有下载成功即可。因此直接屏蔽资源肯定是不行的，思路就变成了伪造一个正常的资源。之后就想到CSS1/2标准不完善的时候一个hack div的技巧，于是构造了一个1px x 1px的透明gif图片，直接替换掉所有广告图片，这样对于检测程序来说，依然认为ad下载成功，而事实上什么都看不到喽。</p>
 <h1>自动化去广告</h1>
 <p>这里没有采用开发一个Chrome Extension的方案，原因主要是Chrome团队是很激进的（褒义词），为了推动web标准进步和增强浏览器安全问题费尽了心思，比如这儿修改response body本身会或者将会受到Chrome API的限制。于是直接就用炉火纯青的中间人攻击(mitm)解决这个问题，网上随便找了个<a href="https://github.com/abhinavsingh/proxy.py">HTTP Proxy</a>，code写的不错，全是Python原生库。之后主要修改下处理response body的环节：</p>
-<div class="highlight"><pre><span></span><code> <span class="n">def</span> <span class="n">_process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="c1"># parse incoming response packet</span>
-        <span class="c1"># only for non-https requests</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;CONNECT&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="n">def</span><span class="w"> </span><span class="n">_process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="c1"># parse incoming response packet</span>
+<span class="w">        </span><span class="c1"># only for non-https requests</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sa">b</span><span class="s2">&quot;CONNECT&quot;</span><span class="p">:</span>
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="c1"># print self.request.host_, self.request.url_</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
-            <span class="c1"># ads</span>
-            <span class="n">one_px_gif_data</span> <span class="o">=</span> <span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
-                    <span class="n">data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
+<span class="w">        </span><span class="c1"># print self.request.host_, self.request.url_</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">host_</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
+<span class="w">            </span><span class="c1"># ads</span>
+<span class="w">            </span><span class="n">one_px_gif_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
+<span class="w">                    </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
 
-            <span class="c1"># count down</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span> <span class="o">==</span> <span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
-                <span class="n">with</span> <span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="w">            </span><span class="c1"># count down</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
+<span class="w">                </span><span class="n">with</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-        <span class="c1"># queue data for client</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="w">        </span><span class="c1"># queue data for client</span>
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div>
 
 <p>我这儿对于修改好的js直接存在文件里了，所以读取后替换。对于1px的transparent gif，实在没必要专门创建个文件然后浪费一次io，于是直接base64了这个图片的byte。</p>
 <p>之后浏览器代理挂好，对于<code>*.dnvod.tv</code>的流量转向这个代理即可。</p>
 <h2>Update: 2018-02-25</h2>
 <p>据网友Orooz反应，程序在Windows下不可用，测试后发现原本使用的HTTP Proxy在Windows下无法正常工作，遂使用<a href="https://github.com/inaz2/proxy2">proxy2</a>替换之。原理完全一样，直接贴修改的代码。</p>
-<div class="highlight"><pre><span></span><code><span class="n">def</span> <span class="n">response_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">req_body</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">res_body</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">url_domain</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">netloc</span>
-        <span class="n">url_path</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">path</span>
+<div class="highlight"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">response_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">req_body</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">,</span><span class="w"> </span><span class="n">res_body</span><span class="p">):</span>
+<span class="w">        </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="w">        </span><span class="n">url_domain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">url</span><span class="o">.</span><span class="n">netloc</span>
+<span class="w">        </span><span class="n">url_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">url</span><span class="o">.</span><span class="n">path</span>
 
-        <span class="k">if</span> <span class="n">url_domain</span> <span class="ow">and</span> <span class="n">url_domain</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
-            <span class="c1"># ads</span>
-            <span class="n">one_px_gif_data</span> <span class="o">=</span> <span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
-            <span class="k">if</span> <span class="n">url_path</span> <span class="ow">and</span> <span class="n">url_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">url_path</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
-                    <span class="n">res_body</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">url_domain</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">url_domain</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;dnvod.tv&#39;</span><span class="p">):</span>
+<span class="w">            </span><span class="c1"># ads</span>
+<span class="w">            </span><span class="n">one_px_gif_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7&#39;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">url_path</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">url_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/upload/video&#39;</span><span class="p">):</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">url_path</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
+<span class="w">                    </span><span class="n">res_body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">one_px_gif_data</span><span class="p">)</span>
 
-            <span class="c1"># count down</span>
-            <span class="k">if</span> <span class="n">url_path</span> <span class="ow">and</span> <span class="n">url_path</span> <span class="o">==</span> <span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
-                <span class="n">with</span> <span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                    <span class="n">res_body</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="w">            </span><span class="c1"># count down</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">url_path</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">url_path</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;/js/2016/playerselection-1.2.7.90.js&#39;</span><span class="p">:</span>
+<span class="w">                </span><span class="n">with</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;dn_replace.js&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span>
+<span class="w">                    </span><span class="n">res_body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-            <span class="k">return</span> <span class="n">res_body</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">res_body</span>
 </code></pre></div>
 
 <p>意外收获是该Proxy支持HTTPS的mitm。</p>
@@ -262,7 +262,7 @@
           <!-- <div class="adjust-width">
             <div id="author-block" class="w3-light-grey w3-border">
               <div id="author-info">
-                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='https://blog.yyx.me/theme/images/avatar.png'" alt="Avatar"></a>
                 <div style="margin-left: 20px; margin-top: 15px;">
                   <a href=""><span id="author-name" class="w3-hover-text-dark-grey">YYX</span></a>
                   <p id="author-story"></p>
@@ -275,10 +275,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/dnvod-ad-killer/&amp;t=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/dnvod-ad-killer/&amp;t=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=https%3A//blog.yyx.me/posts/dnvod-ad-killer/&amp;text=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://twitter.com/share?url=https%3A//blog.yyx.me/posts/dnvod-ad-killer/&amp;text=YYX%27s%20Website%3A%20%E5%A4%9A%E7%91%99%E8%A7%86%E9%A2%91%E5%B9%BF%E5%91%8A%E7%A7%BB%E9%99%A4%E6%80%9D%E8%B7%AF%E5%8F%8A%E5%AE%9E%E7%8E%B0" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
             <a href="https://plus.google.com/share?url=https%3A//blog.yyx.me/posts/dnvod-ad-killer/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
@@ -335,19 +335,18 @@
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2025          yyx.me
+          2014&dash;2026          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q77322KLN5"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-64342434-1', 'auto');
-      ga('send', 'pageview');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q77322KLN5');
     </script>
   </body>
 </html>

@@ -28,8 +28,8 @@
 
     <!-- Feed -->
     <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/all.atom.xml" title="YYX's Website Atom Feed" />
-    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/{slug}.atom.xml" title="YYX's Website Categories Atom Feed" />
-    <link rel="alternate" type="application/rss+xml" href="http://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
+    <link rel="alternate" type="application/atom+xml" href="https://blog.yyx.me/feeds/web.atom.xml" title="YYX's Website Categories Atom Feed" />
+    <link rel="alternate" type="application/rss+xml" href="https://yyxblog.disqus.com/latest.rss" title="YYX's Website Comments RSS Feed">
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
@@ -40,15 +40,15 @@
     <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/jqcloud.css"> -->
     <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/font-awesome.min.css">
     <!-- <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/pygments-highlight-github.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" type="text/css" href="https://blog.yyx.me/theme/css/hljs-tomorrow-night-eighties.min.css">
 
     <!-- Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="/theme/images/favicon-32x32.png">
 
     <!-- JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://blog.yyx.me/theme/js/jquery-3.7.1.min.js"></script>
     <!-- <script src="https://blog.yyx.me/theme/js/jqcloud.min.js"></script> -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://blog.yyx.me/theme/js/highlight-9.12.0.min.js"></script>
     <script src="https://blog.yyx.me/theme/js/main.js"></script>
   </head>
 
@@ -173,25 +173,25 @@ pip install markdown
 
 <h2>写文章</h2>
 <p>这里其实和Pelican没多大关系了。这里使用<a href="http://wowubuntu.com/markdown/">Makedown语法</a>写文章，并保存为.md文件。</p>
-<div class="highlight"><pre><span></span><code><span class="n">Title</span><span class="o">:</span> <span class="n">My</span> <span class="kd">super</span> <span class="n">title</span>
-<span class="n">Date</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">03</span> <span class="mi">10</span><span class="o">:</span><span class="mi">20</span>
-<span class="n">Category</span><span class="o">:</span> <span class="n">Python</span>
-<span class="n">Tags</span><span class="o">:</span> <span class="n">pelican</span><span class="o">,</span> <span class="n">publishing</span>
-<span class="n">Slug</span><span class="o">:</span> <span class="n">my</span><span class="o">-</span><span class="kd">super</span><span class="o">-</span><span class="n">post</span>
-<span class="n">Author</span><span class="o">:</span> <span class="n">Alexis</span> <span class="n">Metaireau</span>
-<span class="n">Summary</span><span class="o">:</span> <span class="n">Short</span> <span class="n">version</span> <span class="k">for</span> <span class="n">index</span> <span class="n">and</span> <span class="n">feeds</span>
+<div class="highlight"><pre><span></span><code><span class="n">Title</span><span class="o">:</span><span class="w"> </span><span class="n">My</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">title</span>
+<span class="n">Date</span><span class="o">:</span><span class="w"> </span><span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">03</span><span class="w"> </span><span class="mi">10</span><span class="o">:</span><span class="mi">20</span>
+<span class="n">Category</span><span class="o">:</span><span class="w"> </span><span class="n">Python</span>
+<span class="n">Tags</span><span class="o">:</span><span class="w"> </span><span class="n">pelican</span><span class="o">,</span><span class="w"> </span><span class="n">publishing</span>
+<span class="n">Slug</span><span class="o">:</span><span class="w"> </span><span class="n">my</span><span class="o">-</span><span class="kd">super</span><span class="o">-</span><span class="n">post</span>
+<span class="n">Author</span><span class="o">:</span><span class="w"> </span><span class="n">Alexis</span><span class="w"> </span><span class="n">Metaireau</span>
+<span class="n">Summary</span><span class="o">:</span><span class="w"> </span><span class="n">Short</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">feeds</span>
 
-<span class="n">This</span> <span class="k">is</span> <span class="n">the</span> <span class="n">content</span> <span class="n">of</span> <span class="n">my</span> <span class="kd">super</span> <span class="n">blog</span> <span class="n">post</span><span class="o">.</span> <span class="err">#正文内容</span>
+<span class="n">This</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">my</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">blog</span><span class="w"> </span><span class="n">post</span><span class="o">.</span><span class="w"> </span><span class="err">#正文内容</span>
 </code></pre></div>
 
 <p>上面是官方给出的模板，可以看到正文内容前为文章的meta数据，你可以制定文章的标题、日期、类别、标签、路径名、作者、摘要等(这些信息部分会出现在最终生成html的meta数据中，当然这取决于主题文件是否引用这些数据)。这些里面只有Title和Date是必须的(默认配置下，Date要自己指定是不是很BT，法国人的思维真是……)。meta块之后就用Makrdown写文章啦~当然你可以和我上面说的一样搞一个Markdown的可视化编辑器，写起来很愉快。Markdown语法实现不了的直接用html的语法即可。</p>
 <h2>Pelican重要的操作命令</h2>
 <p>目录中的makefile非常重要，通过make调用makefile中的命令即可完成相关操作。</p>
-<div class="highlight"><pre><span></span><code><span class="n">make</span> <span class="n">html</span>           <span class="p">#</span><span class="err">创建静态界面</span>
-<span class="n">make</span> <span class="n">regenerate</span>     <span class="p">#</span><span class="err">修改后自动创建静态界面</span>
-<span class="n">make</span> <span class="n">serve</span>          <span class="p">#</span><span class="err">创建服务器</span>
-<span class="n">make</span> <span class="n">devserver</span>      <span class="p">#</span><span class="err">相当于</span><span class="n">regenerate</span><span class="o">+</span><span class="n">serve</span>
-<span class="n">make</span> <span class="n">publish</span>        <span class="p">#</span><span class="err">生成用于发布的</span><span class="n">html</span>
+<div class="highlight"><pre><span></span><code><span class="n">make</span><span class="w"> </span><span class="n">html</span><span class="w">           </span><span class="p">#</span><span class="err">创建静态界面</span>
+<span class="n">make</span><span class="w"> </span><span class="n">regenerate</span><span class="w">     </span><span class="p">#</span><span class="err">修改后自动创建静态界面</span>
+<span class="n">make</span><span class="w"> </span><span class="n">serve</span><span class="w">          </span><span class="p">#</span><span class="err">创建服务器</span>
+<span class="n">make</span><span class="w"> </span><span class="n">devserver</span><span class="w">      </span><span class="p">#</span><span class="err">相当于</span><span class="n">regenerate</span><span class="o">+</span><span class="n">serve</span>
+<span class="n">make</span><span class="w"> </span><span class="n">publish</span><span class="w">        </span><span class="p">#</span><span class="err">生成用于发布的</span><span class="n">html</span>
 </code></pre></div>
 
 <p>手册上还有其他一些命令，请自行发掘。</p>
@@ -259,7 +259,7 @@ THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
           <!-- <div class="adjust-width">
             <div id="author-block" class="w3-light-grey w3-border">
               <div id="author-info">
-                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <a href=""><img style="width: 60px; height: 60px;" src="/theme/images/cat_avatar.png" onerror="this.src='https://blog.yyx.me/theme/images/avatar.png'" alt="Avatar"></a>
                 <div style="margin-left: 20px; margin-top: 15px;">
                   <a href=""><span id="author-name" class="w3-hover-text-dark-grey">YYX</span></a>
                   <p id="author-story"></p>
@@ -272,10 +272,10 @@ THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it with your friends!</p>
           <div id="share" class="share">
-            <a href="http://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/build-blog-on-github-by-pelican/&amp;t=YYX%27s%20Website%3A%20%E5%88%A9%E7%94%A8Pelican%E5%9C%A8Github%E4%B8%8A%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://www.facebook.com/sharer.php?u=https%3A//blog.yyx.me/posts/build-blog-on-github-by-pelican/&amp;t=YYX%27s%20Website%3A%20%E5%88%A9%E7%94%A8Pelican%E5%9C%A8Github%E4%B8%8A%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-facebook"></i> <!-- <span>Facebook</span> -->
             </a>
-            <a href="http://twitter.com/share?url=https%3A//blog.yyx.me/posts/build-blog-on-github-by-pelican/&amp;text=YYX%27s%20Website%3A%20%E5%88%A9%E7%94%A8Pelican%E5%9C%A8Github%E4%B8%8A%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" class="w3-btn yyx-btn-hover">
+            <a href="https://twitter.com/share?url=https%3A//blog.yyx.me/posts/build-blog-on-github-by-pelican/&amp;text=YYX%27s%20Website%3A%20%E5%88%A9%E7%94%A8Pelican%E5%9C%A8Github%E4%B8%8A%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2" target="_blank" class="w3-btn yyx-btn-hover">
               <i class="fa fa-twitter"></i> <!-- <span>Twitter</span> -->
             </a>
             <a href="https://plus.google.com/share?url=https%3A//blog.yyx.me/posts/build-blog-on-github-by-pelican/" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="w3-btn yyx-btn-hover">
@@ -332,19 +332,18 @@ THEME_STATIC_DIR = &#39;theme&#39;  #生成后的主题目录
       <div id="footer-copyright" class="w3-center w3-text-grey w3-padding-48">
         <span>
           &copy;
-          2014&dash;2025          yyx.me
+          2014&dash;2026          yyx.me
  | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank"><i class="fa fa-creative-commons" aria-hidden="true"></i></a>        </span>
       </div>
     </footer>
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q77322KLN5"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-64342434-1', 'auto');
-      ga('send', 'pageview');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q77322KLN5');
     </script>
   </body>
 </html>

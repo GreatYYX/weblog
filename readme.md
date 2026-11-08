@@ -6,15 +6,15 @@ Theme is based on [MinimalX](https://github.com/art1fa/minimalX) & [MinimalXY](h
 
 ## Usage
 
-Install Python dependencies.
+Install Python dependencies (Python 3) into a virtual environment.
 
-    virtualenv venv
+    python3 -m venv venv
     . venv/bin/activate
-    pip install pelican markdown
+    pip install -r requirements.txt
 
-Clone plug-ins.
+Plug-ins (`jinja2content`, `sitemap`) are installed from PyPI by the command above; local plug-ins live in `plugins/`.
 
-    git clone https://github.com/getpelican/pelican-plugins.git
+In a new shell, activate the environment again (`. venv/bin/activate`) before running any `make` command. To upgrade dependencies later, run `pip install -U -r requirements.txt`.
 
 Start local web server. Write articles in Markdown and save them to `content`.
 

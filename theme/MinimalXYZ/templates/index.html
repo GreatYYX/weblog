@@ -11,12 +11,10 @@
 	        </div>
 	        <div id="brand">&copy;{{ SITEDOMAIN }}</div>
 	        <ul class="w3-container" style="margin-top:50px">
-	          {% for title, link, external in MENUITEMS %}
-	            {% if external %}
-	            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
-	            {% else %}
-	            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}">{{ title }}</a></li>{{ " / " if not loop.last }}
-	            {% endif %}
+	          {% for item in MENUITEMS %}
+	            {% set title, link, external = item[0], item[1], item[2] %}
+	            {% set css_class = item[3] if item|length > 3 else '' %}
+	            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}"{% if external %} target="_blank" rel="noopener"{% endif %}{% if css_class %} class="{{ css_class }}"{% endif %}>{{ title }}</a></li>{{ " / " if not loop.last }}
 	          {% endfor %}
 	        </ul>
     	</div>

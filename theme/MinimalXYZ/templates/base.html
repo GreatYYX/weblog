@@ -68,19 +68,19 @@
     <link rel="alternate" type="application/rss+xml" href="{{ FEED_DOMAIN }}/{{ FEED_RSS }}" title="{{ SITENAME }} RSS Feed" />
     {% endif %}
     {% if CATEGORY_FEED_ATOM and category %}
-    <link rel="alternate" type="application/atom+xml" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(slug=category.slug) }}" title="{{ SITENAME }} Categories Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" title="{{ SITENAME }} Categories Atom Feed" />
     {% endif %}
     {% if CATEGORY_FEED_RSS and category %}
-    <link rel="alternate" type="application/rss+xml" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(slug=category.slug) }}" title="{{ SITENAME }} Categories RSS Feed" />
+    <link rel="alternate" type="application/rss+xml" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS.format(slug=category.slug) }}" title="{{ SITENAME }} Categories RSS Feed" />
     {% endif %}
     {% if TAG_FEED_ATOM and tag %}
-    <link rel="alternate" type="application/atom+xml" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(slug=tag.slug) }}" title="{{ SITENAME }} Tags Atom Feed" />
+    <link rel="alternate" type="application/atom+xml" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM.format(slug=tag.slug) }}" title="{{ SITENAME }} Tags Atom Feed" />
     {% endif %}
     {% if TAG_FEED_RSS and tag %}
-    <link rel="alternate" type="application/rss+xml" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(slug=tag.slug) }}" title="{{ SITENAME }} Tags RSS Feed" />
+    <link rel="alternate" type="application/rss+xml" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS.format(slug=tag.slug) }}" title="{{ SITENAME }} Tags RSS Feed" />
     {% endif %}
     {% if DISQUS_SITENAME %}
-    <link rel="alternate" type="application/rss+xml" href="http://{{ DISQUS_SITENAME }}.disqus.com/latest.rss" title="{{ SITENAME }} Comments RSS Feed">
+    <link rel="alternate" type="application/rss+xml" href="https://{{ DISQUS_SITENAME }}.disqus.com/latest.rss" title="{{ SITENAME }} Comments RSS Feed">
     {% endif %}
 
     <!-- CSS -->
@@ -92,7 +92,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/jqcloud.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/font-awesome.min.css">
     <!-- <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/pygments-highlight-github.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/hljs-tomorrow-night-eighties.min.css">
     {% if MINIMALXY_CUSTOM_CSS %}
     <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/{{ MINIMALXY_CUSTOM_CSS }}">
     {% endif %}
@@ -103,9 +103,9 @@
     {% endif %}
 
     <!-- JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="{{ SITEURL }}/theme/js/jquery-3.7.1.min.js"></script>
     <!-- <script src="{{ SITEURL }}/theme/js/jqcloud.min.js"></script> -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="{{ SITEURL }}/theme/js/highlight-9.12.0.min.js"></script>
     <script src="{{ SITEURL }}/theme/js/main.js"></script>
   </head>
 
@@ -138,12 +138,11 @@
             <li class="{% if page_name == 'archives' %}active{% else %}w3-hover-opacity{% endif %}"><a href="{{ SITEURL }}/archives.html">Archives</a></li>
             {% endif %}
             <!-- menu item -->
-            {% for title, link, external in MENUITEMS %}
-            {% if external %}
-            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}" target="_blank">{{ title }}</a></li>
-            {% else %}
-            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}">{{ title }}</a></li>
-            {% endif %}
+            {# MENUITEMS entries: (title, link, external[, css_class]) #}
+            {% for item in MENUITEMS %}
+            {% set title, link, external = item[0], item[1], item[2] %}
+            {% set css_class = item[3] if item|length > 3 else '' %}
+            <li class="w3-border-white w3-hover-opacity"><a href="{{ link }}"{% if external %} target="_blank" rel="noopener"{% endif %}{% if css_class %} class="{{ css_class }}"{% endif %}>{{ title }}</a></li>
             {% endfor %}
             <!-- pages -->
             {% if DISPLAY_PAGES_ON_MENU %}

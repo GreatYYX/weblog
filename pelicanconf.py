@@ -111,5 +111,5 @@ MINIMALXY_FAVICON = SITEURL + '/theme/images/favicon-32x32.png'
 THEME = 'theme/MinimalXYZ'
 THEME_STATIC_DIR = 'theme'
 
-PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS=['jinja2content',]
+PLUGIN_PATHS = ['plugins', 'pelican-plugins']
+PLUGINS = ['jinja2content', 'feed_sanitizer']

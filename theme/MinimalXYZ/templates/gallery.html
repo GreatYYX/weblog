@@ -1,6 +1,10 @@
 <article class="w3-padding-32">
   <div id="photo-container" class="col-main w3-container w3-row-padding w3-margin-top">
   </div>
+  <!-- loading indicator; also used to detect reaching the bottom -->
+  <div id="photo-loader" class="w3-center w3-padding-32">
+    <div class="lds-facebook"><div></div><div></div><div></div></div>
+  </div>
 </article>
 
 <script>
@@ -10,43 +14,69 @@ $(document).ready(function(){
   var offset = 0;
   var limit = 5;
   var loading = false;
+  var $container = $('#photo-container');
+  var $loader = $('#photo-loader');
+  var $spinner = $loader.children('.lds-facebook');
 
-  var load_images = function(){
+  var buildItem = function(photo) {
+    var $img = $('<img>').attr({src: photo['img'], alt: photo['title']});
+    var $title = $('<h4>').text(photo['title']);
+    return $('<div class="w3-first w3-center w3-padding-32">').append(
+      $('<a>').attr({href: photo['link'], title: photo['title']}).append(
+        $('<div class="image w3-display-container">').append(
+          $img,
+          $('<div class="tint">').append(
+            $('<div class="w3-display-middle w3-margin w3-text-white">').append($title)
+          )
+        )
+      )
+    );
+  };
+
+  var finished = function() {
+    $loader.hide();
+    $(window).off('scroll.gallery resize.gallery');
+  };
+
+  var loadImages = function() {
+    if (loading) return;
+    if (offset >= gallery_data.length) { finished(); return; }
+
     loading = true;
-    for(var i = offset; i < offset + limit && i < gallery_data.length; i++) {
-      // console.log(gallery_data[i]);
-      $('#photo-container').append(
-        '<div class="w3-first w3-center w3-padding-32">\
-          <a href="' + gallery_data[i]['link'] + '" title="' + gallery_data[i]['title'] + '">\
-            <div class="image w3-display-container">\
-              <img src="' + gallery_data[i]['img'] + '" alt="' + gallery_data[i]['title'] + '">\
-              <div class="tint">\
-                <div class="w3-display-middle w3-margin w3-text-white"><h4>' + gallery_data[i]['title'] + '</h4></div> \
-              </div>\
-            </div>\
-          </a>\
-        </div>'
-      );
-    }
-    offset = offset + limit;
-    loading = false;
-  }
+    $spinner.css('visibility', 'visible');
+    var batch = gallery_data.slice(offset, offset + limit);
+    offset += batch.length;
 
-  $.get(api, function(data) {
-    // console.log(data);
-    gallery_data = data;
-    load_images();
-  });
+    var pending = batch.length;
+    var done = function() {
+      if (--pending > 0) return;
+      loading = false;
+      $spinner.css('visibility', 'hidden');
+      if (offset >= gallery_data.length) finished();
+      // page still too short to scroll (e.g. tall screen): load one more batch
+      else if (document.documentElement.scrollHeight <= window.innerHeight) loadImages();
+    };
 
-  $(window).scroll(function() {
-    var position = $(window).scrollTop();
-    var bottom = $(document).height() - $(window).height();
+    $.each(batch, function(_, photo) {
+      var $item = buildItem(photo);
+      $item.find('img').one('load error', done);
+      $container.append($item);
+    });
+  };
 
-    if(position == bottom){
-      // console.log("loading...");
-      load_images();
-    }
+  // one batch per trigger; `loading` blocks repeats until the batch is done
+  var nearBottom = function() {
+    return $loader[0].getBoundingClientRect().top < window.innerHeight + 300;
+  };
 
+  $.getJSON(api, function(data) {
+    gallery_data = data || [];
+    loadImages();
+    $(window).on('scroll.gallery resize.gallery', function() {
+      if (nearBottom()) loadImages();
+    });
+  }).fail(function() {
+    $loader.text('Failed to load photos.');
   });
 });
 </script>
